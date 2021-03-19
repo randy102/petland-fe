@@ -1,6 +1,6 @@
 import { CssBaseline } from '@material-ui/core';
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import './App.css';
 import Default from './default';
 
@@ -9,13 +9,11 @@ function App() {
     <React.Fragment>
       <CssBaseline />
 
-      <BrowserRouter>
-        <Switch>
-          <Route path="/">
-            <Default />
-          </Route>
-        </Switch>
-      </BrowserRouter>
+      <Switch>
+        <Route path="/">
+          <Default />
+        </Route>
+      </Switch>
     </React.Fragment>
   );
 }
