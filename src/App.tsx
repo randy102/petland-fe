@@ -1,20 +1,23 @@
-import { CssBaseline } from '@material-ui/core';
-import React from 'react';
+import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import { Route, Switch } from 'react-router-dom';
 import './App.css';
-import Default from './default';
+import PetlandAppBar from './components/PetlandAppBar';
+import IndexPage from './pages';
+import petlandTheme from './petlandTheme';
 
 function App() {
   return (
-    <React.Fragment>
+    <ThemeProvider theme={petlandTheme}>
       <CssBaseline />
+
+      <PetlandAppBar />
 
       <Switch>
         <Route path="/">
-          <Default />
+          <IndexPage />
         </Route>
       </Switch>
-    </React.Fragment>
+    </ThemeProvider>
   );
 }
 

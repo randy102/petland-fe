@@ -1,7 +1,6 @@
-import { Route } from 'react-router';
-import logo from './logo.svg';
+import logo from 'src/logo.svg';
 
-export default function Default() {
+export default function IndexPage() {
   return (
     <div>
       <header className="App-header">
