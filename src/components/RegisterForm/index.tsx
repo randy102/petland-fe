@@ -1,13 +1,15 @@
 import { Button, TextField } from '@material-ui/core';
+import { useAppDispatch } from 'src/redux/hooks';
+import { changeTab } from 'src/redux/slices/registerLoginModal';
 import TextLink from '../TextLink';
 import useStyles from './styles';
 
-type Props = {
-  onLoginClick: () => void;
-};
-
-export default function RegisterForm(props: Props) {
+export default function RegisterForm() {
   const classes = useStyles();
+
+  const dispatch = useAppDispatch();
+
+  const handleClick = () => dispatch(changeTab('LOGIN'));
 
   return (
     <form className={classes.root}>
@@ -25,7 +27,7 @@ export default function RegisterForm(props: Props) {
 
       <div>
         Đã có tài khoản?{' '}
-        <TextLink onClick={props.onLoginClick}>Đăng nhập ngay</TextLink>
+        <TextLink onClick={handleClick}>Đăng nhập ngay</TextLink>
       </div>
     </form>
   );

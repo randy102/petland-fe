@@ -1,33 +1,36 @@
 import { Tab, Tabs } from '@material-ui/core';
-import { useState } from 'react';
-import Dialog, { DialogProps } from '../Dialog';
+import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
+import Dialog from '../Dialog';
 import CloseButton from '../Dialog/CloseButton';
-import DialogTitle from '../Dialog/DialogTitle';
 import LoginForm from '../LoginForm';
 import RegisterForm from '../RegisterForm';
 import useStyles from './styles';
+import {
+  close,
+  changeTab,
+  RegisterLoginModalTab,
+} from 'src/redux/slices/registerLoginModal';
 
-type Props = DialogProps;
-
-export default function LoginRegisterModal(props: Props) {
+export default function LoginRegisterModal() {
   const classes = useStyles();
 
-  const [tab, setTab] = useState<number>(0);
+  const { open, tab } = useAppSelector(state => state.registerLoginModal);
 
-  const handleTabChange = (event: React.ChangeEvent<{}>, newTab: number) => {
-    setTab(newTab);
+  const dispatch = useAppDispatch();
+
+  const handleTabChange = (
+    event: React.ChangeEvent<{}>,
+    newTab: RegisterLoginModalTab
+  ) => {
+    dispatch(changeTab(newTab));
   };
 
-  const handleRegisterClick = () => {
-    setTab(1);
-  };
-
-  const handleLoginClick = () => {
-    setTab(0);
+  const handleClose = () => {
+    dispatch(close());
   };
 
   return (
-    <Dialog open={props.open} onClose={props.onClose} maxWidth="sm" fullWidth>
+    <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
       <Tabs
         classes={{
           root: classes.tabsRoot,
@@ -37,18 +40,18 @@ export default function LoginRegisterModal(props: Props) {
         indicatorColor="primary"
         textColor="primary"
       >
-        <Tab label="Đăng nhập" />
-        <Tab label="Đăng ký" />
+        <Tab label="Đăng nhập" value="LOGIN" />
+        <Tab label="Đăng ký" value="REGISTER" />
       </Tabs>
 
-      <CloseButton onClick={props.onClose} />
+      <CloseButton onClick={handleClose} />
 
-      <div hidden={tab !== 0}>
-        <LoginForm onRegisterClick={handleRegisterClick} />
+      <div hidden={tab !== 'LOGIN'}>
+        <LoginForm />
       </div>
 
-      <div hidden={tab !== 1}>
-        <RegisterForm onLoginClick={handleLoginClick} />
+      <div hidden={tab !== 'REGISTER'}>
+        <RegisterForm />
       </div>
     </Dialog>
   );
