@@ -1,16 +1,15 @@
 import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import { Route, Switch } from 'react-router-dom';
-import './App.css';
-import PetlandAppBar from './components/PetlandAppBar';
+import AppBar from 'src/components/AppBar';
 import IndexPage from './pages';
-import petlandTheme from './petlandTheme';
+import theme from './theme';
 
 function App() {
   return (
-    <ThemeProvider theme={petlandTheme}>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
 
-      <PetlandAppBar />
+      <AppBar />
 
       <Switch>
         <Route path="/">

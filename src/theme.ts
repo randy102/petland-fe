@@ -1,6 +1,6 @@
 import { createMuiTheme } from '@material-ui/core';
 
-const petlandTheme = createMuiTheme({
+const theme = createMuiTheme({
   palette: {
     primary: {
       main: '#53c4b2',
@@ -17,4 +17,4 @@ const petlandTheme = createMuiTheme({
   },
 });
 
-export default petlandTheme;
+export default theme;
