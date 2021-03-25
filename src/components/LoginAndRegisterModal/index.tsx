@@ -8,19 +8,19 @@ import useStyles from './styles';
 import {
   close,
   changeTab,
-  RegisterLoginModalTab,
-} from 'src/redux/slices/registerLoginModal';
+  LoginAndRegisterModalTab,
+} from 'src/redux/slices/loginAndRegisterModal';
 
-export default function LoginRegisterModal() {
+export default function LoginAndRegisterModal() {
   const classes = useStyles();
 
-  const { open, tab } = useAppSelector(state => state.registerLoginModal);
+  const { open, tab } = useAppSelector(state => state.loginAndRegisterModal);
 
   const dispatch = useAppDispatch();
 
   const handleTabChange = (
     event: React.ChangeEvent<{}>,
-    newTab: RegisterLoginModalTab
+    newTab: LoginAndRegisterModalTab
   ) => {
     dispatch(changeTab(newTab));
   };

@@ -3,7 +3,7 @@ import IconButton from '@material-ui/core/IconButton/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import logo from 'src/assets/images/logo.png';
 import { useAppDispatch } from 'src/redux/hooks';
-import { open } from 'src/redux/slices/registerLoginModal';
+import { open } from 'src/redux/slices/loginAndRegisterModal';
 import useStyles from './styles';
 
 export default function AppBar() {

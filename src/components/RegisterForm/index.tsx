@@ -1,6 +1,6 @@
 import { Button, TextField } from '@material-ui/core';
 import { useAppDispatch } from 'src/redux/hooks';
-import { changeTab } from 'src/redux/slices/registerLoginModal';
+import { changeTab } from 'src/redux/slices/loginAndRegisterModal';
 import TextLink from '../TextLink';
 import useStyles from './styles';
 

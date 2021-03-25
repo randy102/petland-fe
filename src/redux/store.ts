@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import registerLoginModalReducer from './slices/registerLoginModal';
+import loginAndRegisterModalReducer from './slices/loginAndRegisterModal';
 
 const store = configureStore({
   reducer: {
-    registerLoginModal: registerLoginModalReducer,
+    loginAndRegisterModal: loginAndRegisterModalReducer,
   },
 });
 
