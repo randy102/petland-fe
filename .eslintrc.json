@@ -1,9 +1,4 @@
 {
-  "settings": {
-    "react": {
-      "version": "detect"
-    }
-  },
   "env": {
     "browser": true,
     "es2021": true
@@ -13,6 +8,9 @@
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:react-hooks/recommended"
+  ],
+  "ignorePatterns": [
+    "src/assets/images/"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -29,24 +27,53 @@
     "sort-keys-fix"
   ],
   "rules": {
-    "indent": ["error", 2],
-    "linebreak-style": ["error", "windows"],
-    "quotes": ["error", "single"],
-    "semi": ["error", "never"],
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "indent": [
+      "error",
+      2
+    ],
+    "linebreak-style": [
+      "error",
+      "windows"
+    ],
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "react/jsx-closing-bracket-location": [
+      "error",
+      "tag-aligned"
+    ],
+    "react/jsx-first-prop-new-line": [
+      "error",
+      "multiline"
+    ],
+    "react/jsx-max-props-per-line": [
+      "error",
+      {
+        "maximum": 1,
+        "when": "always"
+      }
+    ],
+    "react/jsx-sort-props": [
+      "error",
+      {
+        "callbacksLast": true,
+        "ignoreCase": true,
+        "shorthandFirst": true
+      }
+    ],
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
-    "react/jsx-sort-props": ["error", {
-      "callbacksLast": true,
-      "shorthandFirst": true,
-      "ignoreCase": true
-    }],
-    "@typescript-eslint/explicit-module-boundary-types": "off",
-    "react/jsx-max-props-per-line": ["error", {
-      "maximum": 1,
-      "when": "always"
-    }],
-    "react/jsx-first-prop-new-line": ["error", "multiline"],
-    "react/jsx-closing-bracket-location": ["error", "tag-aligned"],
+    "semi": [
+      "error",
+      "never"
+    ],
     "sort-keys-fix/sort-keys-fix": "warn"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }
