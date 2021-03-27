@@ -1,11 +1,11 @@
 import { Button, TextField } from '@material-ui/core';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
-import { openModal, closeModal } from 'src/redux/slices/modal';
+import { closeModal, openModal } from 'src/redux/slices/modal';
 import Dialog from '../Dialog';
 import TextLink from '../TextLink';
 import useStyles from './styles';
 
-export default function RegisterModal() {
+export default function LoginDialog() {
   const classes = useStyles();
 
   const { open } = useAppSelector(state => state.modal);
@@ -14,22 +14,18 @@ export default function RegisterModal() {
 
   const handleClose = () => dispatch(closeModal());
 
-  const handleLinkClick = () => dispatch(openModal('LOGIN'));
+  const handleLinkClick = () => dispatch(openModal('REGISTER'));
 
   return (
     <Dialog
-      open={open === 'REGISTER'}
+      open={open === 'LOGIN'}
       onClose={handleClose}
       maxWidth="sm"
       fullWidth
-      title="Đăng ký"
+      title="Đăng nhập"
     >
       <form className={classes.root}>
-        <TextField fullWidth variant="filled" label="Họ tên" />
-
         <TextField fullWidth variant="filled" label="Email" />
-
-        <TextField fullWidth variant="filled" label="Số điện thoại" />
 
         <TextField
           type="password"
@@ -39,12 +35,12 @@ export default function RegisterModal() {
         />
 
         <Button variant="contained" color="primary">
-          Đăng ký
+          Đăng nhập
         </Button>
 
         <div>
-          Đã có tài khoản?{' '}
-          <TextLink onClick={handleLinkClick}>Đăng nhập ngay</TextLink>
+          Chưa có tài khoản?{' '}
+          <TextLink onClick={handleLinkClick}>Đăng ký ngay</TextLink>
         </div>
       </form>
     </Dialog>
