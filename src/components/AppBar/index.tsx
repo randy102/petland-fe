@@ -1,9 +1,14 @@
-import { AppBar as MuiAppBar, Button, Hidden, Toolbar } from '@material-ui/core';
+import {
+  AppBar as MuiAppBar,
+  Button,
+  Hidden,
+  Toolbar,
+} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import logo from 'src/assets/images/logo.png';
 import { useAppDispatch } from 'src/redux/hooks';
-import { open } from 'src/redux/slices/loginAndRegisterModal';
+import { openModal } from 'src/redux/slices/modal';
 import useStyles from './styles';
 
 export default function AppBar() {
@@ -11,9 +16,9 @@ export default function AppBar() {
 
   const dispatch = useAppDispatch();
 
-  const handleLoginClick = () => dispatch(open('LOGIN'));
+  const handleLoginClick = () => dispatch(openModal('LOGIN'));
 
-  const handleRegisterClick = () => dispatch(open('REGISTER'));
+  const handleRegisterClick = () => dispatch(openModal('REGISTER'));
 
   return (
     <MuiAppBar position="sticky">
