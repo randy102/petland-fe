@@ -37,7 +37,10 @@ export default function LoginDialog() {
       title="Đăng nhập"
       onClose={handleCloseModal}
     >
-      <form className={classes.root} onSubmit={onSubmit}>
+      <form
+        className={classes.root}
+        onSubmit={onSubmit}
+      >
         <TextField
           fullWidth
           error={!!errors.email}
@@ -63,7 +66,11 @@ export default function LoginDialog() {
           variant="filled"
         />
 
-        <Button color="primary" type="submit" variant="contained">
+        <Button
+          color="primary"
+          type="submit"
+          variant="contained"
+        >
           Đăng nhập
         </Button>
 
