@@ -38,11 +38,13 @@ export default function LoginDialog() {
       onClose={handleCloseModal}
     >
       <form
+        noValidate
         className={classes.root}
         onSubmit={onSubmit}
       >
         <TextField
           fullWidth
+          required
           error={!!errors.email}
           helperText={errors.email?.message}
           inputRef={register({
@@ -55,6 +57,7 @@ export default function LoginDialog() {
 
         <TextField
           fullWidth
+          required
           error={!!errors.password}
           helperText={errors.password?.message}
           inputRef={register({
