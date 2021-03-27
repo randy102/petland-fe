@@ -1,12 +1,12 @@
 import {
   withStyles,
   DialogContent as MuiDialogContent,
-} from '@material-ui/core';
+} from '@material-ui/core'
 
 const DialogContent = withStyles(theme => ({
   root: {
     padding: theme.spacing(2),
   },
-}))(MuiDialogContent);
+}))(MuiDialogContent)
 
-export default DialogContent;
+export default DialogContent

@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export type ModalName = 'LOGIN' | 'REGISTER';
 
@@ -8,23 +8,23 @@ type State = {
 
 const initialState: State = {
   open: undefined,
-};
+}
 
 export const modalSlice = createSlice({
-  name: 'modal',
   initialState,
+  name: 'modal',
   reducers: {
-    openModal: (state, action: PayloadAction<ModalName>) => {
-      state.open = action.payload;
-    },
     closeModal: state => {
-      state.open = undefined;
+      state.open = undefined
+    },
+    openModal: (state, action: PayloadAction<ModalName>) => {
+      state.open = action.payload
     },
   },
-});
+})
 
-export const { openModal, closeModal } = modalSlice.actions;
+export const { openModal, closeModal } = modalSlice.actions
 
-const modalReducer = modalSlice.reducer;
+const modalReducer = modalSlice.reducer
 
-export default modalReducer;
+export default modalReducer

@@ -1,13 +1,13 @@
-import IconButton from '@material-ui/core/IconButton/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import useStyles from './styles';
+import IconButton from '@material-ui/core/IconButton/IconButton'
+import CloseIcon from '@material-ui/icons/Close'
+import useStyles from './styles'
 
 type Props = {
   onClick?: () => void;
 };
 
 export default function CloseButton(props: Props) {
-  const classes = useStyles();
+  const classes = useStyles()
 
   return (
     <IconButton
@@ -17,5 +17,5 @@ export default function CloseButton(props: Props) {
     >
       <CloseIcon />
     </IconButton>
-  );
+  )
 }

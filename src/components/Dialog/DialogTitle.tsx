@@ -1,7 +1,7 @@
-import useStyles from './styles';
+import useStyles from './styles'
 
-import { DialogTitle as MuiDialogTitle, Typography } from '@material-ui/core';
-import CloseButton from './CloseButton';
+import { DialogTitle as MuiDialogTitle, Typography } from '@material-ui/core'
+import CloseButton from './CloseButton'
 
 type Props = {
   children: React.ReactNode;
@@ -9,15 +9,18 @@ type Props = {
 };
 
 export default function DialogTitle(props: Props) {
-  const { children, onClose } = props;
+  const { children, onClose } = props
 
-  const classes = useStyles();
+  const classes = useStyles()
 
   return (
-    <MuiDialogTitle disableTypography className={classes.root}>
+    <MuiDialogTitle
+      disableTypography
+      className={classes.root}
+    >
       <Typography variant="h6">{children}</Typography>
 
       {onClose && <CloseButton onClick={onClose} />}
     </MuiDialogTitle>
-  );
+  )
 }

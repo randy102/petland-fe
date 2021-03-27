@@ -1,13 +1,13 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
   root: {
-    display: 'flex',
-    flexDirection: 'column',
     '& > *:not(:last-child)': {
       marginBottom: theme.spacing(2),
     },
+    display: 'flex',
+    flexDirection: 'column',
   },
-}));
+}))
 
-export default useStyles;
+export default useStyles

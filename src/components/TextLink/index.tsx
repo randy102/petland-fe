@@ -1,5 +1,5 @@
-import { Link as MuiLink } from '@material-ui/core';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as MuiLink } from '@material-ui/core'
+import { Link as RouterLink } from 'react-router-dom'
 
 type Props = {
   to?: string;
@@ -16,5 +16,5 @@ export default function TextLink(props: Props) {
     >
       {props.children}
     </MuiLink>
-  );
+  )
 }

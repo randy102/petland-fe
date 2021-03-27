@@ -1,10 +1,10 @@
-import { CssBaseline, ThemeProvider } from '@material-ui/core';
-import { Route, Switch } from 'react-router-dom';
-import AppBar from 'src/components/AppBar';
-import LoginDialog from './components/LoginDialog';
-import RegisterDialog from './components/RegisterDialog';
-import IndexPage from './pages';
-import theme from './theme';
+import { CssBaseline, ThemeProvider } from '@material-ui/core'
+import { Route, Switch } from 'react-router-dom'
+import AppBar from 'src/components/AppBar'
+import LoginDialog from './components/LoginDialog'
+import RegisterDialog from './components/RegisterDialog'
+import IndexPage from './pages'
+import theme from './theme'
 
 function App() {
   return (
@@ -23,7 +23,7 @@ function App() {
         </Route>
       </Switch>
     </ThemeProvider>
-  );
+  )
 }
 
-export default App;
+export default App

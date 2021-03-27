@@ -3,58 +3,62 @@ import {
   Button,
   Hidden,
   Toolbar,
-} from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import logo from 'src/assets/images/logo.png';
-import { useAppDispatch } from 'src/redux/hooks';
-import { openModal } from 'src/redux/slices/modal';
-import useStyles from './styles';
+} from '@material-ui/core'
+import IconButton from '@material-ui/core/IconButton/IconButton'
+import MenuIcon from '@material-ui/icons/Menu'
+import logo from 'src/assets/images/logo.png'
+import { useAppDispatch } from 'src/redux/hooks'
+import { openModal } from 'src/redux/slices/modal'
+import useStyles from './styles'
 
 export default function AppBar() {
-  const classes = useStyles();
+  const classes = useStyles()
 
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
-  const handleLoginClick = () => dispatch(openModal('LOGIN'));
+  const handleLoginClick = () => dispatch(openModal('LOGIN'))
 
-  const handleRegisterClick = () => dispatch(openModal('REGISTER'));
+  const handleRegisterClick = () => dispatch(openModal('REGISTER'))
 
   return (
     <MuiAppBar position="sticky">
       <Toolbar>
         <IconButton
-          edge="start"
+          aria-label="menu"
           className={classes.menuButton}
           color="inherit"
-          aria-label="menu"
+          edge="start"
         >
           <MenuIcon />
         </IconButton>
 
         <Hidden xsDown>
-          <img src={logo} alt="Petland Logo" className={classes.logo} />
+          <img
+            alt="Petland Logo"
+            className={classes.logo}
+            src={logo}
+          />
         </Hidden>
 
         <Button
           classes={{ root: classes.loginButtonRoot }}
-          variant="contained"
           color="secondary"
-          onClick={handleLoginClick}
           size="small"
+          variant="contained"
+          onClick={handleLoginClick}
         >
           Đăng nhập
         </Button>
 
         <Button
-          variant="contained"
           color="secondary"
-          onClick={handleRegisterClick}
           size="small"
+          variant="contained"
+          onClick={handleRegisterClick}
         >
           Đăng ký
         </Button>
       </Toolbar>
     </MuiAppBar>
-  );
+  )
 }
