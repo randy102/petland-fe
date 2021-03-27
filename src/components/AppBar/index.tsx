@@ -1,4 +1,4 @@
-import { AppBar as MuiAppBar, Button, Toolbar } from '@material-ui/core';
+import { AppBar as MuiAppBar, Button, Hidden, Toolbar } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import logo from 'src/assets/images/logo.png';
@@ -27,13 +27,16 @@ export default function AppBar() {
           <MenuIcon />
         </IconButton>
 
-        <img src={logo} alt="Petland Logo" className={classes.logo} />
+        <Hidden xsDown>
+          <img src={logo} alt="Petland Logo" className={classes.logo} />
+        </Hidden>
 
         <Button
           classes={{ root: classes.loginButtonRoot }}
           variant="contained"
           color="secondary"
           onClick={handleLoginClick}
+          size="small"
         >
           Đăng nhập
         </Button>
@@ -42,6 +45,7 @@ export default function AppBar() {
           variant="contained"
           color="secondary"
           onClick={handleRegisterClick}
+          size="small"
         >
           Đăng ký
         </Button>
