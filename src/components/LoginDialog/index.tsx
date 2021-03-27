@@ -1,40 +1,69 @@
-import { Button, TextField } from '@material-ui/core';
-import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
-import { closeModal, openModal } from 'src/redux/slices/modal';
-import Dialog from '../Dialog';
-import TextLink from '../TextLink';
-import useStyles from './styles';
+import { Button, TextField } from '@material-ui/core'
+import { useForm } from 'react-hook-form'
+import errorMessages from 'src/assets/constants/errorMessages'
+import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
+import { closeModal, openModal } from 'src/redux/slices/modal'
+import Dialog from '../Dialog'
+import TextLink from '../TextLink'
+import useStyles from './styles'
+
+type Inputs = {
+  email: string;
+  password: string;
+};
 
 export default function LoginDialog() {
-  const classes = useStyles();
+  const classes = useStyles()
 
-  const { open } = useAppSelector(state => state.modal);
+  const { open } = useAppSelector(state => state.modal)
 
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
-  const handleClose = () => dispatch(closeModal());
+  const { register, handleSubmit, errors } = useForm<Inputs>()
 
-  const handleLinkClick = () => dispatch(openModal('REGISTER'));
+  const onSubmit = handleSubmit(data => {
+    console.log('Submit data:', data)
+  })
+
+  const handleCloseModal = () => dispatch(closeModal())
+
+  const handleLinkClick = () => dispatch(openModal('REGISTER'))
 
   return (
     <Dialog
-      open={open === 'LOGIN'}
-      onClose={handleClose}
-      maxWidth="sm"
       fullWidth
+      maxWidth="sm"
+      open={open === 'LOGIN'}
       title="Đăng nhập"
+      onClose={handleCloseModal}
     >
-      <form className={classes.root}>
-        <TextField fullWidth variant="filled" label="Email" />
-
+      <form className={classes.root} onSubmit={onSubmit}>
         <TextField
-          type="password"
           fullWidth
+          error={!!errors.email}
+          helperText={errors.email?.message}
+          inputRef={register({
+            required: errorMessages.emailRequired,
+          })}
+          label="Email"
+          name="email"
           variant="filled"
-          label="Mật khẩu"
         />
 
-        <Button variant="contained" color="primary">
+        <TextField
+          fullWidth
+          error={!!errors.password}
+          helperText={errors.password?.message}
+          inputRef={register({
+            required: errorMessages.passwordRequired,
+          })}
+          label="Mật khẩu"
+          name="password"
+          type="password"
+          variant="filled"
+        />
+
+        <Button color="primary" type="submit" variant="contained">
           Đăng nhập
         </Button>
 
@@ -44,5 +73,5 @@ export default function LoginDialog() {
         </div>
       </form>
     </Dialog>
-  );
+  )
 }

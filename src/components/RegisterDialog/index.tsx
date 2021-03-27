@@ -1,44 +1,44 @@
-import { Button, TextField } from '@material-ui/core';
-import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
-import { openModal, closeModal } from 'src/redux/slices/modal';
-import Dialog from '../Dialog';
-import TextLink from '../TextLink';
-import useStyles from './styles';
+import { Button, TextField } from '@material-ui/core'
+import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
+import { openModal, closeModal } from 'src/redux/slices/modal'
+import Dialog from '../Dialog'
+import TextLink from '../TextLink'
+import useStyles from './styles'
 
 export default function RegisterDialog() {
-  const classes = useStyles();
+  const classes = useStyles()
 
-  const { open } = useAppSelector(state => state.modal);
+  const { open } = useAppSelector(state => state.modal)
 
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
-  const handleClose = () => dispatch(closeModal());
+  const handleClose = () => dispatch(closeModal())
 
-  const handleLinkClick = () => dispatch(openModal('LOGIN'));
+  const handleLinkClick = () => dispatch(openModal('LOGIN'))
 
   return (
     <Dialog
-      open={open === 'REGISTER'}
-      onClose={handleClose}
-      maxWidth="sm"
       fullWidth
+      maxWidth="sm"
+      open={open === 'REGISTER'}
       title="Đăng ký"
+      onClose={handleClose}
     >
       <form className={classes.root}>
-        <TextField fullWidth variant="filled" label="Họ tên" />
+        <TextField fullWidth label="Họ tên" variant="filled" />
 
-        <TextField fullWidth variant="filled" label="Email" />
+        <TextField fullWidth label="Email" variant="filled" />
 
-        <TextField fullWidth variant="filled" label="Số điện thoại" />
+        <TextField fullWidth label="Số điện thoại" variant="filled" />
 
         <TextField
-          type="password"
           fullWidth
-          variant="filled"
           label="Mật khẩu"
+          type="password"
+          variant="filled"
         />
 
-        <Button variant="contained" color="primary">
+        <Button color="primary" variant="contained">
           Đăng ký
         </Button>
 
@@ -48,5 +48,5 @@ export default function RegisterDialog() {
         </div>
       </form>
     </Dialog>
-  );
+  )
 }
