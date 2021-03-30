@@ -24,7 +24,7 @@ export default function useAxios<T>(props: Props<T>) {
 
     axios({
       method: method,
-      url: `${process.env.API_BASE_URL}/${route}`
+      url: `${process.env.API_BASE_URL}/api/${route}`
     }).then((response: AxiosResponse<T>) => {
       setLoading(false)
   

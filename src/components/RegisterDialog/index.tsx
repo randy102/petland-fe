@@ -9,6 +9,7 @@ import Dialog from '../Dialog'
 import TextLink from '../TextLink'
 import useStyles from './styles'
 import Select from 'src/components/Select'
+import useAxios from 'src/hooks/useAxios'
 
 type Inputs = {
   name: string;
@@ -27,6 +28,19 @@ export default function RegisterDialog() {
   const dispatch = useAppDispatch()
 
   const { register, handleSubmit, errors, control } = useForm<Inputs>()
+
+  const { fetch, loading } = useAxios({
+    config: {
+      method: 'POST',
+      route: 'auth/register'
+    },
+    onCompleted: response => {
+      console.log('Response:', response)
+    },
+    onError: error => {
+      console.log('Error:', error)
+    }
+  })
 
   const onSubmit = handleSubmit(data => {
     console.log('Submit data:', data)
