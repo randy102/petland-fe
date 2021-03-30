@@ -1,4 +1,5 @@
-import { Button, TextField } from '@material-ui/core'
+import { Button, MenuItem, TextField } from '@material-ui/core'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import errorMessages from 'src/assets/constants/errorMessages'
 import phoneRegex from 'src/assets/regex/phoneRegex'
@@ -7,12 +8,15 @@ import { openModal, closeModal } from 'src/redux/slices/modal'
 import Dialog from '../Dialog'
 import TextLink from '../TextLink'
 import useStyles from './styles'
+import Select from 'src/components/Select'
 
 type Inputs = {
   name: string;
   email: string;
   phone: number;
   password: string;
+  city: string;
+  district: string;
 }
 
 export default function RegisterDialog() {
@@ -22,7 +26,7 @@ export default function RegisterDialog() {
 
   const dispatch = useAppDispatch()
 
-  const { register, handleSubmit, errors } = useForm<Inputs>()
+  const { register, handleSubmit, errors, control } = useForm<Inputs>()
 
   const onSubmit = handleSubmit(data => {
     console.log('Submit data:', data)
@@ -31,6 +35,10 @@ export default function RegisterDialog() {
   const handleCloseModal = () => dispatch(closeModal())
 
   const handleLinkClick = () => dispatch(openModal('LOGIN'))
+
+  useEffect(() => {
+    console.log(errors)
+  }, [errors])
 
   return (
     <Dialog
@@ -105,6 +113,42 @@ export default function RegisterDialog() {
           type="password"
           variant="filled"
         />
+
+        <Select
+          required
+          control={control}
+          defaultValue=""
+          error={!!errors.city}
+          helperText={errors.city?.message}
+          label="Tỉnh/Thành phố"
+          name="city"
+          rules={{
+            required: errorMessages.cityRequired
+          }}
+          variant="filled"
+        >
+          <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={20}>Twenty</MenuItem>
+          <MenuItem value={30}>Thirty</MenuItem>
+        </Select>
+
+        <Select
+          required
+          control={control}
+          defaultValue=""
+          error={!!errors.district}
+          helperText={errors.district?.message}
+          label="Quận/Huyện"
+          name="district"
+          rules={{
+            required: errorMessages.districtRequired
+          }}
+          variant="filled"
+        >
+          <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={20}>Twenty</MenuItem>
+          <MenuItem value={30}>Thirty</MenuItem>
+        </Select>
 
         <Button
           color="primary"
