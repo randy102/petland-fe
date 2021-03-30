@@ -9,6 +9,7 @@ import MenuIcon from '@material-ui/icons/Menu'
 import logo from 'src/assets/images/logo.png'
 import { useAppDispatch } from 'src/redux/hooks'
 import { openModal } from 'src/redux/slices/modal'
+import SearchBar from '../SearchBar'
 import useStyles from './styles'
 
 export default function AppBar() {
@@ -39,6 +40,8 @@ export default function AppBar() {
             src={logo}
           />
         </Hidden>
+
+        <SearchBar />
 
         <Button
           classes={{ root: classes.loginButtonRoot }}
