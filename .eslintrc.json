@@ -75,7 +75,8 @@
       "assignment": "parens-new-line",
       "return": "parens-new-line",
       "arrow": "parens-new-line"
-    }]
+    }],
+    "object-curly-spacing": ["error", "always"]
   },
   "settings": {
     "react": {
