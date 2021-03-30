@@ -1,4 +1,4 @@
-import { Button, Menu, MenuItem, Popover } from '@material-ui/core'
+import { Button, Menu, MenuItem } from '@material-ui/core'
 import React, { useState } from 'react'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import useStyles from './styles'
@@ -6,7 +6,7 @@ import theme from 'src/theme'
 
 export type SearchType = 'pet' | 'product'
 
-const label = {
+const searchTypeLabel: Record<SearchType, string> = {
   'pet': 'Thú cưng',
   'product': 'Sản phẩm'
 }
@@ -26,6 +26,11 @@ export default function TypeSelect() {
     setAnchorEl(null)
   }
 
+  const handleItemClick = (type: SearchType) => {
+    setType(type)
+    handleClose()
+  }
+
   return (
     <React.Fragment>
       <Button
@@ -37,7 +42,7 @@ export default function TypeSelect() {
         variant="contained"
         onClick={handleButtonClick}
       >
-        {label[type]}
+        {searchTypeLabel[type]}
 
         <ExpandMoreIcon />
       </Button>
@@ -56,13 +61,16 @@ export default function TypeSelect() {
         }}
         onClose={handleClose}
       >
-        <MenuItem>
-          {label['pet']}
-        </MenuItem>
-        
-        <MenuItem>
-          {label['product']}
-        </MenuItem>
+        {
+          Object.keys(searchTypeLabel).map((type) => (
+            <MenuItem
+              key={type}
+              onClick={() => handleItemClick(type as SearchType)}
+            >
+              {searchTypeLabel[type as SearchType]}
+            </MenuItem>
+          ))
+        }
       </Menu>
     </React.Fragment>
   )
