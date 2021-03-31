@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-export type ModalName = 'LOGIN' | 'REGISTER';
+export type ModalName = 'LOGIN' | 'REGISTER'
 
 type State = {
-  open: ModalName | undefined;
-};
+  open: ModalName | undefined
+}
 
 const initialState: State = {
   open: undefined,

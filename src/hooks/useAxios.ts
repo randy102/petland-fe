@@ -2,13 +2,13 @@ import axios, { AxiosError, AxiosResponse, Method } from 'axios'
 import { useState } from 'react'
 
 type Config = {
-  route: string;
-  method: Method;
+  route: string
+  method: Method
 }
 
 type Props<T> = {
-  config: Config,
-  onCompleted: (data: AxiosResponse<T>) => void,
+  config: Config
+  onCompleted: (data: AxiosResponse<T>) => void
   onError: (error: AxiosError) => void
 }
 

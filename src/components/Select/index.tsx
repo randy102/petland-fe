@@ -2,15 +2,15 @@ import { FormControl, FormHelperText, InputLabel, Select as MuiSelect } from '@m
 import { Control, Controller, RegisterOptions } from 'react-hook-form'
 
 type Props = {
-  name: string;
-  error?: boolean;
-  required?: boolean;
-  variant?: 'standard' | 'filled' | 'outlined';
-  label: React.ReactNode;
-  children: React.ReactNode;
-  control: Control;
-  defaultValue: string;
-  rules: Exclude<RegisterOptions, 'valueAsNumber' | 'valueAsDate' | 'setValueAs'>;
+  name: string
+  error?: boolean
+  required?: boolean
+  variant?: 'standard' | 'filled' | 'outlined'
+  label: React.ReactNode
+  children: React.ReactNode
+  control: Control
+  defaultValue: string
+  rules: Exclude<RegisterOptions, 'valueAsNumber' | 'valueAsDate' | 'setValueAs'>
   helperText?: React.ReactNode
 }
 

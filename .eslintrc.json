@@ -28,10 +28,7 @@
   ],
   "rules": {
     "@typescript-eslint/explicit-module-boundary-types": "off",
-    "indent": [
-      "error",
-      2
-    ],
+    "indent": "off",
     "linebreak-style": [
       "error",
       "windows"
@@ -65,10 +62,7 @@
     ],
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
-    "semi": [
-      "error",
-      "never"
-    ],
+    "semi": "off",
     "sort-keys-fix/sort-keys-fix": "warn",
     "react/jsx-wrap-multilines": ["error", {
       "declaration": "parens-new-line",
@@ -76,7 +70,19 @@
       "return": "parens-new-line",
       "arrow": "parens-new-line"
     }],
-    "object-curly-spacing": ["error", "always"]
+    "object-curly-spacing": "off",
+    "@typescript-eslint/object-curly-spacing": ["error", "always"],
+    "@typescript-eslint/semi": ["error", "never"],
+    "@typescript-eslint/member-delimiter-style": ["error", {
+      "multiline": {
+        "delimiter": "none",
+        "requireLast": true
+      }
+    }],
+    "@typescript-eslint/indent": ["error", 2],
+    "@typescript-eslint/space-before-function-paren": ["error", "never"],
+    "array-bracket-spacing": ["error", "never"],
+    "space-before-blocks": ["error", "always"]
   },
   "settings": {
     "react": {

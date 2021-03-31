@@ -12,12 +12,12 @@ import Select from 'src/components/Select'
 import useAxios from 'src/hooks/useAxios'
 
 type Inputs = {
-  name: string;
-  email: string;
-  phone: number;
-  password: string;
-  city: string;
-  district: string;
+  name: string
+  email: string
+  phone: number
+  password: string
+  city: string
+  district: string
 }
 
 export default function RegisterDialog() {
@@ -77,7 +77,7 @@ export default function RegisterDialog() {
           })}
           label="Họ tên"
           name="name"
-          variant="filled"
+          variant="outlined"
         />
 
         <TextField
@@ -90,7 +90,7 @@ export default function RegisterDialog() {
           })}
           label="Email"
           name="email"
-          variant="filled"
+          variant="outlined"
         />
 
         <TextField
@@ -107,7 +107,7 @@ export default function RegisterDialog() {
           })}
           label="Số điện thoại"
           name="phone"
-          variant="filled"
+          variant="outlined"
         />
 
         <TextField
@@ -125,7 +125,7 @@ export default function RegisterDialog() {
           label="Mật khẩu"
           name="password"
           type="password"
-          variant="filled"
+          variant="outlined"
         />
 
         <Select
@@ -139,7 +139,7 @@ export default function RegisterDialog() {
           rules={{
             required: errorMessages.cityRequired
           }}
-          variant="filled"
+          variant="outlined"
         >
           <MenuItem value={10}>Ten</MenuItem>
           <MenuItem value={20}>Twenty</MenuItem>
@@ -157,7 +157,7 @@ export default function RegisterDialog() {
           rules={{
             required: errorMessages.districtRequired
           }}
-          variant="filled"
+          variant="outlined"
         >
           <MenuItem value={10}>Ten</MenuItem>
           <MenuItem value={20}>Twenty</MenuItem>

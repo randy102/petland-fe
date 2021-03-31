@@ -8,9 +8,9 @@ import TextLink from '../TextLink'
 import useStyles from './styles'
 
 type Inputs = {
-  email: string;
-  password: string;
-};
+  email: string
+  password: string
+}
 
 export default function LoginDialog() {
   const classes = useStyles()

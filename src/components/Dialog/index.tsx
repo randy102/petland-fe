@@ -6,14 +6,17 @@ import DialogContent from './DialogContent'
 import DialogTitle from './DialogTitle'
 
 export type DialogProps = MuiDialogProps & {
-  onClose?: () => void;
-};
+  onClose?: () => void
+}
 
 export default function Dialog(props: DialogProps) {
-  const { title, ...rest } = props
+  const { title, scroll = 'body', ...rest } = props
 
   return (
-    <MuiDialog {...rest}>
+    <MuiDialog
+      scroll={scroll}
+      {...rest}
+    >
       {title && <DialogTitle onClose={props.onClose}>{title}</DialogTitle>}
 
       <DialogContent>{props.children}</DialogContent>

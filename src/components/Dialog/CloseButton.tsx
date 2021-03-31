@@ -3,8 +3,8 @@ import CloseIcon from '@material-ui/icons/Close'
 import useStyles from './styles'
 
 type Props = {
-  onClick?: () => void;
-};
+  onClick?: () => void
+}
 
 export default function CloseButton(props: Props) {
   const classes = useStyles()
