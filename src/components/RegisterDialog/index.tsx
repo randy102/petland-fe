@@ -77,7 +77,6 @@ export default function RegisterDialog() {
           })}
           label="Họ tên"
           name="name"
-          variant="outlined"
         />
 
         <TextField
@@ -90,7 +89,6 @@ export default function RegisterDialog() {
           })}
           label="Email"
           name="email"
-          variant="outlined"
         />
 
         <TextField
@@ -107,7 +105,6 @@ export default function RegisterDialog() {
           })}
           label="Số điện thoại"
           name="phone"
-          variant="outlined"
         />
 
         <TextField
@@ -125,7 +122,6 @@ export default function RegisterDialog() {
           label="Mật khẩu"
           name="password"
           type="password"
-          variant="outlined"
         />
 
         <Select
@@ -139,7 +135,6 @@ export default function RegisterDialog() {
           rules={{
             required: errorMessages.cityRequired
           }}
-          variant="outlined"
         >
           <MenuItem value={10}>Ten</MenuItem>
           <MenuItem value={20}>Twenty</MenuItem>
@@ -157,18 +152,13 @@ export default function RegisterDialog() {
           rules={{
             required: errorMessages.districtRequired
           }}
-          variant="outlined"
         >
           <MenuItem value={10}>Ten</MenuItem>
           <MenuItem value={20}>Twenty</MenuItem>
           <MenuItem value={30}>Thirty</MenuItem>
         </Select>
 
-        <Button
-          color="primary"
-          type="submit"
-          variant="contained"
-        >
+        <Button type="submit">
           Đăng ký
         </Button>
 

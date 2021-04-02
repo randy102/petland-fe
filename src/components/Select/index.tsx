@@ -29,7 +29,10 @@ export default function Select(props: Props) {
           
       <Controller
         as={
-          <MuiSelect labelId={labelId}>
+          <MuiSelect
+            label={props.label}
+            labelId={labelId}
+          >
             {props.children}
           </MuiSelect>
         }

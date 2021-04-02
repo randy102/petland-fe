@@ -44,7 +44,6 @@ export default function LoginDialog() {
       >
         <TextField
           fullWidth
-          required
           error={!!errors.email}
           helperText={errors.email?.message}
           inputRef={register({
@@ -52,12 +51,10 @@ export default function LoginDialog() {
           })}
           label="Email"
           name="email"
-          variant="filled"
         />
 
         <TextField
           fullWidth
-          required
           error={!!errors.password}
           helperText={errors.password?.message}
           inputRef={register({
@@ -66,14 +63,9 @@ export default function LoginDialog() {
           label="Mật khẩu"
           name="password"
           type="password"
-          variant="filled"
         />
 
-        <Button
-          color="primary"
-          type="submit"
-          variant="contained"
-        >
+        <Button type="submit">
           Đăng nhập
         </Button>
 

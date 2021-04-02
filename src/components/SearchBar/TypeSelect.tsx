@@ -49,11 +49,6 @@ export default function TypeSelect() {
 
       <Menu
         anchorEl={anchorEl}
-        anchorOrigin={{
-          horizontal: 'center',
-          vertical: 'bottom',
-        }}
-        getContentAnchorEl={null}
         open={!!anchorEl}
         transformOrigin={{
           horizontal: 'center',
