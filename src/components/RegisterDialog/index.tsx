@@ -11,6 +11,8 @@ import useStyles from './styles'
 import Select from 'src/components/Select'
 import useAxios from 'src/hooks/useAxios'
 
+import { fetchCities } from 'src/redux/slices/cities'
+
 type Inputs = {
   name: string
   email: string
@@ -25,22 +27,28 @@ export default function RegisterDialog() {
 
   const { open } = useAppSelector(state => state.modal)
 
+  const { cities, loading: loadingCities } = useAppSelector(state => state.cities)
+
   const dispatch = useAppDispatch()
 
   const { register, handleSubmit, errors, control } = useForm<Inputs>()
 
-  const { fetch, loading } = useAxios({
+  const { fetch, loading: registering } = useAxios({
     config: {
       method: 'POST',
       route: 'auth/register'
     },
     onCompleted: response => {
-      console.log('Response:', response)
+      console.log('Register response:', response)
     },
     onError: error => {
-      console.log('Error:', error)
+      console.log('Register error:', error)
     }
   })
+
+  useEffect(() => {
+    dispatch(fetchCities())
+  }, [dispatch])
 
   const onSubmit = handleSubmit(data => {
     console.log('Submit data:', data)
@@ -136,9 +144,16 @@ export default function RegisterDialog() {
             required: errorMessages.cityRequired
           }}
         >
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
+          {
+            cities.slice(1).map(city => (
+              <MenuItem
+                key={city._id}
+                value={city._id}
+              >
+                {city.name}
+              </MenuItem>
+            ))
+          }
         </Select>
 
         <Select

@@ -8,8 +8,8 @@ type Config = {
 
 type Props<T> = {
   config: Config
-  onCompleted: (data: AxiosResponse<T>) => void
-  onError: (error: AxiosError) => void
+  onCompleted?: (data: AxiosResponse<T>) => void
+  onError?: (error: AxiosError) => void
 }
 
 export default function useAxios<T>(props: Props<T>) {
@@ -24,15 +24,15 @@ export default function useAxios<T>(props: Props<T>) {
 
     axios({
       method: method,
-      url: `${process.env.API_BASE_URL}/api/${route}`
+      url: `${process.env.REACT_APP_API_BASE_URL}/api/${route}`
     }).then((response: AxiosResponse<T>) => {
       setLoading(false)
   
-      onCompleted(response)
+      onCompleted?.(response)
     }).catch((error: AxiosError) => {
       setLoading(false)
 
-      onError(error)
+      onError?.(error)
     })
   }
 
