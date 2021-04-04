@@ -12,6 +12,7 @@ type Props = {
   defaultValue: string
   rules: Exclude<RegisterOptions, 'valueAsNumber' | 'valueAsDate' | 'setValueAs'>
   helperText?: React.ReactNode
+  disabled?: boolean
 }
 
 export default function Select(props: Props) {
@@ -19,6 +20,7 @@ export default function Select(props: Props) {
 
   return (
     <FormControl
+      disabled={props.disabled}
       error={props.error}
       required={props.required}
       variant={props.variant}

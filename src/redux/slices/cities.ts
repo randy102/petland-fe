@@ -1,44 +1,22 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import axios from 'axios'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { City } from 'src/types/City'
 
-type State = {
-  loading: 'idle' | 'pending' | 'succeeded' | 'failed'
-  cities: City[]
-}
+type State = City[]
 
-const initialState: State = {
-  cities: [],
-  loading: 'idle'
-}
+const initialState: State = []
 
-export const fetchCities = createAsyncThunk(
-  'cities/fetchCities',
-  async () => {
-    const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/city`)
-    return response.data
-  }
-)
 
 export const citiesSlice = createSlice({
-  extraReducers: {
-    [fetchCities.pending.type]: (state) => {
-      state.loading = 'pending'
-    },
-    [fetchCities.fulfilled.type]: (state, action: PayloadAction<City[]>) => {
-      state.cities = action.payload
-      state.loading = 'succeeded'
-    },
-    [fetchCities.rejected.type]: (state) => {
-      state.loading = 'failed'
-    }
-  },
   initialState,
   name: 'cities',
   reducers: {
-    
+    setCities: (state, action: PayloadAction<City[]>) => {
+      return action.payload
+    }
   }
 })
+
+export const { setCities } = citiesSlice.actions
 
 const citiesReducer = citiesSlice.reducer
 

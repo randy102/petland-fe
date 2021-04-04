@@ -1,5 +1,5 @@
 import { Button, MenuItem, TextField } from '@material-ui/core'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import errorMessages from 'src/assets/constants/errorMessages'
 import phoneRegex from 'src/assets/regex/phoneRegex'
@@ -11,56 +11,96 @@ import useStyles from './styles'
 import Select from 'src/components/Select'
 import useAxios from 'src/hooks/useAxios'
 
-import { fetchCities } from 'src/redux/slices/cities'
+import { setCities } from 'src/redux/slices/cities'
+import { District } from 'src/types/District'
+import { City } from 'src/types/City'
 
 type Inputs = {
   name: string
   email: string
-  phone: number
+  phone: string
   password: string
-  city: string
-  district: string
+  cityID: string
+  districtID: string
 }
+
 
 export default function RegisterDialog() {
   const classes = useStyles()
 
   const { open } = useAppSelector(state => state.modal)
 
-  const { cities, loading: loadingCities } = useAppSelector(state => state.cities)
+  const cities = useAppSelector(state => state.cities)
 
   const dispatch = useAppDispatch()
 
-  const { register, handleSubmit, errors, control } = useForm<Inputs>()
+  const { register, handleSubmit, errors, control, watch, setValue } = useForm<Inputs>()
 
-  const { fetch, loading: registering } = useAxios({
+  const { fetch: fetchRegister, loading: loadingRegister } = useAxios<string>({
     config: {
       method: 'POST',
       route: 'auth/register'
     },
     onCompleted: response => {
-      console.log('Register response:', response)
+      localStorage.setItem('token', response.data)
     },
     onError: error => {
       console.log('Register error:', error)
     }
   })
 
+  const { loading: loadingCities } = useAxios<City[]>({
+    config: {
+      method: 'GET',
+      route: 'city'
+    },
+    fetchOnMount: true,
+    onCompleted: response => {
+      dispatch(setCities(response.data))
+    },
+    onError: error => {
+      console.log('Get cities error:', error)
+    }
+  })
+
+  const selectedCityId = watch('cityID') as string
+
   useEffect(() => {
-    dispatch(fetchCities())
-  }, [dispatch])
+    if (!selectedCityId) return
+
+    setValue('districtID', '')
+
+    fetchDistricts({
+      params: {
+        city: selectedCityId
+      }
+    })
+  }, [selectedCityId])
+
+  const [districts, setDistricts] = useState<District[]>([])
+
+  const { fetch: fetchDistricts, loading: loadingDistricts } = useAxios<District[]>({
+    config: {
+      method: 'GET',
+      route: 'district'
+    },
+    onCompleted: response => {
+      setDistricts(response.data)
+    },
+    onError: error => {
+      console.log('Get districts error:', error)
+    }
+  })
 
   const onSubmit = handleSubmit(data => {
-    console.log('Submit data:', data)
+    fetchRegister({
+      data
+    })
   })
 
   const handleCloseModal = () => dispatch(closeModal())
 
   const handleLinkClick = () => dispatch(openModal('LOGIN'))
-
-  useEffect(() => {
-    console.log(errors)
-  }, [errors])
 
   return (
     <Dialog
@@ -136,10 +176,11 @@ export default function RegisterDialog() {
           required
           control={control}
           defaultValue=""
-          error={!!errors.city}
-          helperText={errors.city?.message}
+          disabled={loadingCities}
+          error={!!errors.cityID}
+          helperText={errors.cityID?.message}
           label="Tỉnh/Thành phố"
-          name="city"
+          name="cityID"
           rules={{
             required: errorMessages.cityRequired
           }}
@@ -160,17 +201,25 @@ export default function RegisterDialog() {
           required
           control={control}
           defaultValue=""
-          error={!!errors.district}
-          helperText={errors.district?.message}
+          disabled={loadingDistricts}
+          error={!!errors.districtID}
+          helperText={errors.districtID?.message}
           label="Quận/Huyện"
-          name="district"
+          name="districtID"
           rules={{
             required: errorMessages.districtRequired
           }}
         >
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
+          {
+            districts.map(district => (
+              <MenuItem
+                key={district._id}
+                value={district._id}
+              >
+                {district.name}
+              </MenuItem>
+            ))
+          }
         </Select>
 
         <Button type="submit">
