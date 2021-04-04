@@ -10,7 +10,7 @@ type Props = {
   children: React.ReactNode
   control: Control
   defaultValue: string
-  rules: Exclude<RegisterOptions, 'valueAsNumber' | 'valueAsDate' | 'setValueAs'>
+  rules?: Exclude<RegisterOptions, 'valueAsNumber' | 'valueAsDate' | 'setValueAs'>
   helperText?: React.ReactNode
   disabled?: boolean
 }

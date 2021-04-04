@@ -1,8 +1,6 @@
 import { Button, MenuItem, TextField } from '@material-ui/core'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import errorMessages from 'src/assets/constants/errorMessages'
-import phoneRegex from 'src/assets/regex/phoneRegex'
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
 import { openModal, closeModal } from 'src/redux/slices/modal'
 import Dialog from '../Dialog'
@@ -14,6 +12,7 @@ import useAxios from 'src/hooks/useAxios'
 import { setCities } from 'src/redux/slices/cities'
 import { District } from 'src/types/District'
 import { City } from 'src/types/City'
+import LoadingBackdrop from '../LoadingBackdrop'
 
 type Inputs = {
   name: string
@@ -34,7 +33,11 @@ export default function RegisterDialog() {
 
   const dispatch = useAppDispatch()
 
-  const { register, handleSubmit, errors, control, watch, setValue } = useForm<Inputs>()
+  const { register, handleSubmit, control, watch, setValue, setError, errors } = useForm<Inputs>()
+
+  useEffect(() => {
+    console.log(errors)
+  }, [errors])
 
   const { fetch: fetchRegister, loading: loadingRegister } = useAxios<string>({
     config: {
@@ -45,7 +48,12 @@ export default function RegisterDialog() {
       localStorage.setItem('token', response.data)
     },
     onError: error => {
-      console.log('Register error:', error)
+      Object.keys(error?.data).forEach(field => {
+        setError(field as keyof Inputs, {
+          message: error?.data[field],
+          type: 'server'
+        })
+      })
     }
   })
 
@@ -88,7 +96,7 @@ export default function RegisterDialog() {
       setDistricts(response.data)
     },
     onError: error => {
-      console.log('Get districts error:', error)
+      console.log('Get districts error:', { ...error })
     }
   })
 
@@ -120,9 +128,7 @@ export default function RegisterDialog() {
           required
           error={!!errors.name}
           helperText={errors.name?.message}
-          inputRef={register({
-            required: errorMessages.nameRequired,
-          })}
+          inputRef={register}
           label="Họ tên"
           name="name"
         />
@@ -132,9 +138,7 @@ export default function RegisterDialog() {
           required
           error={!!errors.email}
           helperText={errors.name?.message}
-          inputRef={register({
-            required: errorMessages.emailRequired
-          })}
+          inputRef={register}
           label="Email"
           name="email"
         />
@@ -144,13 +148,7 @@ export default function RegisterDialog() {
           required
           error={!!errors.phone}
           helperText={errors.phone?.message}
-          inputRef={register({
-            pattern: {
-              message: errorMessages.phoneInvalid,
-              value: phoneRegex
-            },
-            required: errorMessages.phoneRequired
-          })}
+          inputRef={register}
           label="Số điện thoại"
           name="phone"
         />
@@ -160,13 +158,7 @@ export default function RegisterDialog() {
           required
           error={!!errors.password}
           helperText={errors.password?.message}
-          inputRef={register({
-            minLength: {
-              message: errorMessages.passwordLength,
-              value: 6
-            },
-            required: errorMessages.passwordRequired
-          })}
+          inputRef={register}
           label="Mật khẩu"
           name="password"
           type="password"
@@ -181,9 +173,6 @@ export default function RegisterDialog() {
           helperText={errors.cityID?.message}
           label="Tỉnh/Thành phố"
           name="cityID"
-          rules={{
-            required: errorMessages.cityRequired
-          }}
         >
           {
             cities.slice(1).map(city => (
@@ -206,9 +195,6 @@ export default function RegisterDialog() {
           helperText={errors.districtID?.message}
           label="Quận/Huyện"
           name="districtID"
-          rules={{
-            required: errorMessages.districtRequired
-          }}
         >
           {
             districts.map(district => (
@@ -231,6 +217,8 @@ export default function RegisterDialog() {
           <TextLink onClick={handleLinkClick}>Đăng nhập ngay</TextLink>
         </div>
       </form>
+
+      <LoadingBackdrop open={loadingCities || loadingDistricts || loadingRegister} />
     </Dialog>
   )
 }

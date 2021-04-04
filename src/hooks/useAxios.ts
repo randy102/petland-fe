@@ -9,7 +9,7 @@ type Config = {
 type Props<Data> = {
   config: Config
   onCompleted?: (data: AxiosResponse<Data>) => void
-  onError?: (error: AxiosError) => void
+  onError?: (error: AxiosResponse<any> | undefined) => void
   fetchOnMount?: boolean
 }
 
@@ -34,7 +34,7 @@ export default function useAxios<Data>(props: Props<Data>) {
     }).catch((error: AxiosError) => {
       setLoading(false)
 
-      onError?.(error)
+      onError?.(error.response)
     })
   }
 
