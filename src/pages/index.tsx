@@ -1,3 +1,3 @@
 export default function IndexPage() {
-  return <div>Petland</div>
+  return <div>Petland Test</div>
 }
