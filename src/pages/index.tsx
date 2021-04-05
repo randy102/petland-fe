@@ -1,3 +1,3 @@
 export default function IndexPage() {
-  return <div>Homepage</div>
+  return <div>Petland</div>
 }
