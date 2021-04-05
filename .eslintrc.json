@@ -29,10 +29,6 @@
   "rules": {
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "indent": "off",
-    "linebreak-style": [
-      "error",
-      "unix"
-    ],
     "quotes": [
       "error",
       "single"
