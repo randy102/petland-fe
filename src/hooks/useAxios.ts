@@ -18,6 +18,8 @@ export default function useAxios<Data>(props: Props<Data>) {
 
   const [loading, setLoading] = useState<boolean>(!!props.fetchOnMount)
 
+  const [data, setData] = useState<Data>()
+
   async function fetch(config?: Omit<AxiosRequestConfig, 'method' | 'url'>) {
     const { route, method } = props.config
 
@@ -29,6 +31,8 @@ export default function useAxios<Data>(props: Props<Data>) {
       ...config,
     }).then((response: AxiosResponse<Data>) => {
       setLoading(false)
+
+      setData(response.data)
   
       onCompleted?.(response)
     }).catch((error: AxiosError) => {
@@ -44,5 +48,5 @@ export default function useAxios<Data>(props: Props<Data>) {
     }
   }, [])
 
-  return { fetch, loading }
+  return { data, fetch, loading }
 }
