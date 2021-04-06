@@ -14,6 +14,7 @@ import { District } from 'src/types/District'
 import { City } from 'src/types/City'
 import LoadingBackdrop from '../LoadingBackdrop'
 import setServerErrors from 'src/helpers/setServerErrors'
+import { useSnackbar } from 'notistack'
 
 type Inputs = {
   name: string
@@ -24,7 +25,6 @@ type Inputs = {
   districtID: string
 }
 
-
 export default function RegisterDialog() {
   const classes = useStyles()
 
@@ -34,10 +34,13 @@ export default function RegisterDialog() {
 
   const dispatch = useAppDispatch()
 
-  const { register, handleSubmit, control, watch, setValue, setError, errors } = useForm<Inputs>()
+  const { register: registerForm, handleSubmit, control, watch, setValue, setError, errors } = useForm<Inputs>()
+
+  // Toast
+  const { enqueueSnackbar } = useSnackbar()
 
   // Register account
-  const { fetch: fetchRegister, loading: loadingRegister } = useAxios<string>({
+  const { fetch: register, loading: registering } = useAxios<string>({
     config: {
       method: 'POST',
       route: 'auth/register'
@@ -46,6 +49,14 @@ export default function RegisterDialog() {
       // Set token after register success
       localStorage.setItem('token', response.data)
       dispatch(closeModal())
+      enqueueSnackbar('Đăng ký thành công!', {
+        anchorOrigin: {
+          horizontal: 'center',
+          vertical: 'top'
+        },
+        autoHideDuration: 1500,
+        variant: 'success'
+      })
     },
     onError: error => {
       // If error status is not 400, log error
@@ -78,6 +89,17 @@ export default function RegisterDialog() {
   // Selected city ID
   const selectedCityId = watch('cityID') as string
 
+  // Fetch districts
+  const { data: districts, fetch: fetchDistricts, loading: loadingDistricts } = useAxios<District[]>({
+    config: {
+      method: 'GET',
+      route: 'district'
+    },
+    onError: error => {
+      console.log('Get districts error:', { ...error })
+    }
+  })
+
   // When user selects a city
   useEffect(() => {
     if (!selectedCityId) return
@@ -91,22 +113,13 @@ export default function RegisterDialog() {
         city: selectedCityId
       }
     })
-  }, [selectedCityId])
+  }, [fetchDistricts, selectedCityId, setValue])
 
-  // Fetch districts
-  const { data: districts, fetch: fetchDistricts, loading: loadingDistricts } = useAxios<District[]>({
-    config: {
-      method: 'GET',
-      route: 'district'
-    },
-    onError: error => {
-      console.log('Get districts error:', { ...error })
-    }
-  })
+  
 
   // Register on form submit
   const onSubmit = handleSubmit(data => {
-    fetchRegister({
+    register({
       data
     })
   })
@@ -134,7 +147,7 @@ export default function RegisterDialog() {
           required
           error={!!errors.name}
           helperText={errors.name?.message}
-          inputRef={register}
+          inputRef={registerForm}
           label="Họ tên"
           name="name"
         />
@@ -144,7 +157,7 @@ export default function RegisterDialog() {
           required
           error={!!errors.email}
           helperText={errors.email?.message}
-          inputRef={register}
+          inputRef={registerForm}
           label="Email"
           name="email"
         />
@@ -154,7 +167,7 @@ export default function RegisterDialog() {
           required
           error={!!errors.phone}
           helperText={errors.phone?.message}
-          inputRef={register}
+          inputRef={registerForm}
           label="Số điện thoại"
           name="phone"
         />
@@ -164,7 +177,7 @@ export default function RegisterDialog() {
           required
           error={!!errors.password}
           helperText={errors.password?.message}
-          inputRef={register}
+          inputRef={registerForm}
           label="Mật khẩu"
           name="password"
           type="password"
@@ -234,7 +247,7 @@ export default function RegisterDialog() {
         </div>
       </form>
 
-      <LoadingBackdrop open={loadingCities || loadingDistricts || loadingRegister} />
+      <LoadingBackdrop open={loadingCities || loadingDistricts || registering} />
     </Dialog>
   )
 }

@@ -1,9 +1,12 @@
 import { Button, TextField } from '@material-ui/core'
+import { useSnackbar } from 'notistack'
 import { useForm } from 'react-hook-form'
-import errorMessages from 'src/assets/constants/errorMessages'
+import setServerErrors from 'src/helpers/setServerErrors'
+import useAxios from 'src/hooks/useAxios'
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
 import { closeModal, openModal } from 'src/redux/slices/modal'
 import Dialog from '../Dialog'
+import LoadingBackdrop from '../LoadingBackdrop'
 import TextLink from '../TextLink'
 import useStyles from './styles'
 
@@ -19,10 +22,53 @@ export default function LoginDialog() {
 
   const dispatch = useAppDispatch()
 
-  const { register, handleSubmit, errors } = useForm<Inputs>()
+  const { register, handleSubmit, errors, setError } = useForm<Inputs>()
 
+  // Toast
+  const { enqueueSnackbar } = useSnackbar()
+
+  // Login API
+  const { fetch: login, loading: loggingIn } = useAxios<string>({
+    config: {
+      method: 'POST',
+      route: 'auth/login'
+    },
+    onCompleted: response => {
+      localStorage.setItem('token', response.data)
+      enqueueSnackbar('Đăng nhập thành công!', {
+        anchorOrigin: {
+          horizontal: 'center',
+          vertical: 'top'
+        },
+        autoHideDuration: 1500,
+        variant: 'success'
+      })
+      dispatch(closeModal())
+    },
+    onError: error => {
+      // If error status is not 400, log error
+      if (error?.status !== 400) {
+        console.log('Login error:', error)
+        return
+      }
+
+      // If error data has statusCode, that means it's an error not specific to a field
+      //   so we use snackbar to announce the error
+      if (error?.data?.statusCode === 400) {
+        enqueueSnackbar(error?.data.message, { variant: 'error' })
+        return
+      }
+
+      // If it's not a universal error, then set errors to specific form fields
+      setServerErrors(error?.data, setError)
+    }
+  })
+
+  // Login on form submit
   const onSubmit = handleSubmit(data => {
-    console.log('Submit data:', data)
+    login({
+      data
+    })
   })
 
   const handleCloseModal = () => dispatch(closeModal())
@@ -37,6 +83,8 @@ export default function LoginDialog() {
       title="Đăng nhập"
       onClose={handleCloseModal}
     >
+      <LoadingBackdrop open={loggingIn} />
+
       <form
         noValidate
         className={classes.root}
@@ -46,9 +94,7 @@ export default function LoginDialog() {
           fullWidth
           error={!!errors.email}
           helperText={errors.email?.message}
-          inputRef={register({
-            required: errorMessages.emailRequired,
-          })}
+          inputRef={register}
           label="Email"
           name="email"
         />
@@ -57,9 +103,7 @@ export default function LoginDialog() {
           fullWidth
           error={!!errors.password}
           helperText={errors.password?.message}
-          inputRef={register({
-            required: errorMessages.passwordRequired,
-          })}
+          inputRef={register}
           label="Mật khẩu"
           name="password"
           type="password"
