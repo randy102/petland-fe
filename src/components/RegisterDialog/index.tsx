@@ -13,6 +13,7 @@ import { setCities } from 'src/redux/slices/cities'
 import { District } from 'src/types/District'
 import { City } from 'src/types/City'
 import LoadingBackdrop from '../LoadingBackdrop'
+import setServerErrors from 'src/helpers/setServerErrors'
 
 type Inputs = {
   name: string
@@ -35,28 +36,29 @@ export default function RegisterDialog() {
 
   const { register, handleSubmit, control, watch, setValue, setError, errors } = useForm<Inputs>()
 
-  useEffect(() => {
-    console.log(errors)
-  }, [errors])
-
+  // Register account
   const { fetch: fetchRegister, loading: loadingRegister } = useAxios<string>({
     config: {
       method: 'POST',
       route: 'auth/register'
     },
     onCompleted: response => {
+      // Set token after register success
       localStorage.setItem('token', response.data)
     },
     onError: error => {
-      Object.keys(error?.data).forEach(field => {
-        setError(field as keyof Inputs, {
-          message: error?.data[field],
-          type: 'server'
-        })
-      })
+      // If error status is not 400, log error
+      if (error?.status !== 400) {
+        console.log('Register error:', error)
+        return
+      }
+
+      // If error status is 400, set server error messages to form fields
+      setServerErrors(error?.data, setError)
     }
   })
 
+  // Fetch cities on component mount
   const { loading: loadingCities } = useAxios<City[]>({
     config: {
       method: 'GET',
@@ -64,6 +66,7 @@ export default function RegisterDialog() {
     },
     fetchOnMount: true,
     onCompleted: response => {
+      // Save cities to redux after fetch
       dispatch(setCities(response.data))
     },
     onError: error => {
@@ -71,13 +74,17 @@ export default function RegisterDialog() {
     }
   })
 
+  // Selected city ID
   const selectedCityId = watch('cityID') as string
 
+  // When user selects a city
   useEffect(() => {
     if (!selectedCityId) return
 
+    // Reset district select
     setValue('districtID', '')
 
+    // Fetch districts of the selected city
     fetchDistricts({
       params: {
         city: selectedCityId
@@ -137,7 +144,7 @@ export default function RegisterDialog() {
           fullWidth
           required
           error={!!errors.email}
-          helperText={errors.name?.message}
+          helperText={errors.email?.message}
           inputRef={register}
           label="Email"
           name="email"
