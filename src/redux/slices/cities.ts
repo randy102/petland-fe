@@ -3,7 +3,7 @@ import { City } from 'src/types/City'
 
 type State = City[]
 
-const initialState: State = []
+const initialState: State = [] as State
 
 
 export const citiesSlice = createSlice({
