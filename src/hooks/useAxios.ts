@@ -19,17 +19,30 @@ export default function useAxios<Data>(props: Props<Data>) {
   const [loading, setLoading] = useState<boolean>(!!props.fetchOnMount)
 
   const [data, setData] = useState<Data>()
-
-  async function fetch(config?: Omit<AxiosRequestConfig, 'method' | 'url'>) {
+  
+  async function fetch(config?: AxiosRequestConfig) {
     const { route, method } = props.config
 
     setLoading(true)
 
-    axios({
+    let defaultConfig: AxiosRequestConfig = {
       method,
-      url: `${process.env.REACT_APP_API_BASE_URL}/api/${route}`,
-      ...config,
-    }).then((response: AxiosResponse<Data>) => {
+      url: `/api/${route}`,
+    }
+
+    const token = localStorage.getItem('token')
+    if (token) {
+      defaultConfig.headers = {
+        Authorization: 'Bearer ' + token
+      }
+    }
+
+    defaultConfig = {
+      ...defaultConfig,
+      ...config
+    }
+
+    axios(defaultConfig).then((response: AxiosResponse<Data>) => {
       setLoading(false)
 
       setData(response.data)

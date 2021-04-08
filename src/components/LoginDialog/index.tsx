@@ -1,10 +1,13 @@
 import { Button, TextField } from '@material-ui/core'
 import { useSnackbar } from 'notistack'
+import React from 'react'
 import { useForm } from 'react-hook-form'
 import setServerErrors from 'src/helpers/setServerErrors'
 import useAxios from 'src/hooks/useAxios'
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
 import { closeModal, openModal } from 'src/redux/slices/modal'
+import { setUser } from 'src/redux/slices/user'
+import { User } from 'src/types/User'
 import Dialog from '../Dialog'
 import LoadingBackdrop from '../LoadingBackdrop'
 import TextLink from '../TextLink'
@@ -27,6 +30,20 @@ export default function LoginDialog() {
   // Toast
   const { enqueueSnackbar } = useSnackbar()
 
+  // Get user data API
+  const { fetch: getUser, loading: gettingUser } = useAxios<User>({
+    config: {
+      method: 'GET',
+      route: 'user/profile'
+    },
+    onCompleted: response => {
+      dispatch(setUser(response.data))
+    },
+    onError: error => {
+      console.log('Get user error:', error)
+    }
+  })
+
   // Login API
   const { fetch: login, loading: loggingIn } = useAxios<string>({
     config: {
@@ -44,6 +61,8 @@ export default function LoginDialog() {
         variant: 'success'
       })
       dispatch(closeModal())
+      
+      getUser()
     },
     onError: error => {
       // If error status is not 400, log error
@@ -76,48 +95,51 @@ export default function LoginDialog() {
   const handleLinkClick = () => dispatch(openModal('REGISTER'))
 
   return (
-    <Dialog
-      fullWidth
-      maxWidth="sm"
-      open={open === 'LOGIN'}
-      title="Đăng nhập"
-      onClose={handleCloseModal}
-    >
-      <LoadingBackdrop open={loggingIn} />
-
-      <form
-        noValidate
-        className={classes.root}
-        onSubmit={onSubmit}
+    <React.Fragment>
+      <LoadingBackdrop open={gettingUser} />
+      <Dialog
+        fullWidth
+        maxWidth="sm"
+        open={open === 'LOGIN'}
+        title="Đăng nhập"
+        onClose={handleCloseModal}
       >
-        <TextField
-          fullWidth
-          error={!!errors.email}
-          helperText={errors.email?.message}
-          inputRef={register}
-          label="Email"
-          name="email"
-        />
+        <LoadingBackdrop open={loggingIn} />
 
-        <TextField
-          fullWidth
-          error={!!errors.password}
-          helperText={errors.password?.message}
-          inputRef={register}
-          label="Mật khẩu"
-          name="password"
-          type="password"
-        />
+        <form
+          noValidate
+          className={classes.root}
+          onSubmit={onSubmit}
+        >
+          <TextField
+            fullWidth
+            error={!!errors.email}
+            helperText={errors.email?.message}
+            inputRef={register}
+            label="Email"
+            name="email"
+          />
 
-        <Button type="submit">
-          Đăng nhập
-        </Button>
+          <TextField
+            fullWidth
+            error={!!errors.password}
+            helperText={errors.password?.message}
+            inputRef={register}
+            label="Mật khẩu"
+            name="password"
+            type="password"
+          />
 
-        <div>
-          Chưa có tài khoản?{' '}
-          <TextLink onClick={handleLinkClick}>Đăng ký ngay</TextLink>
-        </div>
-      </form>
-    </Dialog>
+          <Button type="submit">
+            Đăng nhập
+          </Button>
+
+          <div>
+            Chưa có tài khoản?{' '}
+            <TextLink onClick={handleLinkClick}>Đăng ký ngay</TextLink>
+          </div>
+        </form>
+      </Dialog>
+    </React.Fragment>
   )
 }
