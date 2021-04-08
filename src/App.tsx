@@ -1,6 +1,7 @@
 import { CssBaseline, ThemeProvider } from '@material-ui/core'
 import Grow from '@material-ui/core/Grow'
 import { TransitionProps } from '@material-ui/core/transitions/transition'
+import axios from 'axios'
 import { SnackbarProvider } from 'notistack'
 import { Provider } from 'react-redux'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
@@ -10,6 +11,8 @@ import RegisterDialog from './components/RegisterDialog'
 import IndexPage from './pages'
 import store from './redux/store'
 import theme from './theme'
+
+axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL
 
 function App() {
   return (

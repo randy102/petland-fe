@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { User } from 'src/types/User'
 
-type State = User | undefined
+type State = User | null
 
-const initialState: State = undefined as State
+const initialState: State = null as State
 
 
 export const userSlice = createSlice({
@@ -12,7 +12,7 @@ export const userSlice = createSlice({
   reducers: {
     logout: () => {
       localStorage.removeItem('token')
-      return undefined
+      return null
     },
     setUser: (state, action: PayloadAction<User>) => {
       return action.payload
