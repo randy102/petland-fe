@@ -9,4 +9,5 @@ export type User = {
   cityID: string
   districtID: string
   role: string
+  avatar?: string
 }

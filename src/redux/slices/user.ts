@@ -20,7 +20,7 @@ export const userSlice = createSlice({
   }
 })
 
-export const { setUser } = userSlice.actions
+export const { setUser, logout } = userSlice.actions
 
 const userReducer = userSlice.reducer
 

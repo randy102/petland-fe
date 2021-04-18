@@ -2,7 +2,6 @@ import { Button, Menu, MenuItem } from '@material-ui/core'
 import React, { useState } from 'react'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import useStyles from './styles'
-import theme from 'src/theme'
 
 export type SearchType = 'pet' | 'product'
 
@@ -50,10 +49,6 @@ export default function TypeSelect() {
       <Menu
         anchorEl={anchorEl}
         open={!!anchorEl}
-        transformOrigin={{
-          horizontal: 'center',
-          vertical: theme.spacing(-0.5),
-        }}
         onClose={handleClose}
       >
         {

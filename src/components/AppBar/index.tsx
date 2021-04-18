@@ -4,6 +4,7 @@ import {
   Hidden,
   Toolbar,
 } from '@material-ui/core'
+import React from 'react'
 import IconButton from '@material-ui/core/IconButton/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
 import { useEffect } from 'react'
@@ -14,6 +15,7 @@ import { openModal } from 'src/redux/slices/modal'
 import LoadingBackdrop from '../LoadingBackdrop'
 import SearchBar from '../SearchBar'
 import useStyles from './styles'
+import User from './User'
 
 export default function AppBar() {
   const classes = useStyles()
@@ -33,8 +35,8 @@ export default function AppBar() {
 
     if (user !== null) return
 
-    getUser()
-  }, [])
+    getUser?.()
+  }, [getUser, user])
 
   return (
     <MuiAppBar position="sticky">
@@ -60,24 +62,30 @@ export default function AppBar() {
 
         <SearchBar />
 
-        <Button
-          classes={{ root: classes.loginButtonRoot }}
-          color="secondary"
-          size="small"
-          variant="contained"
-          onClick={handleLoginClick}
-        >
-          Đăng nhập
-        </Button>
+        {
+          user ? <User/> : <React.Fragment>
+            <Button
+              classes={{ root: classes.loginButtonRoot }}
+              color="secondary"
+              size="small"
+              variant="contained"
+              onClick={handleLoginClick}
+            >
+              Đăng nhập
+            </Button>
 
-        <Button
-          color="secondary"
-          size="small"
-          variant="contained"
-          onClick={handleRegisterClick}
-        >
-          Đăng ký
-        </Button>
+            <Button
+              color="secondary"
+              size="small"
+              variant="contained"
+              onClick={handleRegisterClick}
+            >
+              Đăng ký
+            </Button>
+          </React.Fragment>
+        }
+
+        
       </Toolbar>
     </MuiAppBar>
   )
