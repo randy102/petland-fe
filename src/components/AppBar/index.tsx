@@ -6,9 +6,12 @@ import {
 } from '@material-ui/core'
 import IconButton from '@material-ui/core/IconButton/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
+import { useEffect } from 'react'
 import logo from 'src/assets/images/logo.png'
-import { useAppDispatch } from 'src/redux/hooks'
+import useUser from 'src/hooks/useUser'
+import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
 import { openModal } from 'src/redux/slices/modal'
+import LoadingBackdrop from '../LoadingBackdrop'
 import SearchBar from '../SearchBar'
 import useStyles from './styles'
 
@@ -21,8 +24,22 @@ export default function AppBar() {
 
   const handleRegisterClick = () => dispatch(openModal('REGISTER'))
 
+  const { fetch: getUser, loading: gettingUser } = useUser()
+
+  const user = useAppSelector(state => state.user)
+
+  useEffect(() => {
+    if (!localStorage.getItem('token')) return
+
+    if (user !== null) return
+
+    getUser()
+  }, [])
+
   return (
     <MuiAppBar position="sticky">
+      <LoadingBackdrop open={gettingUser} />
+
       <Toolbar>
         <IconButton
           aria-label="menu"
