@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, Method } from 'axios'
+import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 
 type Config = {
@@ -15,6 +16,8 @@ type Props<Data> = {
 
 export default function useAxios<Data>(props: Props<Data>) {
   const { onCompleted, onError } = props
+
+  const { enqueueSnackbar } = useSnackbar()
 
   const [loading, setLoading] = useState<boolean>(!!props.fetchOnMount)
 
@@ -50,6 +53,13 @@ export default function useAxios<Data>(props: Props<Data>) {
       onCompleted?.(response)
     }).catch((error: AxiosError) => {
       setLoading(false)
+
+      console.log('Error:', { error })
+      
+      // Toast error message if available
+      if (error?.response?.data.message) {
+        enqueueSnackbar(error?.response?.data.message, { variant: 'error' })
+      }
 
       onError?.(error.response)
     })

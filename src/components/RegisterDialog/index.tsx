@@ -1,20 +1,21 @@
 import { Button, MenuItem, TextField, Tooltip } from '@material-ui/core'
-import { useEffect } from 'react'
+import { useSnackbar } from 'notistack'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import Select from 'src/components/Select'
+import setServerErrors from 'src/helpers/setServerErrors'
+import useAxios from 'src/hooks/useAxios'
+import useUser from 'src/hooks/useUser'
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
-import { openModal, closeModal } from 'src/redux/slices/modal'
+import { setCities } from 'src/redux/slices/cities'
+import { closeModal, openModal } from 'src/redux/slices/modal'
+import { City } from 'src/types/City'
+import { District } from 'src/types/District'
 import Dialog from '../Dialog'
+import LoadingBackdrop from '../LoadingBackdrop'
 import TextLink from '../TextLink'
 import useStyles from './styles'
-import Select from 'src/components/Select'
-import useAxios from 'src/hooks/useAxios'
 
-import { setCities } from 'src/redux/slices/cities'
-import { District } from 'src/types/District'
-import { City } from 'src/types/City'
-import LoadingBackdrop from '../LoadingBackdrop'
-import setServerErrors from 'src/helpers/setServerErrors'
-import { useSnackbar } from 'notistack'
 
 type Inputs = {
   name: string
@@ -36,19 +37,12 @@ export default function RegisterDialog() {
 
   const { register: registerForm, handleSubmit, control, watch, setValue, setError, errors } = useForm<Inputs>()
 
-  // Toast
   const { enqueueSnackbar } = useSnackbar()
 
-  // Register account
-  const { fetch: register, loading: registering } = useAxios<string>({
-    config: {
-      method: 'POST',
-      route: 'auth/register'
-    },
-    onCompleted: response => {
-      // Set token after register success
-      localStorage.setItem('token', response.data)
-      dispatch(closeModal())
+  const [loading, setLoading] = useState<boolean>(false)
+
+  const { fetch: getUser } = useUser({
+    onCompleted: () => {
       enqueueSnackbar('Đăng ký thành công!', {
         anchorOrigin: {
           horizontal: 'center',
@@ -57,20 +51,37 @@ export default function RegisterDialog() {
         autoHideDuration: 1500,
         variant: 'success'
       })
-    },
-    onError: error => {
-      // If error status is not 400, log error
-      if (error?.status !== 400) {
-        console.log('Register error:', error)
-        return
-      }
 
-      // If error status is 400, set server error messages to form fields
-      setServerErrors(error?.data, setError)
+      setLoading(false)
+
+      dispatch(closeModal())
+    },
+    onError: () => {
+      setLoading(false)
     }
   })
 
-  // Fetch cities on component mount
+  const { fetch: register } = useAxios<string>({
+    config: {
+      method: 'POST',
+      route: 'auth/register'
+    },
+    onCompleted: response => {
+      localStorage.setItem('token', response.data)
+      getUser()
+      
+    },
+    onError: error => {
+      setLoading(false)
+
+      setServerErrors({
+        errors: error?.data, 
+        fields: ['name', 'email', 'phone', 'password', 'cityID', 'districtID'],
+        setError
+      })
+    }
+  })
+
   const { loading: loadingCities } = useAxios<City[]>({
     config: {
       method: 'GET',
@@ -78,7 +89,6 @@ export default function RegisterDialog() {
     },
     fetchOnMount: true,
     onCompleted: response => {
-      // Save cities to redux after fetch
       dispatch(setCities(response.data))
     },
     onError: error => {
@@ -86,10 +96,8 @@ export default function RegisterDialog() {
     }
   })
 
-  // Selected city ID
   const selectedCityId = watch('cityID') as string
 
-  // Fetch districts
   const { data: districts, fetch: fetchDistricts, loading: loadingDistricts } = useAxios<District[]>({
     config: {
       method: 'GET',
@@ -104,10 +112,8 @@ export default function RegisterDialog() {
   useEffect(() => {
     if (!selectedCityId) return
 
-    // Reset district select
     setValue('districtID', '')
 
-    // Fetch districts of the selected city
     fetchDistricts({
       params: {
         city: selectedCityId
@@ -115,10 +121,9 @@ export default function RegisterDialog() {
     })
   }, [fetchDistricts, selectedCityId, setValue])
 
-  
-
-  // Register on form submit
   const onSubmit = handleSubmit(data => {
+    setLoading(true)
+
     register({
       data
     })
@@ -126,7 +131,6 @@ export default function RegisterDialog() {
 
   const handleCloseModal = () => dispatch(closeModal())
 
-  // Open login modal on Login link click
   const handleLinkClick = () => dispatch(openModal('LOGIN'))
 
   return (
@@ -247,7 +251,7 @@ export default function RegisterDialog() {
         </div>
       </form>
 
-      <LoadingBackdrop open={loadingCities || loadingDistricts || registering} />
+      <LoadingBackdrop open={loadingCities || loadingDistricts || loading} />
     </Dialog>
   )
 }

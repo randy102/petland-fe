@@ -1,13 +1,12 @@
 import { Button, TextField } from '@material-ui/core'
 import { useSnackbar } from 'notistack'
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import setServerErrors from 'src/helpers/setServerErrors'
 import useAxios from 'src/hooks/useAxios'
+import useUser from 'src/hooks/useUser'
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
 import { closeModal, openModal } from 'src/redux/slices/modal'
-import { setUser } from 'src/redux/slices/user'
-import { User } from 'src/types/User'
 import Dialog from '../Dialog'
 import LoadingBackdrop from '../LoadingBackdrop'
 import TextLink from '../TextLink'
@@ -27,31 +26,12 @@ export default function LoginDialog() {
 
   const { register, handleSubmit, errors, setError } = useForm<Inputs>()
 
-  // Toast
   const { enqueueSnackbar } = useSnackbar()
 
-  // Get user data API
-  const { fetch: getUser, loading: gettingUser } = useAxios<User>({
-    config: {
-      method: 'GET',
-      route: 'user/profile'
-    },
-    onCompleted: response => {
-      dispatch(setUser(response.data))
-    },
-    onError: error => {
-      console.log('Get user error:', error)
-    }
-  })
+  const [loading, setLoading] = useState<boolean>(false)
 
-  // Login API
-  const { fetch: login, loading: loggingIn } = useAxios<string>({
-    config: {
-      method: 'POST',
-      route: 'auth/login'
-    },
-    onCompleted: response => {
-      localStorage.setItem('token', response.data)
+  const { fetch: getUser } = useUser({
+    onCompleted: () => {
       enqueueSnackbar('Đăng nhập thành công!', {
         anchorOrigin: {
           horizontal: 'center',
@@ -60,31 +40,41 @@ export default function LoginDialog() {
         autoHideDuration: 1500,
         variant: 'success'
       })
+
+      setLoading(false)
+
       dispatch(closeModal())
-      
+    },
+    onError: () => {
+      setLoading(false)
+    }
+  })
+
+  // Login API
+  const { fetch: login } = useAxios<string>({
+    config: {
+      method: 'POST',
+      route: 'auth/login'
+    },
+    onCompleted: response => {
+      localStorage.setItem('token', response.data)
       getUser()
     },
     onError: error => {
-      // If error status is not 400, log error
-      if (error?.status !== 400) {
-        console.log('Login error:', error)
-        return
-      }
+      setLoading(false)
 
-      // If error data has statusCode, that means it's an error not specific to a field
-      //   so we use snackbar to announce the error
-      if (error?.data?.statusCode === 400) {
-        enqueueSnackbar(error?.data.message, { variant: 'error' })
-        return
-      }
-
-      // If it's not a universal error, then set errors to specific form fields
-      setServerErrors(error?.data, setError)
+      setServerErrors({
+        errors: error?.data,
+        fields: ['email', 'password'],
+        setError
+      })
     }
   })
 
   // Login on form submit
   const onSubmit = handleSubmit(data => {
+    setLoading(true)
+    
     login({
       data
     })
@@ -95,51 +85,48 @@ export default function LoginDialog() {
   const handleLinkClick = () => dispatch(openModal('REGISTER'))
 
   return (
-    <React.Fragment>
-      <LoadingBackdrop open={gettingUser} />
-      <Dialog
-        fullWidth
-        maxWidth="sm"
-        open={open === 'LOGIN'}
-        title="Đăng nhập"
-        onClose={handleCloseModal}
+    <Dialog
+      fullWidth
+      maxWidth="sm"
+      open={open === 'LOGIN'}
+      title="Đăng nhập"
+      onClose={handleCloseModal}
+    >
+      <LoadingBackdrop open={loading} />
+
+      <form
+        noValidate
+        className={classes.root}
+        onSubmit={onSubmit}
       >
-        <LoadingBackdrop open={loggingIn} />
+        <TextField
+          fullWidth
+          error={!!errors.email}
+          helperText={errors.email?.message}
+          inputRef={register}
+          label="Email"
+          name="email"
+        />
 
-        <form
-          noValidate
-          className={classes.root}
-          onSubmit={onSubmit}
-        >
-          <TextField
-            fullWidth
-            error={!!errors.email}
-            helperText={errors.email?.message}
-            inputRef={register}
-            label="Email"
-            name="email"
-          />
+        <TextField
+          fullWidth
+          error={!!errors.password}
+          helperText={errors.password?.message}
+          inputRef={register}
+          label="Mật khẩu"
+          name="password"
+          type="password"
+        />
 
-          <TextField
-            fullWidth
-            error={!!errors.password}
-            helperText={errors.password?.message}
-            inputRef={register}
-            label="Mật khẩu"
-            name="password"
-            type="password"
-          />
-
-          <Button type="submit">
+        <Button type="submit">
             Đăng nhập
-          </Button>
+        </Button>
 
-          <div>
+        <div>
             Chưa có tài khoản?{' '}
-            <TextLink onClick={handleLinkClick}>Đăng ký ngay</TextLink>
-          </div>
-        </form>
-      </Dialog>
-    </React.Fragment>
+          <TextLink onClick={handleLinkClick}>Đăng ký ngay</TextLink>
+        </div>
+      </form>
+    </Dialog>
   )
 }
