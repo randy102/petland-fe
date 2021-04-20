@@ -1,9 +1,11 @@
 import { makeStyles } from '@material-ui/core'
 
+const avatarSize = 48
+
 const useStyles = makeStyles(theme => ({
   avatarContainer: {
-    height: 48,
-    width: 48
+    height: avatarSize,
+    width: avatarSize
   },
   avatarDefault: {
     alignItems: 'center',
@@ -11,18 +13,18 @@ const useStyles = makeStyles(theme => ({
     borderRadius: theme.shape.borderRadius,
     color: theme.palette.common.black,
     display: 'flex',
-    height: 48,
+    height: avatarSize,
     justifyContent: 'center',
-    width: 48
+    width: avatarSize
   },
   avatarImg: {
     borderColor: theme.palette.common.white,
     borderRadius: theme.shape.borderRadius,
     borderStyle: 'solid',
     borderWidth: 1,
-    height: 48,
+    height: avatarSize,
     objectFit: 'cover',
-    width: 48
+    width: avatarSize
   },
   loginButtonRoot: {
     marginRight: theme.spacing(2),

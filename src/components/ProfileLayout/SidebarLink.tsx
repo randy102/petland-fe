@@ -1,6 +1,5 @@
 import { Link as MuiLink } from '@material-ui/core'
 import { Link as RouterLink, useLocation } from 'react-router-dom'
-import useStyles from './styles'
 
 type Props = {
   to: string
