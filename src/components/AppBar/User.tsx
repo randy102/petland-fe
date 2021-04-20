@@ -7,6 +7,7 @@ import useStyles from './styles'
 import theme from 'src/theme'
 import { logout } from 'src/redux/slices/user'
 import { useHistory } from 'react-router'
+import { Link } from 'react-router-dom'
 
 function MenuItemContent(props: {
   text: string
@@ -83,21 +84,22 @@ export default function User() {
           </Typography>
         </Box>
 
-        <MenuItem onClick={popupState.close}>
+        <MenuItem
+          component={Link}
+          to="/my-posts"
+          onClick={popupState.close}
+        >
           <MenuItemContent
             icon="pets"
-            text="Tin đăng thú cưng"
+            text="Bài đăng của bạn"
           />
         </MenuItem>
 
-        <MenuItem onClick={popupState.close}>
-          <MenuItemContent
-            icon="widgets"
-            text="Tin đăng sản phẩm"
-          />
-        </MenuItem>
-
-        <MenuItem onClick={popupState.close}>
+        <MenuItem
+          component={Link}
+          to="/my-profile"
+          onClick={popupState.close}
+        >
           <MenuItemContent
             icon="account_circle"
             text="Thông tin cá nhân"

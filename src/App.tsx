@@ -1,15 +1,15 @@
-import { CssBaseline, ThemeProvider } from '@material-ui/core'
+import { Box, Container, CssBaseline, ThemeProvider } from '@material-ui/core'
 import Grow from '@material-ui/core/Grow'
 import { TransitionProps } from '@material-ui/core/transitions/transition'
 import axios from 'axios'
 import { SnackbarProvider } from 'notistack'
 import { Provider } from 'react-redux'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 import AppBar from 'src/components/AppBar'
 import LoginDialog from './components/LoginDialog'
 import RegisterDialog from './components/RegisterDialog'
-import IndexPage from './pages'
 import store from './redux/store'
+import Routes from './Routes'
 import theme from './theme'
 
 axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL
@@ -37,11 +37,11 @@ function App() {
 
             <RegisterDialog />
 
-            <Switch>
-              <Route path="/">
-                <IndexPage />
-              </Route>
-            </Switch>
+            <Container maxWidth="lg">
+              <Box py={2}>
+                <Routes />
+              </Box>
+            </Container>
           </SnackbarProvider>
         </ThemeProvider>
       </BrowserRouter>

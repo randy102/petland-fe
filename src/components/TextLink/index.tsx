@@ -12,6 +12,7 @@ export default function TextLink(props: Props) {
     <MuiLink
       component={RouterLink}
       to={props.to || '#'}
+      variant="body1"
       onClick={props.onClick}
     >
       {props.children}
