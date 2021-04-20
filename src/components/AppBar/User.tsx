@@ -56,12 +56,9 @@ export default function User() {
               id={user.avatar}
             />
           ) : (
-            <div className={classes.avatarDefault}>
-              <Icon fontSize="large">person</Icon>
-            </div>
+            <Icon className={classes.avatarDefault}>person</Icon>
           )
       }
-
 
       <HoverMenu
         anchorOrigin={{

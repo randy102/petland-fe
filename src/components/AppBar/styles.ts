@@ -12,16 +12,10 @@ const useStyles = makeStyles(theme => ({
     background: theme.palette.common.white,
     borderRadius: theme.shape.borderRadius,
     color: theme.palette.common.black,
-    display: 'flex',
-    height: avatarSize,
-    justifyContent: 'center',
-    width: avatarSize
+    fontSize: avatarSize,
   },
   avatarImg: {
-    borderColor: theme.palette.common.white,
     borderRadius: theme.shape.borderRadius,
-    borderStyle: 'solid',
-    borderWidth: 1,
     height: avatarSize,
     objectFit: 'cover',
     width: avatarSize
@@ -34,6 +28,9 @@ const useStyles = makeStyles(theme => ({
   },
   menuButton: {
     marginRight: theme.spacing(2),
+  },
+  toolbar: {
+    padding: 0
   }
 }))
 

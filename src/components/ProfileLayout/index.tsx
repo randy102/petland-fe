@@ -14,6 +14,10 @@ export default function ProfileLayout(props: Props) {
 
   const user = useAppSelector(state => state.user)
 
+  if (!user) {
+    return null
+  }
+
   return (
     <Grid
       container

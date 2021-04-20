@@ -8,6 +8,7 @@ import useUser from 'src/hooks/useUser'
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
 import { closeModal, openModal } from 'src/redux/slices/modal'
 import Dialog from '../Dialog'
+import Form from '../Form'
 import LoadingBackdrop from '../LoadingBackdrop'
 import TextLink from '../TextLink'
 import useStyles from './styles'
@@ -94,11 +95,7 @@ export default function LoginDialog() {
     >
       <LoadingBackdrop open={loading} />
 
-      <form
-        noValidate
-        className={classes.root}
-        onSubmit={onSubmit}
-      >
+      <Form onSubmit={onSubmit}>
         <TextField
           fullWidth
           error={!!errors.email}
@@ -126,7 +123,7 @@ export default function LoginDialog() {
             Chưa có tài khoản?{' '}
           <TextLink onClick={handleLinkClick}>Đăng ký ngay</TextLink>
         </div>
-      </form>
+      </Form>
     </Dialog>
   )
 }

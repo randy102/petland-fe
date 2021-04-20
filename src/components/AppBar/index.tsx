@@ -1,6 +1,7 @@
 import {
   AppBar as MuiAppBar,
   Button,
+  Container,
   Hidden,
   Toolbar,
 } from '@material-ui/core'
@@ -42,51 +43,53 @@ export default function AppBar() {
     <MuiAppBar position="sticky">
       <LoadingBackdrop open={gettingUser} />
 
-      <Toolbar>
-        <IconButton
-          aria-label="menu"
-          className={classes.menuButton}
-          color="inherit"
-          edge="start"
-        >
-          <MenuIcon />
-        </IconButton>
+      <Container maxWidth="lg">
+        <Toolbar className={classes.toolbar}>
+          <IconButton
+            aria-label="menu"
+            className={classes.menuButton}
+            color="inherit"
+            edge="start"
+          >
+            <MenuIcon />
+          </IconButton>
 
-        <Hidden xsDown>
-          <img
-            alt="Petland Logo"
-            className={classes.logo}
-            src={logo}
-          />
-        </Hidden>
+          <Hidden xsDown>
+            <img
+              alt="Petland Logo"
+              className={classes.logo}
+              src={logo}
+            />
+          </Hidden>
 
-        <SearchBar />
+          <SearchBar />
 
-        {
-          user ? <User/> : <React.Fragment>
-            <Button
-              classes={{ root: classes.loginButtonRoot }}
-              color="secondary"
-              size="small"
-              variant="contained"
-              onClick={handleLoginClick}
-            >
-              Đăng nhập
-            </Button>
+          {
+            localStorage.getItem('token') ? <User/> : <React.Fragment>
+              <Button
+                classes={{ root: classes.loginButtonRoot }}
+                color="secondary"
+                size="small"
+                variant="contained"
+                onClick={handleLoginClick}
+              >
+                Đăng nhập
+              </Button>
 
-            <Button
-              color="secondary"
-              size="small"
-              variant="contained"
-              onClick={handleRegisterClick}
-            >
-              Đăng ký
-            </Button>
-          </React.Fragment>
-        }
+              <Button
+                color="secondary"
+                size="small"
+                variant="contained"
+                onClick={handleRegisterClick}
+              >
+                Đăng ký
+              </Button>
+            </React.Fragment>
+          }
 
         
-      </Toolbar>
+        </Toolbar>
+      </Container>
     </MuiAppBar>
   )
 }
