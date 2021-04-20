@@ -8,6 +8,7 @@ import theme from 'src/theme'
 import { logout } from 'src/redux/slices/user'
 import { useHistory } from 'react-router'
 import { Link } from 'react-router-dom'
+import Avatar from '../Avatar'
 
 function MenuItemContent(props: {
   text: string
@@ -48,17 +49,7 @@ export default function User() {
       className={classes.avatarContainer}
       {...bindHover(popupState)}
     >
-      {
-        user?.avatar 
-          ? (
-            <Image
-              className={classes.avatarImg}
-              id={user.avatar}
-            />
-          ) : (
-            <Icon className={classes.avatarDefault}>person</Icon>
-          )
-      }
+      <Avatar />
 
       <HoverMenu
         anchorOrigin={{

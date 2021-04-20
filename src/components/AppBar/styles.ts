@@ -1,24 +1,9 @@
 import { makeStyles } from '@material-ui/core'
 
-const avatarSize = 48
-
 const useStyles = makeStyles(theme => ({
   avatarContainer: {
-    height: avatarSize,
-    width: avatarSize
-  },
-  avatarDefault: {
-    alignItems: 'center',
-    background: theme.palette.common.white,
-    borderRadius: theme.shape.borderRadius,
-    color: theme.palette.common.black,
-    fontSize: avatarSize,
-  },
-  avatarImg: {
-    borderRadius: theme.shape.borderRadius,
-    height: avatarSize,
-    objectFit: 'cover',
-    width: avatarSize
+    height: 48,
+    width: 48
   },
   loginButtonRoot: {
     marginRight: theme.spacing(2),

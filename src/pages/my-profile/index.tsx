@@ -1,19 +1,20 @@
 import { Button, Fab, Icon, TextField } from '@material-ui/core'
-import axios from 'axios'
 import { useSnackbar } from 'notistack'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import Avatar from 'src/components/Avatar'
 import Form from 'src/components/Form'
-import Image from 'src/components/Image'
 import ProfileLayout from 'src/components/ProfileLayout'
 import useAxios from 'src/hooks/useAxios'
 import { useAppSelector } from 'src/redux/hooks'
+import theme from 'src/theme'
 import useStyles from './styles'
 
 type Inputs = {
   name: string
   phone: string
   email: string
+  avatar: string
 }
 
 const IMG_BASE = process.env.REACT_APP_S3URL
@@ -25,24 +26,21 @@ export default function MyProfile() {
 
   const user = useAppSelector(state => state.user)
 
-  const [avatarSrc, setAvatarSrc] = useState(user?.avatar ? `${IMG_BASE}/${user.avatar}` : '')
+  const [avatarSrc, setAvatarSrc] = useState('')
 
   const [imageFile, setImageFile] = useState<File>()
 
-  const { fetch: uploadImage, loading: uploadingImage } = useAxios({
+  const { fetch: uploadImage } = useAxios({
     config: {
       method: 'post',
       route: 'photo'
+    },
+    onCompleted: (response) => {
+      return
     }
   })
 
   const { enqueueSnackbar } = useSnackbar()
-
-  useEffect(() => {
-    if (!user?.avatar) return
-
-    setAvatarSrc(`${IMG_BASE}/${user.avatar}`)
-  }, [user])
 
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -75,6 +73,10 @@ export default function MyProfile() {
       setAvatarSrc(reader.result as string)
     }
   }
+
+  const updateUser = (data: Inputs) => {
+    return
+  }
   
   const onSubmit = handleSubmit(data => {
     if (imageFile) {
@@ -83,13 +85,13 @@ export default function MyProfile() {
       formData.append('file', imageFile)
 
       uploadImage({
-        data: {
-
-        }
+        data: formData
       })
+
+      return
     }
 
-    console.log('Submit data:', data)
+    // updateUser()
   })
 
   return (
@@ -104,23 +106,19 @@ export default function MyProfile() {
 
       <Form onSubmit={onSubmit}>
         <div className={classes.avatarContainer}>
-          {
-            avatarSrc
-              ? (
-                <img
-                  className={classes.avatarImg}
-                  src={avatarSrc}
-                />
-              ) : (
-                <Icon className={classes.avatarDefault}>person</Icon>
-              )
-          }
+          <Avatar
+            background={theme.palette.grey['500']}
+            color={theme.palette.common.white}
+            size={100}
+            src={avatarSrc}
+          />
 
           <Fab
             classes={{
               root: classes.avatarButton
             }}
             color="primary"
+            size="small"
             onClick={handleClick}
           >
             <Icon>photo_camera</Icon>
