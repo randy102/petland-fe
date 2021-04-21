@@ -6,6 +6,7 @@ import Avatar from 'src/components/Avatar'
 import Form from 'src/components/Form'
 import LoadingBackdrop from 'src/components/LoadingBackdrop'
 import ProfileLayout from 'src/components/ProfileLayout'
+import setServerErrors from 'src/helpers/setServerErrors'
 import useAxios from 'src/hooks/useAxios'
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
 import { setUser } from 'src/redux/slices/user'
@@ -25,7 +26,7 @@ export default function MyProfile() {
 
   const user = useAppSelector(state => state.user)
 
-  const { register, handleSubmit, errors, getValues } = useForm<Inputs>()
+  const { register, handleSubmit, errors, getValues , setError } = useForm<Inputs>()
 
   const [avatarSrc, setAvatarSrc] = useState<string>('')
 
@@ -46,8 +47,13 @@ export default function MyProfile() {
       })
     },
     onError: (error) => {
-      console.log('Update user error:', error)
       setLoading(false)
+
+      setServerErrors({
+        errors: error?.data, 
+        fields: ['name', 'phone'],
+        setError
+      })
     }
   })
 
