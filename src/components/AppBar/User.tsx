@@ -1,14 +1,13 @@
 import { Box, Icon, MenuItem, Typography } from '@material-ui/core'
-import HoverMenu from 'material-ui-popup-state/HoverMenu'
 import { bindHover, bindMenu, usePopupState } from 'material-ui-popup-state/hooks'
-import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
-import Image from '../Image'
-import useStyles from './styles'
-import theme from 'src/theme'
-import { logout } from 'src/redux/slices/user'
+import HoverMenu from 'material-ui-popup-state/HoverMenu'
 import { useHistory } from 'react-router'
 import { Link } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
+import { logout } from 'src/redux/slices/user'
+import theme from 'src/theme'
 import Avatar from '../Avatar'
+import useStyles from './styles'
 
 function MenuItemContent(props: {
   text: string
@@ -49,7 +48,7 @@ export default function User() {
       className={classes.avatarContainer}
       {...bindHover(popupState)}
     >
-      <Avatar />
+      <Avatar size={48} />
 
       <HoverMenu
         anchorOrigin={{

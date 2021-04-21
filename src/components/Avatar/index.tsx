@@ -1,52 +1,44 @@
 import useStyles from './styles'
-import theme from 'src/theme'
 import { useAppSelector } from 'src/redux/hooks'
 import Image from '../Image'
 import { Icon } from '@material-ui/core'
+import clsx from 'clsx'
 
 
 export type Props = {
   size?: string | number
-  borderRadius?: string | number
-  borderBottomLeftRadius?: string | number
-  borderBottomRightRadius?: string | number
-  borderTopLeftRadius?: string | number
-  borderTopRightRadius?: string | number
-  background?: string
-  color?: string
+  className?: string
   src?: string
 }
 
 export default function Avatar(props: Props) {
+  const { size = 48, className, src } = props
+
   const user = useAppSelector(state => state.user)
 
-  const classes = useStyles({
-    size: 48,
-    borderRadius: theme.shape.borderRadius,
-    background: theme.palette.common.white,
-    color: theme.palette.common.black,
-    ...props,
-  })
+  const classes = useStyles({ size })
 
-  if (props.src) {
+  if (src) {
     return (
       <img
-        className={classes.avatarImg}
-        src={props.src}
+        className={clsx(classes.avatar, className)}
+        src={src}
       />
     )
   }
 
-  if (user?.avatar && !props.src) {
+  if (user?.avatar) {
     return (
       <Image
-        className={classes.avatarImg}
+        className={clsx(classes.avatar, className)}
         id={user.avatar}
       />
     )
   }
 
   return (
-    <Icon className={classes.avatarDefault}>person</Icon>
+    <Icon className={clsx(classes.avatar, className)}>
+      person
+    </Icon>
   )
 }

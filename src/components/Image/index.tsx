@@ -11,7 +11,7 @@ export default function Image(props: Props) {
 
   return (
     <img
-      src={IMAGE_BASE_URL + id}
+      src={IMAGE_BASE_URL + '/' + id}
       {...rest}
     />
   )

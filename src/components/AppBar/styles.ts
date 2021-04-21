@@ -2,8 +2,7 @@ import { makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
   avatarContainer: {
-    height: 48,
-    width: 48
+    display: 'flex'
   },
   loginButtonRoot: {
     marginRight: theme.spacing(2),

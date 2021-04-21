@@ -10,6 +10,9 @@ const useStyles = makeStyles(theme => ({
     paddingRight: theme.spacing(2),
     paddingTop: theme.spacing(1),
   },
+  avatar: {
+    margin: 4
+  },
   infoCard: {
     display: 'flex'
   },

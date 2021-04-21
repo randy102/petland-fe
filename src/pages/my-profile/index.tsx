@@ -4,51 +4,76 @@ import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Avatar from 'src/components/Avatar'
 import Form from 'src/components/Form'
+import LoadingBackdrop from 'src/components/LoadingBackdrop'
 import ProfileLayout from 'src/components/ProfileLayout'
 import useAxios from 'src/hooks/useAxios'
-import { useAppSelector } from 'src/redux/hooks'
-import theme from 'src/theme'
+import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
+import { setUser } from 'src/redux/slices/user'
+import { User } from 'src/types/User'
 import useStyles from './styles'
 
 type Inputs = {
   name: string
   phone: string
-  email: string
   avatar: string
 }
-
-const IMG_BASE = process.env.REACT_APP_S3URL
 
 export default function MyProfile() {
   const classes = useStyles()
 
-  const { register, handleSubmit, errors } = useForm<Inputs>()
+  const dispatch = useAppDispatch()
 
   const user = useAppSelector(state => state.user)
 
-  const [avatarSrc, setAvatarSrc] = useState('')
+  const { register, handleSubmit, errors, getValues } = useForm<Inputs>()
+
+  const [avatarSrc, setAvatarSrc] = useState<string>('')
 
   const [imageFile, setImageFile] = useState<File>()
 
-  const { fetch: uploadImage } = useAxios({
+  const [loading, setLoading] = useState<boolean>(false)
+
+  const { fetch: updateUser } = useAxios<User>({
+    config: {
+      method: 'put',
+      route: 'user/changeInfo'
+    },
+    onCompleted: (response) => {
+      setLoading(false)
+      dispatch(setUser(response.data))
+      enqueueSnackbar('Cập nhật thông tin thành công!', {
+        variant: 'success'
+      })
+    }
+  })
+
+  const { fetch: uploadImage } = useAxios<string>({
     config: {
       method: 'post',
       route: 'photo'
     },
+    // Update user with new avatar id after upload
     onCompleted: (response) => {
-      return
+      const data = getValues()
+
+      data.avatar = response.data
+
+      updateUser({
+        data
+      })
     }
   })
 
   const { enqueueSnackbar } = useSnackbar()
 
+  // File input ref to open file browser programmatically
   const fileInputRef = useRef<HTMLInputElement>(null)
 
+  // Open file browser on click
   const handleClick = () => {
     if (!fileInputRef?.current) return
 
     fileInputRef.current.click()
-    fileInputRef.current.value = ''
   }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,12 +98,11 @@ export default function MyProfile() {
       setAvatarSrc(reader.result as string)
     }
   }
-
-  const updateUser = (data: Inputs) => {
-    return
-  }
   
   const onSubmit = handleSubmit(data => {
+    setLoading(true)
+
+    // Upload image if user had chosen an image file
     if (imageFile) {
       const formData = new FormData()
 
@@ -91,11 +115,16 @@ export default function MyProfile() {
       return
     }
 
-    // updateUser()
+    // Else go straight to update user
+    updateUser({
+      data
+    })
   })
 
   return (
     <ProfileLayout title="Thông tin cá nhân">
+      <LoadingBackdrop open={loading} />
+
       <input
         hidden
         accept="image/*"
@@ -107,8 +136,6 @@ export default function MyProfile() {
       <Form onSubmit={onSubmit}>
         <div className={classes.avatarContainer}>
           <Avatar
-            background={theme.palette.grey['500']}
-            color={theme.palette.common.white}
             size={100}
             src={avatarSrc}
           />
@@ -151,9 +178,7 @@ export default function MyProfile() {
           disabled
           fullWidth
           defaultValue={user?.email}
-          inputRef={register}
           label="Email"
-          name="email"
         />
 
         <Button type="submit">

@@ -1,8 +1,6 @@
-import { Box, Grid, Icon, Paper, Typography } from '@material-ui/core'
+import { Box, Grid, Paper, Typography } from '@material-ui/core'
 import { useAppSelector } from 'src/redux/hooks'
-import theme from 'src/theme'
 import Avatar from '../Avatar'
-import Image from '../Image'
 import SidebarLink from './SidebarLink'
 import useStyles from './styles'
 
@@ -38,10 +36,7 @@ export default function ProfileLayout(props: Props) {
           <Grid item>
             <Paper className={classes.infoCard}>
               <Avatar
-                background={theme.palette.grey['500']}
-                borderBottomRightRadius={0}
-                borderTopRightRadius={0}
-                color={theme.palette.common.white}
+                className={classes.avatar}
                 size={80}
               />
 
