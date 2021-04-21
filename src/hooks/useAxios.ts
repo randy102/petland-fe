@@ -10,6 +10,7 @@ type Config = {
 type Props<Data> = {
   config: Config
   onCompleted?: (data: AxiosResponse<Data>) => void
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onError?: (error: AxiosResponse<any> | undefined) => void
   fetchOnMount?: boolean
 }
@@ -69,6 +70,7 @@ export default function useAxios<Data>(props: Props<Data>) {
     if (props.fetchOnMount) {
       fetch()
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return { data, fetch, loading }

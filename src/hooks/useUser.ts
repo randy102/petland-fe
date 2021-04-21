@@ -6,6 +6,7 @@ import useAxios from './useAxios'
 
 type Props = {
   onCompleted?: (data: AxiosResponse<User>) => void
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onError?: (error: AxiosResponse<any> | undefined) => void
 }
 

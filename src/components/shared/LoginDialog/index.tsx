@@ -19,8 +19,6 @@ type Inputs = {
 }
 
 export default function LoginDialog() {
-  const classes = useStyles()
-
   const { open } = useAppSelector(state => state.modal)
 
   const dispatch = useAppDispatch()

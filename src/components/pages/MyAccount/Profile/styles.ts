@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   avatarButton: {
     boxShadow: `
       0px 3px 5px -1px rgb(0 0 0 / 20%), 

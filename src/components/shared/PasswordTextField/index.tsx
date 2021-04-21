@@ -4,6 +4,7 @@ import { useState } from 'react'
 type Props = {
   label: string
   name: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   inputRef: any
   fullWidth?: boolean
   required?: boolean
