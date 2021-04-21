@@ -49,7 +49,7 @@ export default function ProfileLayout(props: Props) {
           </Grid>
 
           <Grid item>
-            <Paper className={classes.paper}>
+            <Paper className={classes.card}>
               <div className={classes.linkGrid}>
                 <SidebarLink to="/my-profile">
                   Thông tin cá nhân
@@ -72,19 +72,17 @@ export default function ProfileLayout(props: Props) {
         item
         xs
       >
-        <Paper>
-          <div className={classes.contentHeader}>
+        <Paper className={classes.card}>
+          <div className={classes.cardHeader}>
             <Typography
-              color="textPrimary"
+              className={classes.title}
               variant="h6"
             >
               {props.title}
             </Typography>
           </div>
 
-          <Box padding={2}>
-            {props.children}
-          </Box>
+          {props.children}
         </Paper>
       </Grid>
     </Grid>

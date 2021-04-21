@@ -44,6 +44,10 @@ export default function MyProfile() {
       enqueueSnackbar('Cập nhật thông tin thành công!', {
         variant: 'success'
       })
+    },
+    onError: (error) => {
+      console.log('Update user error:', error)
+      setLoading(false)
     }
   })
 
@@ -135,6 +139,13 @@ export default function MyProfile() {
 
       <Form onSubmit={onSubmit}>
         <div className={classes.avatarContainer}>
+          <input
+            hidden
+            defaultValue={user?.avatar || 'default'}
+            name="avatar"
+            ref={register}
+          />
+        
           <Avatar
             size={100}
             src={avatarSrc}

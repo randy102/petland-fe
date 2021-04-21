@@ -27,11 +27,11 @@ export default function Avatar(props: Props) {
     )
   }
 
-  if (user?.avatar) {
+  if (user?.avatar && user.avatar !== 'default') {
     return (
       <Image
         className={clsx(classes.avatar, className)}
-        id={user.avatar}
+        id={user?.avatar || ''}
       />
     )
   }
