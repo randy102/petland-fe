@@ -137,7 +137,10 @@ export default function RegisterDialog() {
           type="password"
         />
 
-        <Button type="submit">
+        <Button
+          fullWidth
+          type="submit"
+        >
           Đăng ký
         </Button>
 

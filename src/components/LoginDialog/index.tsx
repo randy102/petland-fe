@@ -115,7 +115,10 @@ export default function LoginDialog() {
           type="password"
         />
 
-        <Button type="submit">
+        <Button
+          fullWidth
+          type="submit"
+        >
             Đăng nhập
         </Button>
 

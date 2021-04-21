@@ -157,7 +157,7 @@ export default function MyProfile() {
         />
 
         <Button type="submit">
-          Đăng ký
+          Lưu
         </Button>
       </Form>
     </ProfileLayout>

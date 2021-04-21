@@ -13,6 +13,8 @@ const useStyles = makeStyles(theme => ({
     transform: 'translate(65%, -50%)'
   },
   avatarContainer: {
+    display: 'flex',
+    width: 'fit-content',
     margin: '0 auto',
     position: 'relative'
   },

@@ -2,11 +2,12 @@ import { makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
   root: {
-    '& > *:not(:last-child)': {
-      marginBottom: theme.spacing(2),
-    },
     display: 'flex',
     flexDirection: 'column',
+    alignItems: 'center',
+    '& > *:not(:last-child)': {
+      marginBottom: theme.spacing(3),
+    },
   },
 }))
 
