@@ -11,8 +11,6 @@ import Dialog from '../Dialog'
 import Form from '../Form'
 import LoadingBackdrop from '../LoadingBackdrop'
 import TextLink from '../TextLink'
-import useStyles from './styles'
-
 
 type Inputs = {
   name: string
@@ -22,7 +20,6 @@ type Inputs = {
 }
 
 export default function RegisterDialog() {
-  const classes = useStyles()
 
   const { open } = useAppSelector(state => state.modal)
 

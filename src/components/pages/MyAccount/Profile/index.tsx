@@ -1,11 +1,11 @@
 import { Button, Fab, Icon, TextField } from '@material-ui/core'
 import { useSnackbar } from 'notistack'
-import { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import Avatar from 'src/components/Avatar'
-import Form from 'src/components/Form'
-import LoadingBackdrop from 'src/components/LoadingBackdrop'
-import ProfileLayout from 'src/components/ProfileLayout'
+import Avatar from 'src/components/shared/Avatar'
+import CardWithTitle from 'src/components/shared/CardWithTitle'
+import Form from 'src/components/shared/Form'
+import LoadingBackdrop from 'src/components/shared/LoadingBackdrop'
 import setServerErrors from 'src/helpers/setServerErrors'
 import useAxios from 'src/hooks/useAxios'
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
@@ -19,7 +19,7 @@ type Inputs = {
   avatar: string
 }
 
-export default function MyProfile() {
+export default function Profile() {
   const classes = useStyles()
 
   const dispatch = useAppDispatch()
@@ -92,7 +92,7 @@ export default function MyProfile() {
     const file: File = event.currentTarget.files[0]
 
     if (!file.type.startsWith('image')) {
-      enqueueSnackbar('Chỉ chấp nhận file ảnh', {
+      enqueueSnackbar('Chỉ chấp nhận file ảnh!', {
         variant: 'error'
       })
       return
@@ -132,7 +132,7 @@ export default function MyProfile() {
   })
 
   return (
-    <ProfileLayout title="Thông tin cá nhân">
+    <CardWithTitle title="Thông tin cá nhân">
       <LoadingBackdrop open={loading} />
 
       <input
@@ -202,6 +202,6 @@ export default function MyProfile() {
           Lưu
         </Button>
       </Form>
-    </ProfileLayout>
+    </CardWithTitle>
   )
 }

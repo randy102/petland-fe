@@ -1,10 +1,10 @@
 import { Button } from '@material-ui/core'
 import { useSnackbar } from 'notistack'
 import { useForm } from 'react-hook-form'
-import Form from 'src/components/Form'
-import LoadingBackdrop from 'src/components/LoadingBackdrop'
-import PasswordTextField from 'src/components/PasswordTextField'
-import ProfileLayout from 'src/components/ProfileLayout'
+import CardWithTitle from 'src/components/shared/CardWithTitle'
+import Form from 'src/components/shared/Form'
+import LoadingBackdrop from 'src/components/shared/LoadingBackdrop'
+import PasswordTextField from 'src/components/shared/PasswordTextField'
 import setServerErrors from 'src/helpers/setServerErrors'
 import useAxios from 'src/hooks/useAxios'
 
@@ -15,7 +15,7 @@ type Inputs = {
 }
 
 export default function ChangePassword() {
-  const { register, handleSubmit, getValues, errors, setError, control } = useForm<Inputs>()
+  const { register, handleSubmit, getValues, errors, setError } = useForm<Inputs>()
 
   const { enqueueSnackbar } = useSnackbar()
 
@@ -24,7 +24,7 @@ export default function ChangePassword() {
       method: 'put',
       route: 'user/changePassWord'
     },
-    onCompleted: response => {
+    onCompleted: () => {
       enqueueSnackbar('Đổi mật khẩu thành công!', {
         anchorOrigin: {
           horizontal: 'center',
@@ -44,8 +44,6 @@ export default function ChangePassword() {
   })
 
   const onSubmit = handleSubmit(data => {
-    console.log('Submit data:', data)
-    
     changePassword({
       data: {
         oldPassword: data.oldPassword,
@@ -55,7 +53,7 @@ export default function ChangePassword() {
   })
 
   return (
-    <ProfileLayout title="Đổi mật khẩu">
+    <CardWithTitle title="Đổi mật khẩu">
       <LoadingBackdrop open={loading} />
 
       <Form onSubmit={onSubmit}>
@@ -85,7 +83,7 @@ export default function ChangePassword() {
           error={!!errors.confirmNewPassword}
           helperText={errors.confirmNewPassword?.message}
           inputRef={register({
-            validate: value => value === getValues()['newPassword'] || 'Xác nhận mật khẩu không đúng'
+            validate: value => value === getValues()['newPassword'] || 'Xác nhận mật khẩu mới không đúng'
           })}
           label="Xác nhận mật khẩu mới"
           name="confirmNewPassword"
@@ -95,6 +93,6 @@ export default function ChangePassword() {
           Lưu
         </Button>
       </Form>
-    </ProfileLayout>
+    </CardWithTitle>
   )
 }

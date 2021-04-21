@@ -4,7 +4,7 @@ const useStyles = makeStyles(theme => ({
   card: {
     padding: theme.spacing(2)
   },
-  cardHeader: {
+  header: {
     background: theme.palette.primary.main,
     borderTopLeftRadius: theme.shape.borderRadius,
     borderTopRightRadius: theme.shape.borderRadius,
@@ -17,20 +17,7 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     color: theme.palette.primary.contrastText
-  },
-  avatar: {
-    margin: 4
-  },
-  infoCard: {
-    display: 'flex'
-  },
-  infoContainer: {
-    padding: theme.spacing(1)
-  },
-  linkGrid: {
-    display: 'grid',
-    gap: theme.spacing(1),
-  },
+  }
 }))
 
 export default useStyles

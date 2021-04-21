@@ -1,30 +1,13 @@
-import { Box, Icon, MenuItem, Typography } from '@material-ui/core'
+import { Box, Typography } from '@material-ui/core'
 import { bindHover, bindMenu, usePopupState } from 'material-ui-popup-state/hooks'
 import HoverMenu from 'material-ui-popup-state/HoverMenu'
 import { useHistory } from 'react-router'
-import { Link } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
 import { logout } from 'src/redux/slices/user'
 import theme from 'src/theme'
 import Avatar from '../Avatar'
+import MenuLink from './MenuLink'
 import useStyles from './styles'
-
-function MenuItemContent(props: {
-  text: string
-  icon: string
-}) {
-  const { text, icon } = props
-
-  return (
-    <Box
-      alignItems="center"
-      display="flex"
-    >
-      <Icon>{icon}</Icon>
-      <Box ml={1.25}>{text}</Box>
-    </Box>
-  )
-}
 
 export default function User() {
   const user = useAppSelector(state => state.user)
@@ -71,34 +54,33 @@ export default function User() {
           </Typography>
         </Box>
 
-        <MenuItem
-          component={Link}
-          to="/my-posts"
+        <MenuLink
+          icon="post_add"
+          text="Đăng tin"
+          to="/create-post"
           onClick={popupState.close}
-        >
-          <MenuItemContent
-            icon="pets"
-            text="Bài đăng của bạn"
-          />
-        </MenuItem>
+        />
 
-        <MenuItem
-          component={Link}
-          to="/my-profile"
+        <MenuLink
+          icon="pets"
+          text="Tin đăng của bạn"
+          to="/my-account/posts"
           onClick={popupState.close}
-        >
-          <MenuItemContent
-            icon="account_circle"
-            text="Thông tin cá nhân"
-          />
-        </MenuItem>
+        />
 
-        <MenuItem onClick={handleLogout}>
-          <MenuItemContent
-            icon="power_settings_new"
-            text="Đăng xuất"
-          />
-        </MenuItem>
+        <MenuLink
+          icon="account_circle"
+          text="Thông tin cá nhân"
+          to="/my-account/profile"
+          onClick={popupState.close}
+        />
+
+        <MenuLink
+          icon="power_settings_new"
+          text="Đăng xuất"
+          to="#"
+          onClick={handleLogout}
+        />
       </HoverMenu>
     </div>
   )

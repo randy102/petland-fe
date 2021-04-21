@@ -17,6 +17,7 @@ import LoadingBackdrop from '../LoadingBackdrop'
 import SearchBar from '../SearchBar'
 import useStyles from './styles'
 import User from './User'
+import { Link } from 'react-router-dom'
 
 export default function AppBar() {
   const classes = useStyles()
@@ -55,11 +56,13 @@ export default function AppBar() {
           </IconButton>
 
           <Hidden xsDown>
-            <img
-              alt="Petland Logo"
-              className={classes.logo}
-              src={logo}
-            />
+            <Link to="/">
+              <img
+                alt="Petland Logo"
+                className={classes.logo}
+                src={logo}
+              />
+            </Link>
           </Hidden>
 
           <SearchBar />
