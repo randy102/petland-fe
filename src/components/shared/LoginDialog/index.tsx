@@ -11,7 +11,6 @@ import Dialog from '../Dialog'
 import Form from '../Form'
 import LoadingBackdrop from '../LoadingBackdrop'
 import TextLink from '../TextLink'
-import useStyles from './styles'
 
 type Inputs = {
   email: string
