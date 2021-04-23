@@ -2,10 +2,11 @@ import { Grid, Paper, Typography } from '@material-ui/core'
 import Avatar from 'src/components/shared/Avatar'
 import { useAppSelector } from 'src/redux/hooks'
 import useStyles from './styles'
-import SidebarLink from './SidebarLink'
 import { Route, Switch, useRouteMatch } from 'react-router'
 import Profile from './Profile'
 import ChangePassword from './ChangePassword'
+import { useMemo } from 'react'
+import TextLink from 'src/components/shared/TextLink'
 
 export default function MyAccount() {
   const classes = useStyles()
@@ -13,6 +14,17 @@ export default function MyAccount() {
   const user = useAppSelector(state => state.user)
 
   const { path, url } = useRouteMatch()
+
+  const sidebarLinks = useMemo(() => ([{
+    to: '/profile',
+    label: 'Thông tin cá nhân'
+  }, {
+    to: '/posts',
+    label: 'Tin đăng của bạn'
+  }, {
+    to: '/change-password',
+    label: 'Đổi mật khẩu'
+  }]), [])
 
   if (!user) {
     return null
@@ -51,17 +63,18 @@ export default function MyAccount() {
           <Grid item>
             <Paper className={classes.card}>
               <div className={classes.linkGrid}>
-                <SidebarLink to={`${url}/profile`}>
-                  Thông tin cá nhân
-                </SidebarLink>
-            
-                <SidebarLink to={`${url}/posts`}>
-                  Tin đăng của bạn
-                </SidebarLink>
-
-                <SidebarLink to={`${url}/change-password`}>
-                  Đổi mật khẩu
-                </SidebarLink>
+                {
+                  sidebarLinks.map(link => (
+                    <TextLink
+                      color={location.pathname === url + link.to ? 'primary' : 'inherit'}
+                      key={link.to}
+                      to={url + link.to}
+                      underline="none"
+                    >
+                      {link.label}
+                    </TextLink>
+                  ))
+                }
               </div>
             </Paper>
           </Grid>
