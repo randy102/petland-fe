@@ -15,40 +15,46 @@ type Inputs = {
 }
 
 export default function ChangePassword() {
-  const { register, handleSubmit, getValues, errors, setError } = useForm<Inputs>()
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    errors,
+    setError,
+  } = useForm<Inputs>()
 
   const { enqueueSnackbar } = useSnackbar()
 
   const { fetch: changePassword, loading } = useAxios({
     config: {
       method: 'put',
-      route: 'user/changePassWord'
+      route: 'user/changePassWord',
     },
     onCompleted: () => {
       enqueueSnackbar('Đổi mật khẩu thành công!', {
         anchorOrigin: {
           horizontal: 'center',
-          vertical: 'top'
+          vertical: 'top',
         },
         autoHideDuration: 1500,
-        variant: 'success'
+        variant: 'success',
       })
     },
     onError: error => {
       setServerErrors({
-        errors: error?.data, 
+        errors: error?.data,
         fields: ['oldPassword', 'newPassword'],
-        setError
+        setError,
       })
-    }
+    },
   })
 
   const onSubmit = handleSubmit(data => {
     changePassword({
       data: {
         oldPassword: data.oldPassword,
-        newPassword: data.newPassword
-      }
+        newPassword: data.newPassword,
+      },
     })
   })
 
@@ -83,15 +89,15 @@ export default function ChangePassword() {
           error={!!errors.confirmNewPassword}
           helperText={errors.confirmNewPassword?.message}
           inputRef={register({
-            validate: value => value === getValues()['newPassword'] || 'Xác nhận mật khẩu mới không đúng'
+            validate: value =>
+              value === getValues()['newPassword'] ||
+              'Xác nhận mật khẩu mới không đúng',
           })}
           label="Xác nhận mật khẩu mới"
           name="confirmNewPassword"
         />
 
-        <Button type="submit">
-          Lưu
-        </Button>
+        <Button type="submit">Lưu</Button>
       </Form>
     </CardWithTitle>
   )

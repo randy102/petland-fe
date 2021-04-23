@@ -7,11 +7,11 @@ const theme = createMuiTheme({
     MuiFormLabel: {
       asterisk: {
         '&$error': {
-          color: '#db3131'
+          color: '#db3131',
         },
-        color: '#db3131'
-      }
-    }
+        color: '#db3131',
+      },
+    },
   },
   palette: {
     background: {
@@ -30,13 +30,13 @@ const theme = createMuiTheme({
   props: {
     MuiButton: {
       color: 'primary',
-      variant: 'contained'
+      variant: 'contained',
     },
     MuiFormControl: {
-      variant: 'outlined'
+      variant: 'outlined',
     },
     MuiMenu: {
-      anchorOrigin:{
+      anchorOrigin: {
         horizontal: 'center',
         vertical: 'bottom',
       },
@@ -47,9 +47,9 @@ const theme = createMuiTheme({
       },
     },
     MuiTextField: {
-      variant: 'outlined'
-    }
-  }
+      variant: 'outlined',
+    },
+  },
 })
 
 export default theme

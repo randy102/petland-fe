@@ -30,19 +30,25 @@ export default function CreatePost() {
 
   const { control, register } = useForm<Inputs>()
 
-  const { data: categories, loading: loadingCategories } = useAxios<Category[]>({
-    config: {
-      method: 'get',
-      route: 'category'
-    },
-    fetchOnMount: true
-  })
-
-  const { fetch: getSubcategories, data: subcategories, loading: loadingSubcategories } = useAxios<Subcategory[]>({
-    config: {
-      method: 'get',
-      route: 'subcategory'
+  const { data: categories, loading: loadingCategories } = useAxios<Category[]>(
+    {
+      config: {
+        method: 'get',
+        route: 'category',
+      },
+      fetchOnMount: true,
     }
+  )
+
+  const {
+    fetch: getSubcategories,
+    data: subcategories,
+    loading: loadingSubcategories,
+  } = useAxios<Subcategory[]>({
+    config: {
+      method: 'get',
+      route: 'subcategory',
+    },
   })
 
   return (
@@ -50,10 +56,7 @@ export default function CreatePost() {
       <LoadingBackdrop open={loadingCategories} />
 
       <Grid container>
-        <Grid
-          item
-          xs={6}
-        >
+        <Grid item xs={6}>
           <CardWithTitle title="Thông tin thú cưng">
             <TextField
               fullWidth
@@ -71,19 +74,18 @@ export default function CreatePost() {
               name="categoryID"
             >
               {categories?.map(category => (
-                <MenuItem
-                  key={category._id}
-                  value={category._id}
-                >
+                <MenuItem key={category._id} value={category._id}>
                   {category.name}
                 </MenuItem>
               ))}
             </Select>
-      
+
             <Tooltip
               className={classes.tooltip}
               placement="bottom"
-              title={!subcategories?.length ? 'Hãy chọn Loại thú cưng trước' : ''}
+              title={
+                !subcategories?.length ? 'Hãy chọn Loại thú cưng trước' : ''
+              }
             >
               <div>
                 <Select
@@ -96,10 +98,7 @@ export default function CreatePost() {
                   name="subCategoryID"
                 >
                   {subcategories?.map(subcategory => (
-                    <MenuItem
-                      key={subcategory._id}
-                      value={subcategory._id}
-                    >
+                    <MenuItem key={subcategory._id} value={subcategory._id}>
                       {subcategory.name}
                     </MenuItem>
                   ))}
@@ -115,13 +114,9 @@ export default function CreatePost() {
               label="Giới tính"
               name="sex"
             >
-              <MenuItem value="MALE">
-          Đực
-              </MenuItem>
+              <MenuItem value="MALE">Đực</MenuItem>
 
-              <MenuItem value="FEMALE">
-          Cái
-              </MenuItem>
+              <MenuItem value="FEMALE">Cái</MenuItem>
             </Select>
 
             <Select
@@ -132,19 +127,13 @@ export default function CreatePost() {
               label="Đã tiêm chủng"
               name="vaccination"
             >
-              <MenuItem value="YES">
-          Có
-              </MenuItem>
+              <MenuItem value="YES">Có</MenuItem>
 
-              <MenuItem value="NO">
-          Không
-              </MenuItem>
+              <MenuItem value="NO">Không</MenuItem>
             </Select>
           </CardWithTitle>
         </Grid>
       </Grid>
-
-      
     </Form>
   )
 }

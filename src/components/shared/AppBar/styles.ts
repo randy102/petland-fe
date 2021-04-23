@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
   avatarContainer: {
-    display: 'flex'
+    display: 'flex',
   },
   loginButtonRoot: {
     marginRight: theme.spacing(2),
@@ -14,8 +14,8 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(2),
   },
   toolbar: {
-    padding: 0
-  }
+    padding: 0,
+  },
 }))
 
 export default useStyles

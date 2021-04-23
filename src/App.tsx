@@ -22,7 +22,7 @@ function App() {
           <SnackbarProvider
             anchorOrigin={{
               horizontal: 'right',
-              vertical: 'top'
+              vertical: 'top',
             }}
             autoHideDuration={3000}
             maxSnack={3}

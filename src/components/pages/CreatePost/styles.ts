@@ -1,9 +1,9 @@
 import { makeStyles } from '@material-ui/core'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   tooltip: {
-    width: '100%'
-  }
+    width: '100%',
+  },
 }))
 
 export default useStyles

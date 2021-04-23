@@ -14,10 +14,7 @@ export default function DialogTitle(props: Props) {
   const classes = useStyles()
 
   return (
-    <MuiDialogTitle
-      disableTypography
-      className={classes.root}
-    >
+    <MuiDialogTitle disableTypography className={classes.root}>
       <Typography variant="h6">{children}</Typography>
 
       {onClose && <CloseButton onClick={onClose} />}

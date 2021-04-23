@@ -1,4 +1,11 @@
-import { FormControl, FormControlClassKey, FormHelperText, InputLabel, Select as MuiSelect, StyledComponentProps } from '@material-ui/core'
+import {
+  FormControl,
+  FormControlClassKey,
+  FormHelperText,
+  InputLabel,
+  Select as MuiSelect,
+  StyledComponentProps,
+} from '@material-ui/core'
 import { Control, Controller, RegisterOptions } from 'react-hook-form'
 
 type Props = {
@@ -10,7 +17,10 @@ type Props = {
   children: React.ReactNode
   control: Control
   defaultValue: string
-  rules?: Exclude<RegisterOptions, 'valueAsNumber' | 'valueAsDate' | 'setValueAs'>
+  rules?: Exclude<
+    RegisterOptions,
+    'valueAsNumber' | 'valueAsDate' | 'setValueAs'
+  >
   helperText?: React.ReactNode
   disabled?: boolean
   classes?: StyledComponentProps<FormControlClassKey>['classes']
@@ -29,16 +39,11 @@ export default function Select(props: Props) {
       required={props.required}
       variant={props.variant}
     >
-      <InputLabel id={labelId}>
-        {props.label}
-      </InputLabel>
-          
+      <InputLabel id={labelId}>{props.label}</InputLabel>
+
       <Controller
         as={
-          <MuiSelect
-            label={props.label}
-            labelId={labelId}
-          >
+          <MuiSelect label={props.label} labelId={labelId}>
             {props.children}
           </MuiSelect>
         }

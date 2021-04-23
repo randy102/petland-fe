@@ -1,4 +1,12 @@
-import { FormControl, FormHelperText, Icon, IconButton, InputAdornment, InputLabel, OutlinedInput } from '@material-ui/core'
+import {
+  FormControl,
+  FormHelperText,
+  Icon,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+} from '@material-ui/core'
 import { useState } from 'react'
 
 type Props = {
@@ -26,14 +34,11 @@ export default function PasswordTextField(props: Props) {
       required={props.required}
     >
       <InputLabel>{props.label}</InputLabel>
-      
+
       <OutlinedInput
         endAdornment={
           <InputAdornment position="end">
-            <IconButton
-              edge="end"
-              onClick={handleClick}
-            >
+            <IconButton edge="end" onClick={handleClick}>
               <Icon>{showPassword ? 'visibility' : 'visibility_off'}</Icon>
             </IconButton>
           </InputAdornment>

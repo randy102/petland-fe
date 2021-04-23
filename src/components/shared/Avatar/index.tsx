@@ -4,7 +4,6 @@ import Image from '../Image'
 import { Icon } from '@material-ui/core'
 import clsx from 'clsx'
 
-
 export type Props = {
   size?: string | number
   className?: string
@@ -19,12 +18,7 @@ export default function Avatar(props: Props) {
   const classes = useStyles({ size })
 
   if (src) {
-    return (
-      <img
-        className={clsx(classes.avatar, className)}
-        src={src}
-      />
-    )
+    return <img className={clsx(classes.avatar, className)} src={src} />
   }
 
   if (user?.avatar && user.avatar !== 'default') {
@@ -36,9 +30,5 @@ export default function Avatar(props: Props) {
     )
   }
 
-  return (
-    <Icon className={clsx(classes.avatar, className)}>
-      person
-    </Icon>
-  )
+  return <Icon className={clsx(classes.avatar, className)}>person</Icon>
 }

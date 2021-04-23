@@ -7,12 +7,9 @@ type Props = {
 
 export default function LoadingBackdrop(props: Props) {
   const classes = useStyles()
-  
+
   return (
-    <Backdrop
-      className={classes.backdrop}
-      open={props.open}
-    >
+    <Backdrop className={classes.backdrop} open={props.open}>
       <CircularProgress color="inherit" />
     </Backdrop>
   )

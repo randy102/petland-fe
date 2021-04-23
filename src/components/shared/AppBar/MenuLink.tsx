@@ -11,15 +11,8 @@ type Props = {
 export default function MenuLink(props: Props) {
   const { to, onClick, icon, text } = props
   return (
-    <MenuItem
-      component={Link}
-      to={to}
-      onClick={onClick}
-    >
-      <Box
-        alignItems="center"
-        display="flex"
-      >
+    <MenuItem component={Link} to={to} onClick={onClick}>
+      <Box alignItems="center" display="flex">
         <Icon>{icon}</Icon>
         <Box ml={1.25}>{text}</Box>
       </Box>

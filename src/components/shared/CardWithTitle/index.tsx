@@ -13,10 +13,7 @@ export default function CardWithTitle(props: Props) {
   return (
     <Paper className={classes.card}>
       <div className={classes.header}>
-        <Typography
-          className={classes.title}
-          variant="h6"
-        >
+        <Typography className={classes.title} variant="h6">
           {props.title}
         </Typography>
       </div>

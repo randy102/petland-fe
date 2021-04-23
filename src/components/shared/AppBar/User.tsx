@@ -1,5 +1,9 @@
 import { Box, Typography } from '@material-ui/core'
-import { bindHover, bindMenu, usePopupState } from 'material-ui-popup-state/hooks'
+import {
+  bindHover,
+  bindMenu,
+  usePopupState,
+} from 'material-ui-popup-state/hooks'
 import HoverMenu from 'material-ui-popup-state/HoverMenu'
 import { useHistory } from 'react-router'
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
@@ -27,16 +31,13 @@ export default function User() {
   }
 
   return (
-    <div
-      className={classes.avatarContainer}
-      {...bindHover(popupState)}
-    >
+    <div className={classes.avatarContainer} {...bindHover(popupState)}>
       <Avatar size={48} />
 
       <HoverMenu
         anchorOrigin={{
           horizontal: 'right',
-          vertical: 'bottom'
+          vertical: 'bottom',
         }}
         transformOrigin={{
           horizontal: 'right',
@@ -44,14 +45,8 @@ export default function User() {
         }}
         {...bindMenu(popupState)}
       >
-        <Box
-          px={2}
-          py={1}
-          width="100%"
-        >
-          <Typography>
-            {user?.name}
-          </Typography>
+        <Box px={2} py={1} width="100%">
+          <Typography>{user?.name}</Typography>
         </Box>
 
         <MenuLink
@@ -84,5 +79,4 @@ export default function User() {
       </HoverMenu>
     </div>
   )
-
 }

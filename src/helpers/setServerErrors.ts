@@ -19,7 +19,7 @@ export default function setServerErrors<Inputs>(props: Props<Inputs>) {
     Object.keys(errors).forEach(field => {
       setError(field as keyof Inputs, {
         message: errors[field as keyof Inputs] as string,
-        type: 'server'
+        type: 'server',
       })
     })
   }

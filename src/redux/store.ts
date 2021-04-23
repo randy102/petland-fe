@@ -5,7 +5,7 @@ import userReducer from './slices/user'
 const store = configureStore({
   reducer: {
     modal: modalReducer,
-    user: userReducer
+    user: userReducer,
   },
 })
 

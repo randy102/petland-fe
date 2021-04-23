@@ -33,10 +33,10 @@ export default function LoginDialog() {
       enqueueSnackbar('Đăng nhập thành công!', {
         anchorOrigin: {
           horizontal: 'center',
-          vertical: 'top'
+          vertical: 'top',
         },
         autoHideDuration: 1500,
-        variant: 'success'
+        variant: 'success',
       })
 
       setLoading(false)
@@ -45,14 +45,14 @@ export default function LoginDialog() {
     },
     onError: () => {
       setLoading(false)
-    }
+    },
   })
 
   // Login API
   const { fetch: login } = useAxios<string>({
     config: {
       method: 'POST',
-      route: 'auth/login'
+      route: 'auth/login',
     },
     onCompleted: response => {
       localStorage.setItem('token', response.data)
@@ -64,17 +64,17 @@ export default function LoginDialog() {
       setServerErrors({
         errors: error?.data,
         fields: ['email', 'password'],
-        setError
+        setError,
       })
-    }
+    },
   })
 
   // Login on form submit
   const onSubmit = handleSubmit(data => {
     setLoading(true)
-    
+
     login({
-      data
+      data,
     })
   })
 
@@ -112,15 +112,12 @@ export default function LoginDialog() {
           type="password"
         />
 
-        <Button
-          fullWidth
-          type="submit"
-        >
-            Đăng nhập
+        <Button fullWidth type="submit">
+          Đăng nhập
         </Button>
 
         <div>
-            Chưa có tài khoản?{' '}
+          Chưa có tài khoản?{' '}
           <TextLink onClick={handleLinkClick}>Đăng ký ngay</TextLink>
         </div>
       </Form>

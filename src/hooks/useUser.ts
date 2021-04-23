@@ -19,13 +19,13 @@ export default function useUser(props?: Props) {
   const { fetch, loading } = useAxios<User>({
     config: {
       method: 'GET',
-      route: 'user/profile'
+      route: 'user/profile',
     },
     onCompleted: response => {
       dispatch(setUser(response.data))
       onCompleted?.(response)
     },
-    onError
+    onError,
   })
 
   return { fetch, loading }

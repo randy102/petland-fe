@@ -14,16 +14,12 @@ export default function SearchBar() {
   })
 
   return (
-    <form
-      noValidate
-      className={classes.search}
-      onSubmit={onSubmit}
-    >
+    <form noValidate className={classes.search} onSubmit={onSubmit}>
       <SearchIcon />
 
       <InputBase
         classes={{
-          root: classes.inputRoot
+          root: classes.inputRoot,
         }}
         defaultValue=""
         inputRef={register}

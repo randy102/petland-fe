@@ -57,18 +57,16 @@ export default function AppBar() {
 
           <Hidden xsDown>
             <Link to="/">
-              <img
-                alt="Petland Logo"
-                className={classes.logo}
-                src={logo}
-              />
+              <img alt="Petland Logo" className={classes.logo} src={logo} />
             </Link>
           </Hidden>
 
           <SearchBar />
 
-          {
-            localStorage.getItem('token') ? <User/> : <React.Fragment>
+          {localStorage.getItem('token') ? (
+            <User />
+          ) : (
+            <React.Fragment>
               <Button
                 classes={{ root: classes.loginButtonRoot }}
                 color="secondary"
@@ -88,9 +86,7 @@ export default function AppBar() {
                 Đăng ký
               </Button>
             </React.Fragment>
-          }
-
-        
+          )}
         </Toolbar>
       </Container>
     </MuiAppBar>

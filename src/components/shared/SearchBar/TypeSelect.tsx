@@ -6,8 +6,8 @@ import useStyles from './styles'
 export type SearchType = 'pet' | 'product'
 
 const searchTypeLabel: Record<SearchType, string> = {
-  'pet': 'Thú cưng',
-  'product': 'Sản phẩm'
+  pet: 'Thú cưng',
+  product: 'Sản phẩm',
 }
 
 export default function TypeSelect() {
@@ -34,7 +34,7 @@ export default function TypeSelect() {
     <React.Fragment>
       <Button
         classes={{
-          root: classes.searchButtonRoot
+          root: classes.searchButtonRoot,
         }}
         color="secondary"
         size="small"
@@ -46,21 +46,15 @@ export default function TypeSelect() {
         <ExpandMoreIcon />
       </Button>
 
-      <Menu
-        anchorEl={anchorEl}
-        open={!!anchorEl}
-        onClose={handleClose}
-      >
-        {
-          Object.keys(searchTypeLabel).map((type) => (
-            <MenuItem
-              key={type}
-              onClick={() => handleItemClick(type as SearchType)}
-            >
-              {searchTypeLabel[type as SearchType]}
-            </MenuItem>
-          ))
-        }
+      <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleClose}>
+        {Object.keys(searchTypeLabel).map(type => (
+          <MenuItem
+            key={type}
+            onClick={() => handleItemClick(type as SearchType)}
+          >
+            {searchTypeLabel[type as SearchType]}
+          </MenuItem>
+        ))}
       </Menu>
     </React.Fragment>
   )

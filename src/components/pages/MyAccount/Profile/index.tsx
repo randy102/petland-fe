@@ -26,7 +26,13 @@ export default function Profile() {
 
   const user = useAppSelector(state => state.user)
 
-  const { register, handleSubmit, errors, getValues , setError } = useForm<Inputs>()
+  const {
+    register,
+    handleSubmit,
+    errors,
+    getValues,
+    setError,
+  } = useForm<Inputs>()
 
   const [avatarSrc, setAvatarSrc] = useState<string>('')
 
@@ -37,41 +43,41 @@ export default function Profile() {
   const { fetch: updateUser } = useAxios<User>({
     config: {
       method: 'put',
-      route: 'user/changeInfo'
+      route: 'user/changeInfo',
     },
-    onCompleted: (response) => {
+    onCompleted: response => {
       setLoading(false)
       dispatch(setUser(response.data))
       enqueueSnackbar('Cập nhật thông tin thành công!', {
-        variant: 'success'
+        variant: 'success',
       })
     },
-    onError: (error) => {
+    onError: error => {
       setLoading(false)
 
       setServerErrors({
-        errors: error?.data, 
+        errors: error?.data,
         fields: ['name', 'phone'],
-        setError
+        setError,
       })
-    }
+    },
   })
 
   const { fetch: uploadImage } = useAxios<string>({
     config: {
       method: 'post',
-      route: 'photo'
+      route: 'photo',
     },
     // Update user with new avatar id after upload
-    onCompleted: (response) => {
+    onCompleted: response => {
       const data = getValues()
 
       data.avatar = response.data
 
       updateUser({
-        data
+        data,
       })
-    }
+    },
   })
 
   const { enqueueSnackbar } = useSnackbar()
@@ -88,12 +94,12 @@ export default function Profile() {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event?.currentTarget?.files) return
-    
+
     const file: File = event.currentTarget.files[0]
 
     if (!file.type.startsWith('image')) {
       enqueueSnackbar('Chỉ chấp nhận file ảnh!', {
-        variant: 'error'
+        variant: 'error',
       })
       return
     }
@@ -108,7 +114,7 @@ export default function Profile() {
       setAvatarSrc(reader.result as string)
     }
   }
-  
+
   const onSubmit = handleSubmit(data => {
     setLoading(true)
 
@@ -119,7 +125,7 @@ export default function Profile() {
       formData.append('file', imageFile)
 
       uploadImage({
-        data: formData
+        data: formData,
       })
 
       return
@@ -127,7 +133,7 @@ export default function Profile() {
 
     // Else go straight to update user
     updateUser({
-      data
+      data,
     })
   })
 
@@ -151,15 +157,12 @@ export default function Profile() {
             name="avatar"
             ref={register}
           />
-        
-          <Avatar
-            size={100}
-            src={avatarSrc}
-          />
+
+          <Avatar size={100} src={avatarSrc} />
 
           <Fab
             classes={{
-              root: classes.avatarButton
+              root: classes.avatarButton,
             }}
             color="primary"
             size="small"
@@ -169,7 +172,7 @@ export default function Profile() {
           </Fab>
         </div>
 
-        <TextField 
+        <TextField
           fullWidth
           required
           defaultValue={user?.name}
@@ -198,9 +201,7 @@ export default function Profile() {
           label="Email"
         />
 
-        <Button type="submit">
-          Lưu
-        </Button>
+        <Button type="submit">Lưu</Button>
       </Form>
     </CardWithTitle>
   )

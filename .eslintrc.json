@@ -7,11 +7,10 @@
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:react-hooks/recommended"
+    "plugin:react-hooks/recommended",
+    "prettier"
   ],
-  "ignorePatterns": [
-    "src/assets/images/"
-  ],
+  "ignorePatterns": ["src/assets/images/"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
@@ -20,34 +19,13 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": [
-    "react",
-    "@typescript-eslint",
-    "react-hooks",
-    "sort-keys-fix"
-  ],
+  "plugins": ["react", "@typescript-eslint", "react-hooks", "sort-keys-fix"],
   "rules": {
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "indent": "off",
-    "quotes": [
-      "error",
-      "single"
-    ],
-    "react/jsx-closing-bracket-location": [
-      "error",
-      "tag-aligned"
-    ],
-    "react/jsx-first-prop-new-line": [
-      "error",
-      "multiline"
-    ],
-    "react/jsx-max-props-per-line": [
-      "error",
-      {
-        "maximum": 1,
-        "when": "always"
-      }
-    ],
+    "quotes": ["error", "single"],
+    "react/jsx-closing-bracket-location": ["error", "tag-aligned"],
+    "react/jsx-first-prop-new-line": ["error", "multiline"],
     "react/jsx-sort-props": [
       "error",
       {
@@ -59,27 +37,36 @@
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
     "semi": "off",
-    "react/jsx-wrap-multilines": ["error", {
-      "declaration": "parens-new-line",
-      "assignment": "parens-new-line",
-      "return": "parens-new-line",
-      "arrow": "parens-new-line"
-    }],
+    "react/jsx-wrap-multilines": [
+      "error",
+      {
+        "declaration": "parens-new-line",
+        "assignment": "parens-new-line",
+        "return": "parens-new-line",
+        "arrow": "parens-new-line"
+      }
+    ],
     "object-curly-spacing": "off",
     "@typescript-eslint/object-curly-spacing": ["error", "always"],
     "@typescript-eslint/semi": ["error", "never"],
-    "@typescript-eslint/member-delimiter-style": ["error", {
-      "multiline": {
-        "delimiter": "none",
-        "requireLast": true
+    "@typescript-eslint/member-delimiter-style": [
+      "error",
+      {
+        "multiline": {
+          "delimiter": "none",
+          "requireLast": true
+        }
       }
-    }],
+    ],
     "@typescript-eslint/indent": ["error", 2],
-    "@typescript-eslint/space-before-function-paren": ["error", {
-      "anonymous": "always",
-      "named": "never",
-      "asyncArrow": "always"
-    }],
+    "@typescript-eslint/space-before-function-paren": [
+      "error",
+      {
+        "anonymous": "always",
+        "named": "never",
+        "asyncArrow": "always"
+      }
+    ],
     "array-bracket-spacing": ["error", "never"],
     "space-before-blocks": ["error", "always"]
   },

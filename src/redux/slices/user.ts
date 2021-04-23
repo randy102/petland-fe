@@ -20,8 +20,8 @@ export const userSlice = createSlice({
       if (!state) return
 
       state.avatar = action.payload
-    }
-  }
+    },
+  },
 })
 
 export const { setUser, logout, setAvatar } = userSlice.actions

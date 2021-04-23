@@ -20,12 +20,16 @@ type Inputs = {
 }
 
 export default function RegisterDialog() {
-
   const { open } = useAppSelector(state => state.modal)
 
   const dispatch = useAppDispatch()
 
-  const { register: registerForm, handleSubmit, setError, errors } = useForm<Inputs>()
+  const {
+    register: registerForm,
+    handleSubmit,
+    setError,
+    errors,
+  } = useForm<Inputs>()
 
   const { enqueueSnackbar } = useSnackbar()
 
@@ -36,10 +40,10 @@ export default function RegisterDialog() {
       enqueueSnackbar('Đăng ký thành công!', {
         anchorOrigin: {
           horizontal: 'center',
-          vertical: 'top'
+          vertical: 'top',
         },
         autoHideDuration: 1500,
-        variant: 'success'
+        variant: 'success',
       })
 
       setLoading(false)
@@ -48,35 +52,34 @@ export default function RegisterDialog() {
     },
     onError: () => {
       setLoading(false)
-    }
+    },
   })
 
   const { fetch: register } = useAxios<string>({
     config: {
       method: 'POST',
-      route: 'auth/register'
+      route: 'auth/register',
     },
     onCompleted: response => {
       localStorage.setItem('token', response.data)
       getUser()
-      
     },
     onError: error => {
       setLoading(false)
 
       setServerErrors({
-        errors: error?.data, 
+        errors: error?.data,
         fields: ['name', 'email', 'phone', 'password'],
-        setError
+        setError,
       })
-    }
+    },
   })
 
   const onSubmit = handleSubmit(data => {
     setLoading(true)
 
     register({
-      data
+      data,
     })
   })
 
@@ -134,10 +137,7 @@ export default function RegisterDialog() {
           type="password"
         />
 
-        <Button
-          fullWidth
-          type="submit"
-        >
+        <Button fullWidth type="submit">
           Đăng ký
         </Button>
 

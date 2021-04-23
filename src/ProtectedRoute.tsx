@@ -7,7 +7,5 @@ export default function ProtectedRoute(props: Props) {
     return <Route {...props} />
   }
 
-  return (
-    <Redirect to="/" />
-  )
+  return <Redirect to="/" />
 }
