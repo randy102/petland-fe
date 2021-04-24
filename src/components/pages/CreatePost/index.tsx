@@ -37,7 +37,7 @@ type Inputs = {
 export default function CreatePost() {
   const classes = useStyles()
 
-  const { control, register, watch } = useForm<Inputs>()
+  const { control, register, watch, handleSubmit } = useForm<Inputs>()
 
   // Categories and subcategories
   const categoryID = watch('categoryID', '')
@@ -147,8 +147,12 @@ export default function CreatePost() {
     })
   }
 
+  const onSubmit = handleSubmit(data => {
+    console.log('Submit data:', data)
+  })
+
   return (
-    <form noValidate>
+    <form noValidate onSubmit={onSubmit}>
       <LoadingBackdrop
         open={
           loadingCategories ||
@@ -329,6 +333,8 @@ export default function CreatePost() {
               </Button>
             </CustomFormRow>
           </div>
+
+          <Button type="submit">Submit</Button>
         </CardWithTitle>
       </div>
     </form>
