@@ -12,7 +12,7 @@ import store from './redux/store'
 import Routes from './Routes'
 import theme from './theme'
 
-  axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL
+axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL
 
 function App() {
   return (

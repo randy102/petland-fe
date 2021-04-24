@@ -23,6 +23,12 @@
   },
   "plugins": ["react", "@typescript-eslint", "react-hooks", "sort-keys-fix"],
   "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "react/jsx-sort-props": [
       "error",
