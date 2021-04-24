@@ -57,7 +57,7 @@ export default function MyAccount() {
                 {sidebarLinks.map(link => (
                   <TextLink
                     color={
-                      location.pathname === url + link.to
+                      window.location.pathname === url + link.to
                         ? 'primary'
                         : 'inherit'
                     }

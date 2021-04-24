@@ -10,7 +10,7 @@ type Props = Omit<HTMLImageProps, 'src'> & {
 const IMAGE_BASE_URL = process.env.REACT_APP_S3URL
 
 export default function Image(props: Props) {
-  const { id, ...rest } = props
+  const { id, alt = '', ...rest } = props
 
-  return <img src={IMAGE_BASE_URL + '/' + id} {...rest} />
+  return <img alt={alt} src={IMAGE_BASE_URL + '/' + id} {...rest} />
 }

@@ -18,7 +18,7 @@ export default function Avatar(props: Props) {
   const classes = useStyles({ size })
 
   if (src) {
-    return <img className={clsx(classes.avatar, className)} src={src} />
+    return <img alt="" className={clsx(classes.avatar, className)} src={src} />
   }
 
   if (user?.avatar && user.avatar !== 'default') {
