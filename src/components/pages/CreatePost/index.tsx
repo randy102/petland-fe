@@ -1,4 +1,11 @@
-import { Button, Grid, Icon, MenuItem } from '@material-ui/core'
+import {
+  Button,
+  Grid,
+  Icon,
+  MenuItem,
+  useMediaQuery,
+  useTheme,
+} from '@material-ui/core'
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import CardWithTitle from 'src/components/shared/CardWithTitle'
@@ -15,11 +22,8 @@ import _partition from 'lodash/partition'
 import isImage from 'src/helpers/isImage'
 import { useSnackbar } from 'notistack'
 import TextField from 'src/components/shared/TextField'
-import theme from 'src/theme'
-
-const MAX_IMAGES_COUNT = 6
-
-const MIN_IMAGE_SIZE = 150
+import { MAX_POST_IMAGES } from 'src/constants'
+import Radio from 'src/components/shared/Radio'
 
 type Inputs = {
   name: string
@@ -29,7 +33,7 @@ type Inputs = {
   districtID: string
   detail: string
   sex: string
-  vaccination: string
+  vaccination: string | boolean
   age: number
   price: number
   origin: string
@@ -40,7 +44,17 @@ type Inputs = {
 export default function CreatePost() {
   const classes = useStyles()
 
-  const { control, register, watch, handleSubmit } = useForm<Inputs>()
+  const theme = useTheme()
+
+  const isXs = useMediaQuery(theme.breakpoints.down('xs'))
+
+  const {
+    control,
+    register,
+    watch,
+    handleSubmit,
+    getValues,
+  } = useForm<Inputs>()
 
   // Categories and subcategories
   const categoryID = watch('categoryID', '')
@@ -110,7 +124,9 @@ export default function CreatePost() {
 
   const [previewSources, setPreviewSources] = useState<string[]>([])
 
-  const [imagesDecoding, setImagesDecoding] = useState(0)
+  const [imageFiles, setImageFiles] = useState<File[]>([])
+
+  const [previewsLoading, setPreviewsLoading] = useState(0)
 
   const { enqueueSnackbar } = useSnackbar()
 
@@ -137,13 +153,15 @@ export default function CreatePost() {
     }
 
     // Available slots for new images
-    const availableSlots = MAX_IMAGES_COUNT - previewSources.length
+    const availableSlots = MAX_POST_IMAGES - previewSources.length
 
-    // Take all images, up to a maximum of available slots
+    // Cut image length to a maximum of available slots
     images.length = Math.min(availableSlots, images.length)
 
+    setImageFiles(imageFiles => [...imageFiles, ...images])
+
     // Set loading
-    setImagesDecoding(() => images.length)
+    setPreviewsLoading(images.length)
 
     // Load images into preview sources
     images.forEach(file => {
@@ -152,50 +170,36 @@ export default function CreatePost() {
       reader.readAsDataURL(file)
 
       reader.onloadend = () => {
-        setPreviewSources(images => [...images, reader.result as string])
-        setImagesDecoding(imagesDecoding => imagesDecoding - 1)
+        setPreviewSources(sources => [...sources, reader.result as string])
+        setPreviewsLoading(count => count - 1)
       }
     })
 
-    // Reset input value so user can select the same file next time
+    // Reset input value so user can select the same file(s) next time
     event.currentTarget.value = ''
   }
 
-  // const uploadImages = () => {
+  const uploadImages = () => {
+    console.log('Upload images')
+    const imageIds = ['1', '2', '3']
+    const data = getValues()
+    data.images = imageIds
+    uploadPost(data)
+  }
 
-  // }
+  const uploadPost = (data: Inputs) => {
+    data.vaccination = data.vaccination === 'true'
+    console.log('Submit data:', data)
+  }
 
   const onSubmit = handleSubmit((data: Inputs) => {
-    console.log('Submit data:', {
-      ...data,
-      vaccination: data.vaccination === 'true',
-    })
-  })
-
-  const [imageSize, setImageSize] = useState(MIN_IMAGE_SIZE)
-
-  const imageGrid = useCallback(node => {
-    if (!node) return
-
-    const margin = theme.spacing(2)
-
-    let availableSpace = node.getBoundingClientRect().width
-
-    let maxItems = Math.floor(availableSpace / MIN_IMAGE_SIZE)
-    let totalWidth = maxItems * MIN_IMAGE_SIZE + (maxItems - 1) * margin
-    while (totalWidth > availableSpace) {
-      maxItems--
-      totalWidth -= MIN_IMAGE_SIZE + margin
+    if (imageFiles.length) {
+      uploadImages()
+      return
     }
 
-    availableSpace -= (maxItems - 1) * margin
-
-    const itemWidth = availableSpace / maxItems
-
-    setImageSize(itemWidth)
-
-    node.style.gridTemplateColumns = `repeat(${maxItems}, 1fr)`
-  }, [])
+    uploadPost(data)
+  })
 
   const handleDeleteImageClick = (index: number) => {
     setPreviewSources(previewSources => {
@@ -212,7 +216,7 @@ export default function CreatePost() {
   return (
     <form noValidate onSubmit={onSubmit}>
       <LoadingBackdrop
-        open={loadingSubcategories || loadingDistricts || imagesDecoding > 0}
+        open={loadingSubcategories || loadingDistricts || previewsLoading > 0}
       />
 
       <Grid container spacing={3}>
@@ -265,6 +269,17 @@ export default function CreatePost() {
                 </Grid>
               </Grid>
 
+              <TextField fullWidth required label="Nguồn gốc" name="origin" />
+
+              <NumberTextField
+                fullWidth
+                required
+                control={control}
+                label="Tuổi"
+                name="age"
+                suffix=" tháng"
+              />
+
               <TextField
                 fullWidth
                 required
@@ -278,29 +293,37 @@ export default function CreatePost() {
                 <MenuItem value="FEMALE">Cái</MenuItem>
               </TextField>
 
-              <TextField fullWidth required label="Nguồn gốc" name="origin" />
+              <Grid container item spacing={3}>
+                <Grid item sm={6} xs={12}>
+                  <Radio
+                    fullWidth
+                    required
+                    defaultValue=""
+                    label="Giới tính"
+                    row={isXs}
+                    {...register('sex')}
+                    items={[
+                      { label: 'Đực', value: 'MALE' },
+                      { label: 'Cái', value: 'FEMALE' },
+                    ]}
+                  />
+                </Grid>
 
-              <TextField
-                fullWidth
-                required
-                select
-                defaultValue=""
-                label="Đã tiêm chủng"
-                {...register('vaccination')}
-              >
-                <MenuItem value="true">Có</MenuItem>
-
-                <MenuItem value="false">Không</MenuItem>
-              </TextField>
-
-              <NumberTextField
-                fullWidth
-                required
-                control={control}
-                label="Tuổi"
-                name="age"
-                suffix=" tháng"
-              />
+                <Grid item sm={6} xs={12}>
+                  <Radio
+                    fullWidth
+                    required
+                    defaultValue=""
+                    label="Đã tiêm chủng"
+                    row={isXs}
+                    {...register('vaccination')}
+                    items={[
+                      { label: 'Có', value: 'true' },
+                      { label: 'Không', value: 'false' },
+                    ]}
+                  />
+                </Grid>
+              </Grid>
 
               <TextField
                 fullWidth
@@ -350,7 +373,7 @@ export default function CreatePost() {
                   >
                     {!cities?.length && <MenuItem value="">Đang tải</MenuItem>}
 
-                    {cities?.map(city => (
+                    {cities?.slice(1).map(city => (
                       <MenuItem key={city._id} value={city._id}>
                         {city.name}
                       </MenuItem>
@@ -398,31 +421,24 @@ export default function CreatePost() {
 
                 <Button
                   color="default"
-                  disabled={previewSources.length === MAX_IMAGES_COUNT}
+                  disabled={previewSources.length === MAX_POST_IMAGES}
                   startIcon={
-                    previewSources.length !== MAX_IMAGES_COUNT && (
+                    previewSources.length !== MAX_POST_IMAGES && (
                       <Icon>add</Icon>
                     )
                   }
                   type="button"
                   onClick={handleClick}
                 >
-                  {previewSources.length === MAX_IMAGES_COUNT
-                    ? `Tối đa ${MAX_IMAGES_COUNT} ảnh`
+                  {previewSources.length === MAX_POST_IMAGES
+                    ? `Tối đa ${MAX_POST_IMAGES} ảnh`
                     : 'Thêm ảnh'}
                 </Button>
 
                 {previewSources.length > 0 && (
-                  <div className={classes.imageGrid} ref={imageGrid}>
+                  <div className={classes.imageGrid}>
                     {previewSources.map((src, index) => (
-                      <div
-                        className={classes.imageItemContainer}
-                        key={index}
-                        style={{
-                          width: imageSize,
-                          height: imageSize,
-                        }}
-                      >
+                      <div className={classes.imageItemContainer} key={index}>
                         <img alt="" className={classes.imageItem} src={src} />
 
                         <Button

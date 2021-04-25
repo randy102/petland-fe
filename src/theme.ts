@@ -49,6 +49,9 @@ const theme = createMuiTheme({
     MuiTextField: {
       variant: 'outlined',
     },
+    MuiRadio: {
+      color: 'primary',
+    },
   },
 })
 

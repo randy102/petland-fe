@@ -15,8 +15,10 @@ const useStyles = makeStyles(theme => ({
   imageItemContainer: {
     display: 'flex',
     position: 'relative',
+    paddingTop: '100%',
   },
   imageItem: {
+    position: 'absolute',
     top: 0,
     left: 0,
     objectFit: 'cover',
@@ -26,6 +28,7 @@ const useStyles = makeStyles(theme => ({
   },
   imageGrid: {
     display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
     gap: theme.spacing(2),
     marginTop: theme.spacing(2),
   },
