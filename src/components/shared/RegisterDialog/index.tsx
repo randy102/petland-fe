@@ -1,4 +1,4 @@
-import { Button, TextField } from '@material-ui/core'
+import { Button } from '@material-ui/core'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -10,6 +10,7 @@ import { closeModal, openModal } from 'src/redux/slices/modal'
 import Dialog from '../Dialog'
 import Form from '../Form'
 import LoadingBackdrop from '../LoadingBackdrop'
+import TextField from '../TextField'
 import TextLink from '../TextLink'
 
 type Inputs = {
@@ -28,7 +29,7 @@ export default function RegisterDialog() {
     register: registerForm,
     handleSubmit,
     setError,
-    errors,
+    formState: { errors },
   } = useForm<Inputs>()
 
   const { enqueueSnackbar } = useSnackbar()
@@ -101,9 +102,8 @@ export default function RegisterDialog() {
           required
           error={!!errors.name}
           helperText={errors.name?.message}
-          inputRef={registerForm}
           label="Họ tên"
-          name="name"
+          {...registerForm('name')}
         />
 
         <TextField
@@ -111,9 +111,8 @@ export default function RegisterDialog() {
           required
           error={!!errors.phone}
           helperText={errors.phone?.message}
-          inputRef={registerForm}
           label="Số điện thoại"
-          name="phone"
+          {...registerForm('phone')}
         />
 
         <TextField
@@ -121,9 +120,8 @@ export default function RegisterDialog() {
           required
           error={!!errors.email}
           helperText={errors.email?.message}
-          inputRef={registerForm}
           label="Email"
-          name="email"
+          {...registerForm('email')}
         />
 
         <TextField
@@ -131,10 +129,9 @@ export default function RegisterDialog() {
           required
           error={!!errors.password}
           helperText={errors.password?.message}
-          inputRef={registerForm}
           label="Mật khẩu"
-          name="password"
           type="password"
+          {...registerForm('password')}
         />
 
         <Button fullWidth type="submit">

@@ -1,4 +1,4 @@
-import { Button, Fab, Icon, TextField } from '@material-ui/core'
+import { Button, Fab, Icon } from '@material-ui/core'
 import { useSnackbar } from 'notistack'
 import React, { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -6,6 +6,8 @@ import Avatar from 'src/components/shared/Avatar'
 import CardWithTitle from 'src/components/shared/CardWithTitle'
 import Form from 'src/components/shared/Form'
 import LoadingBackdrop from 'src/components/shared/LoadingBackdrop'
+import TextField from 'src/components/shared/TextField'
+import isImage from 'src/helpers/isImage'
 import setServerErrors from 'src/helpers/setServerErrors'
 import useAxios from 'src/hooks/useAxios'
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
@@ -29,7 +31,7 @@ export default function Profile() {
   const {
     register,
     handleSubmit,
-    errors,
+    formState: { errors },
     getValues,
     setError,
   } = useForm<Inputs>()
@@ -97,7 +99,7 @@ export default function Profile() {
 
     const file: File = event.currentTarget.files[0]
 
-    if (!file.type.startsWith('image')) {
+    if (!isImage(file)) {
       enqueueSnackbar('Chỉ chấp nhận file ảnh!', {
         variant: 'error',
       })
@@ -154,8 +156,7 @@ export default function Profile() {
           <input
             hidden
             defaultValue={user?.avatar || 'default'}
-            name="avatar"
-            ref={register}
+            {...register('avatar')}
           />
 
           <Avatar size={100} src={avatarSrc} />
@@ -178,9 +179,8 @@ export default function Profile() {
           defaultValue={user?.name}
           error={!!errors.name}
           helperText={errors.name?.message}
-          inputRef={register}
           label="Họ tên"
-          name="name"
+          {...register('name')}
         />
 
         <TextField
@@ -189,9 +189,8 @@ export default function Profile() {
           defaultValue={user?.phone}
           error={!!errors.phone}
           helperText={errors.phone?.message}
-          inputRef={register}
           label="Số điện thoại"
-          name="phone"
+          {...register('phone')}
         />
 
         <TextField

@@ -24,13 +24,18 @@ type Props = {
 export default function NumberTextField(props: Props) {
   return (
     <Controller
-      as={
+      control={props.control}
+      defaultValue={props.defaultValue}
+      name={props.name}
+      render={({ field, fieldState }) => (
         <NumberFormat
           allowLeadingZeros={props.allowLeadingZeros}
           allowNegative={props.allowNegative}
           customInput={TextField}
           decimalScale={props.decimalScale}
           decimalSeparator={props.decimalSeparator}
+          fullWidth={props.fullWidth}
+          helperText={props.helperText}
           isAllowed={({ floatValue }) => {
             if (props.max === undefined) {
               return true
@@ -38,20 +43,15 @@ export default function NumberTextField(props: Props) {
 
             return floatValue === undefined || floatValue <= props.max
           }}
+          label={props.label}
           max={props.max}
           min={props.min}
+          required={props.required}
           suffix={props.suffix}
           thousandSeparator={props.thousandSeparator}
+          variant="outlined"
         />
-      }
-      control={props.control}
-      defaultValue={props.defaultValue}
-      fullWidth={props.fullWidth}
-      helperText={props.helperText}
-      label={props.label}
-      name={props.name}
-      required={props.required}
-      variant="outlined"
+      )}
     />
   )
 }

@@ -8,12 +8,10 @@ import {
   OutlinedInput,
 } from '@material-ui/core'
 import { useState } from 'react'
+import { UseFormRegisterReturn } from 'react-hook-form'
 
-type Props = {
+type Props = UseFormRegisterReturn & {
   label: string
-  name: string
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  inputRef: any
   fullWidth?: boolean
   required?: boolean
   error?: boolean
@@ -43,10 +41,12 @@ export default function PasswordTextField(props: Props) {
             </IconButton>
           </InputAdornment>
         }
-        inputRef={props.inputRef}
+        inputRef={props.ref}
         label={props.label}
         name={props.name}
         type={showPassword ? 'text' : 'password'}
+        onBlur={props.onBlur}
+        onChange={props.onChange}
       />
 
       <FormHelperText>{props.helperText}</FormHelperText>

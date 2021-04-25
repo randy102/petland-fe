@@ -19,7 +19,7 @@ export default function ChangePassword() {
     register,
     handleSubmit,
     getValues,
-    errors,
+    formState: { errors },
     setError,
   } = useForm<Inputs>()
 
@@ -68,9 +68,8 @@ export default function ChangePassword() {
           required
           error={!!errors.oldPassword}
           helperText={errors.oldPassword?.message}
-          inputRef={register}
           label="Mật khẩu cũ"
-          name="oldPassword"
+          {...register('oldPassword')}
         />
 
         <PasswordTextField
@@ -78,9 +77,8 @@ export default function ChangePassword() {
           required
           error={!!errors.newPassword}
           helperText={errors.newPassword?.message}
-          inputRef={register}
           label="Mật khẩu mới"
-          name="newPassword"
+          {...register('newPassword')}
         />
 
         <PasswordTextField
@@ -88,13 +86,12 @@ export default function ChangePassword() {
           required
           error={!!errors.confirmNewPassword}
           helperText={errors.confirmNewPassword?.message}
-          inputRef={register({
+          label="Xác nhận mật khẩu mới"
+          {...register('confirmNewPassword', {
             validate: value =>
               value === getValues()['newPassword'] ||
               'Xác nhận mật khẩu mới không đúng',
           })}
-          label="Xác nhận mật khẩu mới"
-          name="confirmNewPassword"
         />
 
         <Button type="submit">Lưu</Button>

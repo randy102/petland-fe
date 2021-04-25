@@ -1,11 +1,10 @@
-import { Button, Icon, MenuItem, TextField } from '@material-ui/core'
+import { Button, Icon, MenuItem } from '@material-ui/core'
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import CardWithTitle from 'src/components/shared/CardWithTitle'
 import CustomFormRow from 'src/components/shared/CustomFormRow'
 import LoadingBackdrop from 'src/components/shared/LoadingBackdrop'
 import NumberTextField from 'src/components/shared/NumberTextField'
-import Select from 'src/components/shared/Select'
 import useAxios from 'src/hooks/useAxios'
 import { Category } from 'src/types/Category'
 import { City } from 'src/types/City'
@@ -15,6 +14,7 @@ import useStyles from './styles'
 import _partition from 'lodash/partition'
 import isImage from 'src/helpers/isImage'
 import { useSnackbar } from 'notistack'
+import TextField from 'src/components/shared/TextField'
 
 const MAX_IMAGES_COUNT = 6
 
@@ -27,8 +27,8 @@ type Inputs = {
   detail: string
   sex: string
   vaccination: true
-  age: 0
-  price: 0
+  age: number
+  price: number
   origin: string
   mainImage: string
   images: string[]
@@ -147,7 +147,7 @@ export default function CreatePost() {
     })
   }
 
-  const onSubmit = handleSubmit(data => {
+  const onSubmit = handleSubmit((data: Inputs) => {
     console.log('Submit data:', data)
   })
 
@@ -166,68 +166,68 @@ export default function CreatePost() {
         <CardWithTitle title="Thông tin thú cưng">
           <div className={classes.form}>
             <div className={classes.formGrid}>
-              <Select
+              <TextField
                 fullWidth
                 required
-                control={control}
+                select
                 defaultValue=""
                 label="Loại thú cưng"
-                name="categoryID"
+                {...register('categoryID')}
               >
                 {categories?.map(category => (
                   <MenuItem key={category._id} value={category._id}>
                     {category.name}
                   </MenuItem>
                 ))}
-              </Select>
+              </TextField>
 
-              <Select
+              <TextField
                 fullWidth
                 required
-                control={control}
+                select
                 defaultValue=""
                 disabled={!subcategories?.length}
                 helperText={
                   subcategories?.length ? '' : 'Hãy chọn Loại thú cưng trước'
                 }
                 label="Giống thú cưng"
-                name="subCategoryID"
+                {...register('subCategoryID')}
               >
                 {subcategories?.map(subcategory => (
                   <MenuItem key={subcategory._id} value={subcategory._id}>
                     {subcategory.name}
                   </MenuItem>
                 ))}
-              </Select>
+              </TextField>
             </div>
 
-            <Select
+            <TextField
               fullWidth
               required
-              control={control}
+              select
               defaultValue=""
               label="Giới tính"
-              name="sex"
+              {...register('sex')}
             >
               <MenuItem value="MALE">Đực</MenuItem>
 
               <MenuItem value="FEMALE">Cái</MenuItem>
-            </Select>
+            </TextField>
 
             <TextField fullWidth required label="Nguồn gốc" name="origin" />
 
-            <Select
+            <TextField
               fullWidth
               required
-              control={control}
+              select
               defaultValue=""
               label="Đã tiêm chủng"
-              name="vaccination"
+              {...register('vaccination')}
             >
               <MenuItem value="YES">Có</MenuItem>
 
               <MenuItem value="NO">Không</MenuItem>
-            </Select>
+            </TextField>
 
             <NumberTextField
               fullWidth
@@ -278,39 +278,39 @@ export default function CreatePost() {
             />
 
             <div className={classes.formGrid}>
-              <Select
+              <TextField
                 fullWidth
                 required
-                control={control}
+                select
                 defaultValue=""
                 label="Tỉnh/Thành phố"
-                name="cityID"
+                {...register('cityID')}
               >
                 {cities?.map(city => (
                   <MenuItem key={city._id} value={city._id}>
                     {city.name}
                   </MenuItem>
                 ))}
-              </Select>
+              </TextField>
 
-              <Select
+              <TextField
                 fullWidth
                 required
-                control={control}
+                select
                 defaultValue=""
                 disabled={!districts?.length}
                 helperText={
                   districts?.length ? '' : 'Hãy chọn Tỉnh/Thành phố trước'
                 }
                 label="Quận/Huyện"
-                name="districtID"
+                {...register('districtID')}
               >
                 {districts?.map(district => (
                   <MenuItem key={district._id} value={district._id}>
                     {district.name}
                   </MenuItem>
                 ))}
-              </Select>
+              </TextField>
             </div>
 
             <CustomFormRow fullWidth required label="Hình ảnh thú cưng">

@@ -1,4 +1,4 @@
-import { Button, TextField } from '@material-ui/core'
+import { Button } from '@material-ui/core'
 import { useSnackbar } from 'notistack'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -10,6 +10,7 @@ import { closeModal, openModal } from 'src/redux/slices/modal'
 import Dialog from '../Dialog'
 import Form from '../Form'
 import LoadingBackdrop from '../LoadingBackdrop'
+import TextField from '../TextField'
 import TextLink from '../TextLink'
 
 type Inputs = {
@@ -22,7 +23,12 @@ export default function LoginDialog() {
 
   const dispatch = useAppDispatch()
 
-  const { register, handleSubmit, errors, setError } = useForm<Inputs>()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm<Inputs>()
 
   const { enqueueSnackbar } = useSnackbar()
 
@@ -97,19 +103,17 @@ export default function LoginDialog() {
           fullWidth
           error={!!errors.email}
           helperText={errors.email?.message}
-          inputRef={register}
           label="Email"
-          name="email"
+          {...register('email')}
         />
 
         <TextField
           fullWidth
           error={!!errors.password}
           helperText={errors.password?.message}
-          inputRef={register}
           label="Mật khẩu"
-          name="password"
           type="password"
+          {...register('password')}
         />
 
         <Button fullWidth type="submit">

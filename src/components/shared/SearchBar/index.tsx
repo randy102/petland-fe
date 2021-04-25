@@ -22,9 +22,8 @@ export default function SearchBar() {
           root: classes.inputRoot,
         }}
         defaultValue=""
-        inputRef={register}
-        name="search"
         placeholder="Tìm kiếm..."
+        {...register('search')}
       />
 
       <TypeSelect />
