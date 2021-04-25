@@ -51,14 +51,14 @@ export default function User() {
 
         <MenuLink
           icon="post_add"
-          text="Đăng tin"
+          text="Đăng bài"
           to="/create-post"
           onClick={popupState.close}
         />
 
         <MenuLink
           icon="pets"
-          text="Tin đăng của bạn"
+          text="Bài đăng của bạn"
           to="/my-account/posts"
           onClick={popupState.close}
         />

@@ -1,7 +1,12 @@
 import { TextFieldProps, TextField as MuiTextField } from '@material-ui/core'
+import { forwardRef } from 'react'
 
-export default function TextField(props: TextFieldProps) {
-  const { ref, ...rest } = props
+const TextField = forwardRef((props: TextFieldProps, ref) => {
+  const { ...rest } = props
 
   return <MuiTextField inputRef={ref} {...rest} />
-}
+})
+
+TextField.displayName = 'TextField'
+
+export default TextField

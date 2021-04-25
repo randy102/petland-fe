@@ -10,8 +10,6 @@ type Props = {
   decimalScale?: number
   decimalSeparator?: string
   thousandSeparator?: string | boolean
-  min?: number
-  max?: number
   prefix?: string
   suffix?: string
   control: Control<any>
@@ -36,20 +34,16 @@ export default function NumberTextField(props: Props) {
           decimalSeparator={props.decimalSeparator}
           fullWidth={props.fullWidth}
           helperText={props.helperText}
-          isAllowed={({ floatValue }) => {
-            if (props.max === undefined) {
-              return true
-            }
-
-            return floatValue === undefined || floatValue <= props.max
-          }}
           label={props.label}
-          max={props.max}
-          min={props.min}
           required={props.required}
           suffix={props.suffix}
           thousandSeparator={props.thousandSeparator}
+          value={field.value}
           variant="outlined"
+          onBlur={field.onBlur}
+          onValueChange={values => {
+            field.onChange(values.floatValue)
+          }}
         />
       )}
     />

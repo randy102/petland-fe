@@ -23,7 +23,7 @@ export default function MyAccount() {
       },
       {
         to: '/posts',
-        label: 'Tin đăng của bạn',
+        label: 'Bài đăng của bạn',
       },
       {
         to: '/change-password',
