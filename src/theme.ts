@@ -3,16 +3,6 @@ import { createMuiTheme } from '@material-ui/core'
 const defaultTheme = createMuiTheme()
 
 const theme = createMuiTheme({
-  overrides: {
-    MuiFormLabel: {
-      asterisk: {
-        '&$error': {
-          color: '#db3131',
-        },
-        color: '#db3131',
-      },
-    },
-  },
   palette: {
     background: {
       default: '#f4f4f4',
@@ -50,7 +40,7 @@ const theme = createMuiTheme({
       variant: 'outlined',
     },
     MuiRadio: {
-      color: 'primary',
+      color: 'default',
     },
   },
 })

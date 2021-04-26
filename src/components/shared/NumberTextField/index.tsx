@@ -17,6 +17,7 @@ type Props = {
   helperText?: string
   label: string
   name: string
+  error?: boolean
 }
 
 export default function NumberTextField(props: Props) {
@@ -32,6 +33,7 @@ export default function NumberTextField(props: Props) {
           customInput={TextField}
           decimalScale={props.decimalScale}
           decimalSeparator={props.decimalSeparator}
+          error={props.error}
           fullWidth={props.fullWidth}
           helperText={props.helperText}
           label={props.label}

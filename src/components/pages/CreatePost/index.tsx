@@ -5,8 +5,9 @@ import {
   MenuItem,
   useMediaQuery,
   useTheme,
+  Radio as MuiRadio,
 } from '@material-ui/core'
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import CardWithTitle from 'src/components/shared/CardWithTitle'
 import CustomFormRow from 'src/components/shared/CustomFormRow'
@@ -54,6 +55,7 @@ export default function CreatePost() {
     watch,
     handleSubmit,
     getValues,
+    formState: { errors },
   } = useForm<Inputs>()
 
   // Categories and subcategories
@@ -231,7 +233,11 @@ export default function CreatePost() {
                     select
                     defaultValue=""
                     label="Loại thú cưng"
-                    {...register('categoryID')}
+                    {...register('categoryID', {
+                      required: 'Hãy chọn loại thú cưng',
+                    })}
+                    error={!!errors?.categoryID}
+                    helperText={errors?.categoryID?.message}
                   >
                     {categories?.map(category => (
                       <MenuItem key={category._id} value={category._id}>
@@ -249,15 +255,13 @@ export default function CreatePost() {
                     defaultValue=""
                     disabled={!subcategories?.length}
                     helperText={
-                      subcategories?.length
-                        ? ''
-                        : 'Hãy chọn Loại thú cưng trước'
+                      !subcategories?.length && 'Hãy chọn loại thú cưng trước'
                     }
                     label="Giống thú cưng"
                     {...register('subCategoryID')}
                   >
                     {!subcategories?.length && (
-                      <MenuItem value="">Hãy chọn Loại thú cưng trước</MenuItem>
+                      <MenuItem value="">Hãy chọn loại thú cưng trước</MenuItem>
                     )}
 
                     {subcategories?.map(subcategory => (
@@ -269,7 +273,14 @@ export default function CreatePost() {
                 </Grid>
               </Grid>
 
-              <TextField fullWidth required label="Nguồn gốc" name="origin" />
+              <TextField
+                fullWidth
+                required
+                label="Nguồn gốc"
+                {...register('origin', {
+                  required: 'Hãy nhập nguồn gốc thú cưng',
+                })}
+              />
 
               <NumberTextField
                 fullWidth
@@ -280,19 +291,6 @@ export default function CreatePost() {
                 suffix=" tháng"
               />
 
-              <TextField
-                fullWidth
-                required
-                select
-                defaultValue=""
-                label="Giới tính"
-                {...register('sex')}
-              >
-                <MenuItem value="MALE">Đực</MenuItem>
-
-                <MenuItem value="FEMALE">Cái</MenuItem>
-              </TextField>
-
               <Grid container item spacing={3}>
                 <Grid item sm={6} xs={12}>
                   <Radio
@@ -301,7 +299,9 @@ export default function CreatePost() {
                     defaultValue=""
                     label="Giới tính"
                     row={isXs}
-                    {...register('sex')}
+                    {...register('sex', {
+                      required: 'Hãy chọn giới tính thú cưng',
+                    })}
                     items={[
                       { label: 'Đực', value: 'MALE' },
                       { label: 'Cái', value: 'FEMALE' },
@@ -316,7 +316,9 @@ export default function CreatePost() {
                     defaultValue=""
                     label="Đã tiêm chủng"
                     row={isXs}
-                    {...register('vaccination')}
+                    {...register('vaccination', {
+                      required: 'Hãy chọn tình trạng tiêm chủng',
+                    })}
                     items={[
                       { label: 'Có', value: 'true' },
                       { label: 'Không', value: 'false' },
@@ -344,6 +346,9 @@ export default function CreatePost() {
                 required
                 label="Tiêu đề bài đăng"
                 name="name"
+                {...register('name', {
+                  required: 'Hãy nhập tiêu đề bài đăng',
+                })}
               />
 
               <NumberTextField
@@ -369,7 +374,9 @@ export default function CreatePost() {
                     select
                     defaultValue=""
                     label="Tỉnh/Thành phố"
-                    {...register('cityID')}
+                    {...register('cityID', {
+                      required: 'Hãy chọn tỉnh/thành phố',
+                    })}
                   >
                     {!cities?.length && <MenuItem value="">Đang tải</MenuItem>}
 
