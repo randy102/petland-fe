@@ -276,6 +276,8 @@ export default function CreatePost() {
               <TextField
                 fullWidth
                 required
+                error={!!errors?.origin}
+                helperText={errors?.origin?.message}
                 label="Nguồn gốc"
                 {...register('origin', {
                   required: 'Hãy nhập nguồn gốc thú cưng',
@@ -286,8 +288,13 @@ export default function CreatePost() {
                 fullWidth
                 required
                 control={control}
+                error={!!errors?.age}
+                helperText={errors?.age?.message}
                 label="Tuổi"
                 name="age"
+                rules={{
+                  required: 'Hãy nhập tuổi thú cưng',
+                }}
                 suffix=" tháng"
               />
 
@@ -297,6 +304,8 @@ export default function CreatePost() {
                     fullWidth
                     required
                     defaultValue=""
+                    error={!!errors?.sex}
+                    helperText={errors?.sex?.message}
                     label="Giới tính"
                     row={isXs}
                     {...register('sex', {
@@ -314,6 +323,8 @@ export default function CreatePost() {
                     fullWidth
                     required
                     defaultValue=""
+                    error={!!errors?.vaccination}
+                    helperText={errors?.vaccination?.message}
                     label="Đã tiêm chủng"
                     row={isXs}
                     {...register('vaccination', {
@@ -331,8 +342,10 @@ export default function CreatePost() {
                 fullWidth
                 multiline
                 label="Mô tả thêm (nếu có)"
-                name="detail"
                 rows={4}
+                {...register('detail')}
+                error={!!errors?.detail}
+                helperText={errors?.detail?.message}
               />
             </div>
           </CardWithTitle>
@@ -345,7 +358,6 @@ export default function CreatePost() {
                 fullWidth
                 required
                 label="Tiêu đề bài đăng"
-                name="name"
                 {...register('name', {
                   required: 'Hãy nhập tiêu đề bài đăng',
                 })}

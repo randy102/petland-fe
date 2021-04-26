@@ -1,5 +1,10 @@
 import { TextField } from '@material-ui/core'
-import { Control, Controller } from 'react-hook-form'
+import {
+  Control,
+  Controller,
+  RegisterOptions,
+  UseControllerProps,
+} from 'react-hook-form'
 import NumberFormat from 'react-number-format'
 
 type Props = {
@@ -18,6 +23,7 @@ type Props = {
   label: string
   name: string
   error?: boolean
+  rules?: UseControllerProps['rules']
 }
 
 export default function NumberTextField(props: Props) {
@@ -48,6 +54,7 @@ export default function NumberTextField(props: Props) {
           }}
         />
       )}
+      rules={props.rules}
     />
   )
 }
