@@ -1,6 +1,6 @@
-import { Button } from '@material-ui/core'
+import { Button, Typography } from '@material-ui/core'
 import { useSnackbar } from 'notistack'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import setServerErrors from 'src/helpers/setServerErrors'
 import useAxios from 'src/hooks/useAxios'
@@ -9,7 +9,6 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
 import { closeModal, openModal } from 'src/redux/slices/modal'
 import Dialog from '../Dialog'
 import Form from '../Form'
-import LoadingBackdrop from '../LoadingBackdrop'
 import TextField from '../TextField'
 import TextLink from '../TextLink'
 
@@ -91,13 +90,12 @@ export default function LoginDialog() {
   return (
     <Dialog
       fullWidth
+      loading={loading}
       maxWidth="sm"
       open={open === 'LOGIN'}
       title="Đăng nhập"
       onClose={handleCloseModal}
     >
-      <LoadingBackdrop open={loading} />
-
       <Form onSubmit={onSubmit}>
         <TextField
           fullWidth
@@ -120,10 +118,10 @@ export default function LoginDialog() {
           Đăng nhập
         </Button>
 
-        <div>
+        <Typography>
           Chưa có tài khoản?{' '}
           <TextLink onClick={handleLinkClick}>Đăng ký ngay</TextLink>
-        </div>
+        </Typography>
       </Form>
     </Dialog>
   )

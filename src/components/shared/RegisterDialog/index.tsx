@@ -9,7 +9,6 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
 import { closeModal, openModal } from 'src/redux/slices/modal'
 import Dialog from '../Dialog'
 import Form from '../Form'
-import LoadingBackdrop from '../LoadingBackdrop'
 import TextField from '../TextField'
 import TextLink from '../TextLink'
 
@@ -91,6 +90,7 @@ export default function RegisterDialog() {
   return (
     <Dialog
       fullWidth
+      loading={loading}
       maxWidth="sm"
       open={open === 'REGISTER'}
       title="Đăng ký"
@@ -143,8 +143,6 @@ export default function RegisterDialog() {
           <TextLink onClick={handleLinkClick}>Đăng nhập ngay</TextLink>
         </div>
       </Form>
-
-      <LoadingBackdrop open={loading} />
     </Dialog>
   )
 }
