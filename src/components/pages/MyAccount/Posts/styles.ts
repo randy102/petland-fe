@@ -1,5 +1,7 @@
 import { makeStyles } from '@material-ui/core'
 
+const thumbnailSize = 120
+
 const useStyles = makeStyles(theme => ({
   root: {
     marginTop: theme.spacing(-2),
@@ -11,8 +13,25 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     '& > div:not(:first-child)': {
-      marginTop: theme.spacing(2),
+      marginTop: theme.spacing(3),
     },
+  },
+  post: {
+    display: 'flex',
+    '& > img': {
+      height: '100%',
+      width: thumbnailSize,
+    },
+    '& > div': {
+      padding: theme.spacing(2),
+    },
+  },
+  loading: {
+    width: '100%',
+    height: '300px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 }))
 
