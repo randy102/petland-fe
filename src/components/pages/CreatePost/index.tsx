@@ -5,7 +5,6 @@ import {
   MenuItem,
   useMediaQuery,
   useTheme,
-  Radio as MuiRadio,
 } from '@material-ui/core'
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'

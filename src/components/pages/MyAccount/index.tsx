@@ -5,6 +5,7 @@ import useStyles from './styles'
 import { Route, Switch, useRouteMatch } from 'react-router'
 import Profile from './Profile'
 import ChangePassword from './ChangePassword'
+import Posts from './Posts'
 import { useMemo } from 'react'
 import TextLink from 'src/components/shared/TextLink'
 
@@ -79,6 +80,8 @@ export default function MyAccount() {
           <Route component={Profile} path={`${path}/profile`} />
 
           <Route component={ChangePassword} path={`${path}/change-password`} />
+
+          <Route component={Posts} path={`${path}/posts`} />
         </Switch>
       </Grid>
     </Grid>
