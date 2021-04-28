@@ -1,16 +1,14 @@
-import { CircularProgress, Paper, Tab, Tabs } from '@material-ui/core'
-import { ChangeEvent, useState } from 'react'
+import { CircularProgress, Tab, Tabs } from '@material-ui/core'
+import { ChangeEvent, useMemo, useState } from 'react'
 import CardWithTitle from 'src/components/shared/CardWithTitle'
-import Image from 'src/components/shared/Image'
 import NoData from 'src/components/shared/NoData'
 import useAxios from 'src/hooks/useAxios'
 import { Post } from 'src/types/Post'
 import useStyles from './styles'
+import PostItem from './PostItem'
 
 export default function Posts() {
   const classes = useStyles()
-
-  const [filteredPosts, setFilteredPosts] = useState<Post[]>([])
 
   const { data: posts, loading } = useAxios<Post[]>({
     config: {
@@ -18,23 +16,24 @@ export default function Posts() {
       route: 'post/user',
     },
     fetchOnMount: true,
-    onCompleted: response => {
-      setFilteredPosts(response.data.filter(post => post.state === 'PUBLISHED'))
-    },
   })
 
   const [state, setState] = useState<Post['state']>('PUBLISHED')
 
   const handleTabChange = (_event: ChangeEvent<any>, state: Post['state']) => {
     setState(state)
-    setFilteredPosts(posts?.filter(post => post.state === state) || [])
   }
+
+  const filteredPosts = useMemo(
+    () => posts?.filter(post => post.state === state) || [],
+    [posts, state]
+  )
 
   return (
     <CardWithTitle title="Bài đăng của bạn">
       <Tabs
         classes={{
-          root: classes.root,
+          root: classes.tabs,
         }}
         indicatorColor="primary"
         value={state}
@@ -59,11 +58,7 @@ export default function Posts() {
       ) : (
         <div className={classes.posts}>
           {filteredPosts.map(post => (
-            <Paper className={classes.post} elevation={3} key={post._id}>
-              <Image id={post.mainImage} />
-
-              <div>{JSON.stringify(post)}</div>
-            </Paper>
+            <PostItem key={post._id} post={post} />
           ))}
         </div>
       )}
