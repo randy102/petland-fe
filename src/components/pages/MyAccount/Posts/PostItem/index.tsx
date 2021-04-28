@@ -8,6 +8,7 @@ import {
   Typography,
 } from '@material-ui/core'
 import { IMAGE_BASE_URL } from 'src/constants'
+import epochToString from 'src/helpers/epochToString'
 import { Post } from 'src/types/Post'
 import useStyles from './styles'
 
@@ -62,6 +63,10 @@ export default function PostItem(props: Props) {
         <CardContent>
           <Typography gutterBottom variant="h5">
             {post.name}
+          </Typography>
+
+          <Typography variant="body1">
+            Ngày tạo: {epochToString(post.createdAt)}
           </Typography>
         </CardContent>
 
