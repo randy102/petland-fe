@@ -6,7 +6,14 @@ import {
   useMediaQuery,
   useTheme,
 } from '@material-ui/core'
-import { ChangeEvent, useEffect, useRef, useState } from 'react'
+import {
+  ChangeEvent,
+  FormEventHandler,
+  MouseEvent,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { useForm } from 'react-hook-form'
 import CardWithTitle from 'src/components/shared/CardWithTitle'
 import CustomFormRow from 'src/components/shared/CustomFormRow'
@@ -24,6 +31,11 @@ import { useSnackbar } from 'notistack'
 import TextField from 'src/components/shared/TextField'
 import { MAX_POST_IMAGES } from 'src/constants'
 import Radio from 'src/components/shared/Radio'
+
+type ImageObject = {
+  src: string
+  file: File
+}
 
 type Inputs = {
   name: string
@@ -55,6 +67,8 @@ export default function CreatePost() {
     handleSubmit,
     getValues,
     formState: { errors },
+    setError,
+    clearErrors,
   } = useForm<Inputs>()
 
   // Categories and subcategories
@@ -123,11 +137,7 @@ export default function CreatePost() {
     })
   }, [cityID])
 
-  const [previewSources, setPreviewSources] = useState<string[]>([])
-
-  const [imageFiles, setImageFiles] = useState<File[]>([])
-
-  const [previewsLoading, setPreviewsLoading] = useState(0)
+  const [previewImages, setPreviewImages] = useState<ImageObject[]>([])
 
   const { enqueueSnackbar } = useSnackbar()
 
@@ -154,15 +164,18 @@ export default function CreatePost() {
     }
 
     // Available slots for new images
-    const availableSlots = MAX_POST_IMAGES - previewSources.length
+    const availableSlots = MAX_POST_IMAGES - previewImages.length
 
     // Cut image length to a maximum of available slots
     images.length = Math.min(availableSlots, images.length)
 
-    setImageFiles(imageFiles => [...imageFiles, ...images])
-
-    // Set loading
-    setPreviewsLoading(images.length)
+    if (previewImages.length + images.length >= 2) {
+      clearErrors('mainImage')
+    } else {
+      setError('mainImage', {
+        message: 'Cần ít nhất 2 ảnh thú cưng',
+      })
+    }
 
     // Load images into preview sources
     images.forEach(file => {
@@ -171,8 +184,10 @@ export default function CreatePost() {
       reader.readAsDataURL(file)
 
       reader.onloadend = () => {
-        setPreviewSources(sources => [...sources, reader.result as string])
-        setPreviewsLoading(count => count - 1)
+        setPreviewImages(previewImages => [
+          ...previewImages,
+          { src: reader.result as string, file },
+        ])
       }
     })
 
@@ -181,10 +196,19 @@ export default function CreatePost() {
   }
 
   const uploadImages = () => {
-    console.log('Upload images')
-    const imageIds = ['1', '2', '3']
+    const mainImage = previewImages.slice(0, 1)
+    const otherImages = previewImages.slice(1)
+
+    // Upload main image and other images to get ids
+    const mainImageId = '1'
+    const otherImagesIds = ['2', '3', '4']
+
+    // Add main image id and other images ids into form data
     const data = getValues()
-    data.images = imageIds
+    data.mainImage = mainImageId
+    data.images = otherImagesIds
+
+    // Upload post with new form data
     uploadPost(data)
   }
 
@@ -193,20 +217,30 @@ export default function CreatePost() {
     console.log('Submit data:', data)
   }
 
-  const onSubmit = handleSubmit((data: Inputs) => {
-    if (imageFiles.length) {
-      uploadImages()
-      return
-    }
-
-    uploadPost(data)
-  })
+  const onSubmit = handleSubmit(() => uploadImages())
 
   const handleDeleteImageClick = (index: number) => {
-    setPreviewSources(previewSources => {
-      const newSources = [...previewSources]
-      newSources.splice(index, 1)
-      return newSources
+    setPreviewImages(previewImages => {
+      const newImages = [...previewImages]
+      newImages.splice(index, 1)
+
+      if (newImages.length < 2) {
+        setError('mainImage', {
+          message: 'Cần ít nhất 2 ảnh thú cưng',
+        })
+      }
+
+      return newImages
+    })
+  }
+
+  const handlePinImageClick = (index: number) => {
+    setPreviewImages(previewImages => {
+      const newImages = [...previewImages]
+
+      newImages.unshift(newImages.splice(index, 1)[0])
+
+      return newImages
     })
   }
 
@@ -216,15 +250,18 @@ export default function CreatePost() {
 
   return (
     <form noValidate onSubmit={onSubmit}>
-      <LoadingBackdrop
-        open={loadingSubcategories || loadingDistricts || previewsLoading > 0}
-      />
+      <LoadingBackdrop open={loadingSubcategories || loadingDistricts} />
 
       <Grid container spacing={3}>
         <Grid item lg={6} xs={12}>
           <CardWithTitle title="Thông tin thú cưng">
             <div className={classes.form}>
-              <Grid container item spacing={3}>
+              <Grid
+                container
+                item
+                className={classes.marginBottom15}
+                spacing={3}
+              >
                 <Grid item sm={6} xs={12}>
                   <TextField
                     fullWidth
@@ -253,11 +290,18 @@ export default function CreatePost() {
                     select
                     defaultValue=""
                     disabled={!subcategories?.length}
+                    error={
+                      !subcategories?.length ? false : !!errors?.subCategoryID
+                    }
                     helperText={
-                      !subcategories?.length && 'Hãy chọn loại thú cưng trước'
+                      !subcategories?.length
+                        ? 'Hãy chọn loại thú cưng trước'
+                        : errors?.subCategoryID?.message
                     }
                     label="Giống thú cưng"
-                    {...register('subCategoryID')}
+                    {...register('subCategoryID', {
+                      required: 'Hãy chọn giống thú cưng',
+                    })}
                   >
                     {!subcategories?.length && (
                       <MenuItem value="">Hãy chọn loại thú cưng trước</MenuItem>
@@ -281,11 +325,13 @@ export default function CreatePost() {
                 {...register('origin', {
                   required: 'Hãy nhập nguồn gốc thú cưng',
                 })}
+                className={classes.marginBottom3}
               />
 
               <NumberTextField
                 fullWidth
                 required
+                className={classes.marginBottom3}
                 control={control}
                 error={!!errors?.age}
                 helperText={errors?.age?.message}
@@ -297,7 +343,12 @@ export default function CreatePost() {
                 suffix=" tháng"
               />
 
-              <Grid container item spacing={3}>
+              <Grid
+                container
+                item
+                className={classes.marginBottom1}
+                spacing={3}
+              >
                 <Grid item sm={6} xs={12}>
                   <Radio
                     fullWidth
@@ -343,6 +394,7 @@ export default function CreatePost() {
                 label="Mô tả thêm (nếu có)"
                 rows={4}
                 {...register('detail')}
+                className={classes.marginBottom3}
                 error={!!errors?.detail}
                 helperText={errors?.detail?.message}
               />
@@ -356,10 +408,13 @@ export default function CreatePost() {
               <TextField
                 fullWidth
                 required
+                error={!!errors?.name}
+                helperText={errors?.name?.message}
                 label="Tiêu đề bài đăng"
                 {...register('name', {
                   required: 'Hãy nhập tiêu đề bài đăng',
                 })}
+                className={classes.marginBottom3}
               />
 
               <NumberTextField
@@ -367,23 +422,37 @@ export default function CreatePost() {
                 required
                 allowLeadingZeros={false}
                 allowNegative={false}
+                className={classes.marginBottom3}
                 control={control}
                 decimalScale={0}
                 decimalSeparator=","
-                helperText="Điền 0 nghĩa là giá thương lượng"
+                error={!!errors?.price}
+                helperText={
+                  errors?.price?.message || 'Điền 0 nghĩa là giá thương lượng'
+                }
                 label="Giá bán"
                 name="price"
+                rules={{
+                  required: 'Hãy nhập giá bán',
+                }}
                 suffix=" đ"
                 thousandSeparator="."
               />
 
-              <Grid container item spacing={3}>
+              <Grid
+                container
+                item
+                className={classes.marginBottom15}
+                spacing={3}
+              >
                 <Grid item sm={6} xs={12}>
                   <TextField
                     fullWidth
                     required
                     select
                     defaultValue=""
+                    error={!!errors?.cityID}
+                    helperText={errors?.cityID?.message}
                     label="Tỉnh/Thành phố"
                     {...register('cityID', {
                       required: 'Hãy chọn tỉnh/thành phố',
@@ -406,11 +475,17 @@ export default function CreatePost() {
                     select
                     defaultValue=""
                     disabled={!districts?.length}
+                    error={!districts?.length ? false : !!errors?.districtID}
                     helperText={
-                      districts?.length ? '' : 'Hãy chọn Tỉnh/Thành phố trước'
+                      !districts?.length
+                        ? ''
+                        : errors?.districtID?.message ||
+                          'Hãy chọn tỉnh/thành phố trước'
                     }
                     label="Quận/Huyện"
-                    {...register('districtID')}
+                    {...register('districtID', {
+                      required: 'Hãy chọn quận/huyện',
+                    })}
                   >
                     {!districts?.length && (
                       <MenuItem value="">
@@ -427,7 +502,17 @@ export default function CreatePost() {
                 </Grid>
               </Grid>
 
-              <CustomFormRow fullWidth required label="Hình ảnh thú cưng">
+              <CustomFormRow
+                fullWidth
+                required
+                className={classes.marginBottom3}
+                error={!!errors?.mainImage}
+                helperText={
+                  errors?.mainImage?.message ||
+                  'Ảnh đầu tiên sẽ dùng để hiển thị bài viết'
+                }
+                label="Hình ảnh thú cưng"
+              >
                 <input
                   hidden
                   multiple
@@ -437,27 +522,37 @@ export default function CreatePost() {
                   onChange={handleChange}
                 />
 
+                <input
+                  hidden
+                  {...register('mainImage', {
+                    validate: value =>
+                      previewImages.length >= 2 || 'Cần ít nhất 2 ảnh thú cưng',
+                  })}
+                />
+
                 <Button
                   color="default"
-                  disabled={previewSources.length === MAX_POST_IMAGES}
+                  disabled={previewImages.length === MAX_POST_IMAGES}
                   startIcon={
-                    previewSources.length !== MAX_POST_IMAGES && (
-                      <Icon>add</Icon>
-                    )
+                    previewImages.length !== MAX_POST_IMAGES && <Icon>add</Icon>
                   }
                   type="button"
                   onClick={handleClick}
                 >
-                  {previewSources.length === MAX_POST_IMAGES
+                  {previewImages.length === MAX_POST_IMAGES
                     ? `Tối đa ${MAX_POST_IMAGES} ảnh`
                     : 'Thêm ảnh'}
                 </Button>
 
-                {previewSources.length > 0 && (
+                {previewImages.length > 0 && (
                   <div className={classes.imageGrid}>
-                    {previewSources.map((src, index) => (
+                    {previewImages.map((image, index) => (
                       <div className={classes.imageItemContainer} key={index}>
-                        <img alt="" className={classes.imageItem} src={src} />
+                        <img
+                          alt=""
+                          className={classes.imageItem}
+                          src={image.src}
+                        />
 
                         <Button
                           className={classes.imageDeleteButton}
@@ -467,13 +562,24 @@ export default function CreatePost() {
                         >
                           <Icon>delete</Icon>
                         </Button>
+
+                        {index > 0 && (
+                          <Button
+                            className={classes.imagePinButton}
+                            size="small"
+                            type="button"
+                            onClick={() => handlePinImageClick(index)}
+                          >
+                            <Icon>push_pin</Icon>
+                          </Button>
+                        )}
                       </div>
                     ))}
                   </div>
                 )}
               </CustomFormRow>
 
-              <Button type="submit">Đăng bài</Button>
+              <Button type="submit">Lưu bài đăng</Button>
             </div>
           </CardWithTitle>
         </Grid>

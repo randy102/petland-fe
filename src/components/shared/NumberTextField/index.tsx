@@ -24,6 +24,7 @@ type Props = {
   name: string
   error?: boolean
   rules?: UseControllerProps['rules']
+  className?: string
 }
 
 export default function NumberTextField(props: Props) {
@@ -36,6 +37,7 @@ export default function NumberTextField(props: Props) {
         <NumberFormat
           allowLeadingZeros={props.allowLeadingZeros}
           allowNegative={props.allowNegative}
+          className={props.className}
           customInput={TextField}
           decimalScale={props.decimalScale}
           decimalSeparator={props.decimalSeparator}

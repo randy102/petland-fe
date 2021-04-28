@@ -1,11 +1,18 @@
-import { makeStyles } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core'
 
-const useStyles = makeStyles(theme => ({
+type Props = {
+  error?: boolean
+}
+
+const useStyles = makeStyles<Theme, Props>(theme => ({
   fullWidth: {
     width: '100%',
   },
   root: {
-    border: '1px solid rgba(0, 0, 0, 0.23)',
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: props =>
+      props.error ? theme.palette.error.main : 'rgba(0, 0, 0, 0.23)',
     borderRadius: theme.shape.borderRadius,
     padding: '18.5px 14px',
     position: 'relative',
@@ -21,7 +28,8 @@ const useStyles = makeStyles(theme => ({
     lineHeight: 1,
     background: theme.palette.common.white,
     transformOrigin: 'top left',
-    color: 'rgba(0, 0, 0, 0.54)',
+    color: props =>
+      props.error ? theme.palette.error.main : 'rgba(0, 0, 0, 0.54)',
   },
 }))
 

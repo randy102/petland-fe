@@ -12,6 +12,17 @@ const useStyles = makeStyles(theme => ({
       background: theme.palette.error.dark,
     },
   },
+  imagePinButton: {
+    position: 'absolute',
+    top: 4,
+    left: 4,
+    minWidth: 'fit-content',
+    padding: 4,
+    background: theme.palette.primary.main,
+    '&:hover': {
+      background: theme.palette.primary.dark,
+    },
+  },
   imageItemContainer: {
     display: 'flex',
     position: 'relative',
@@ -36,13 +47,15 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    '& > *:not(:last-child)': {
-      marginBottom: theme.spacing(3),
-
-      '&.MuiGrid-root': {
-        marginBottom: theme.spacing(1.5),
-      },
-    },
+  },
+  marginBottom1: {
+    marginBottom: theme.spacing(1),
+  },
+  marginBottom3: {
+    marginBottom: theme.spacing(3),
+  },
+  marginBottom15: {
+    marginBottom: theme.spacing(1.5),
   },
 }))
 
