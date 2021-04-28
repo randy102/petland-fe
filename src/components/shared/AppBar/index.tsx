@@ -28,17 +28,15 @@ export default function AppBar() {
 
   const handleRegisterClick = () => dispatch(openModal('REGISTER'))
 
-  const { fetch: getUser, loading: gettingUser } = useUser()
-
   const user = useAppSelector(state => state.user)
+
+  const { fetch: getUser, loading: gettingUser } = useUser()
 
   useEffect(() => {
     if (!localStorage.getItem('token')) return
 
-    if (user !== null) return
-
-    getUser?.()
-  }, [getUser, user])
+    getUser()
+  }, [])
 
   return (
     <MuiAppBar position="sticky">

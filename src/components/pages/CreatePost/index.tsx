@@ -6,14 +6,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@material-ui/core'
-import {
-  ChangeEvent,
-  FormEventHandler,
-  MouseEvent,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import CardWithTitle from 'src/components/shared/CardWithTitle'
 import CustomFormRow from 'src/components/shared/CustomFormRow'
@@ -31,6 +24,9 @@ import { useSnackbar } from 'notistack'
 import TextField from 'src/components/shared/TextField'
 import { MAX_POST_IMAGES } from 'src/constants'
 import Radio from 'src/components/shared/Radio'
+import axios from 'axios'
+import uploadImages from 'src/helpers/uploadImages'
+import { useHistory } from 'react-router'
 
 type ImageObject = {
   src: string
@@ -60,12 +56,13 @@ export default function CreatePost() {
 
   const isXs = useMediaQuery(theme.breakpoints.down('xs'))
 
+  const [loading, setLoading] = useState<boolean>(false)
+
   const {
     control,
     register,
     watch,
     handleSubmit,
-    getValues,
     formState: { errors },
     setError,
     clearErrors,
@@ -195,29 +192,36 @@ export default function CreatePost() {
     event.currentTarget.value = ''
   }
 
-  const uploadImages = () => {
-    const mainImage = previewImages.slice(0, 1)
-    const otherImages = previewImages.slice(1)
+  const history = useHistory()
 
-    // Upload main image and other images to get ids
-    const mainImageId = '1'
-    const otherImagesIds = ['2', '3', '4']
-
-    // Add main image id and other images ids into form data
-    const data = getValues()
-    data.mainImage = mainImageId
-    data.images = otherImagesIds
-
-    // Upload post with new form data
-    uploadPost(data)
-  }
-
-  const uploadPost = (data: Inputs) => {
+  const onSubmit = handleSubmit((data: Inputs) => {
     data.vaccination = data.vaccination === 'true'
-    console.log('Submit data:', data)
-  }
 
-  const onSubmit = handleSubmit(() => uploadImages())
+    setLoading(true)
+
+    const mainImageFile = previewImages.slice(0, 1).map(img => img.file)
+    const otherImageFiles = previewImages.slice(1).map(img => img.file)
+
+    Promise.all([
+      uploadImages(mainImageFile),
+      uploadImages(otherImageFiles),
+    ]).then(results => {
+      data.mainImage = results[0].data[0]
+      data.images = results[1].data
+
+      axios
+        .post('/post', {
+          ...data,
+        })
+        .then(response => {
+          setLoading(false)
+
+          enqueueSnackbar('Tạo bài đăng thành công!', {
+            variant: 'success',
+          })
+        })
+    })
+  })
 
   const handleDeleteImageClick = (index: number) => {
     setPreviewImages(previewImages => {
@@ -250,7 +254,9 @@ export default function CreatePost() {
 
   return (
     <form noValidate onSubmit={onSubmit}>
-      <LoadingBackdrop open={loadingSubcategories || loadingDistricts} />
+      <LoadingBackdrop
+        open={loadingSubcategories || loadingDistricts || loading}
+      />
 
       <Grid container spacing={3}>
         <Grid item lg={6} xs={12}>

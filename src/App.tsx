@@ -12,7 +12,19 @@ import store from './redux/store'
 import Routes from './Routes'
 import theme from './theme'
 
-axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL
+// Base URL for all requests
+axios.defaults.baseURL = 'https://petland-cnpm.herokuapp.com/api'
+
+// Add token to each request before firing
+axios.interceptors.request.use(config => {
+  const token = localStorage.getItem('token')
+
+  if (token) {
+    config.headers.Authorization = 'Bearer ' + token
+  }
+
+  return config
+})
 
 function App() {
   return (

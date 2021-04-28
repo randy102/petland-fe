@@ -30,5 +30,9 @@ export default function Avatar(props: Props) {
     )
   }
 
-  return <Icon className={clsx(classes.avatar, className)}>person</Icon>
+  return (
+    <Icon className={clsx(classes.avatar, classes.default, className)}>
+      person
+    </Icon>
+  )
 }

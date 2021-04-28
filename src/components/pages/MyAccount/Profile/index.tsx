@@ -74,7 +74,7 @@ export default function Profile() {
     onCompleted: response => {
       const data = getValues()
 
-      data.avatar = response.data
+      data.avatar = response.data[0]
 
       updateUser({
         data,
@@ -124,7 +124,7 @@ export default function Profile() {
     if (imageFile) {
       const formData = new FormData()
 
-      formData.append('file', imageFile)
+      formData.append('files', imageFile)
 
       uploadImage({
         data: formData,
