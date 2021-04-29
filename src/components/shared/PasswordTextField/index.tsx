@@ -7,6 +7,7 @@ import {
   InputLabel,
   OutlinedInput,
 } from '@material-ui/core'
+import { Visibility, VisibilityOff } from '@material-ui/icons'
 import { useState } from 'react'
 import { UseFormRegisterReturn } from 'react-hook-form'
 
@@ -37,7 +38,7 @@ export default function PasswordTextField(props: Props) {
         endAdornment={
           <InputAdornment position="end">
             <IconButton edge="end" onClick={handleClick}>
-              <Icon>{showPassword ? 'visibility' : 'visibility_off'}</Icon>
+              {showPassword ? <Visibility /> : <VisibilityOff />}
             </IconButton>
           </InputAdornment>
         }

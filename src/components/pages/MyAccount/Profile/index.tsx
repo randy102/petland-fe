@@ -1,4 +1,5 @@
 import { Button, Fab, Icon } from '@material-ui/core'
+import { PhotoCamera } from '@material-ui/icons'
 import { useSnackbar } from 'notistack'
 import React, { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -169,7 +170,7 @@ export default function Profile() {
             size="small"
             onClick={handleClick}
           >
-            <Icon>photo_camera</Icon>
+            <PhotoCamera />
           </Fab>
         </div>
 

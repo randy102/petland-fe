@@ -26,7 +26,8 @@ import { MAX_POST_IMAGES } from 'src/constants'
 import Radio from 'src/components/shared/Radio'
 import axios from 'axios'
 import uploadImages from 'src/helpers/uploadImages'
-import { useHistory } from 'react-router'
+import { useHistory, useParams } from 'react-router'
+import { Delete } from '@material-ui/icons'
 
 type ImageObject = {
   src: string
@@ -55,6 +56,8 @@ export default function CreatePost() {
   const theme = useTheme()
 
   const isXs = useMediaQuery(theme.breakpoints.down('xs'))
+
+  // const {id} = useParams()
 
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -219,6 +222,8 @@ export default function CreatePost() {
           enqueueSnackbar('Tạo bài đăng thành công!', {
             variant: 'success',
           })
+
+          history.push('/my-account/posts?state=DRAFT')
         })
     })
   })
@@ -566,7 +571,7 @@ export default function CreatePost() {
                           type="button"
                           onClick={() => handleDeleteImageClick(index)}
                         >
-                          <Icon>delete</Icon>
+                          <Delete />
                         </Button>
 
                         {index > 0 && (

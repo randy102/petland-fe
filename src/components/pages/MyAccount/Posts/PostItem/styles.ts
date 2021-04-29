@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core'
 
-const thumbnailSize = 120
+const thumbnailSize = 150
 
 const useStyles = makeStyles(theme => ({
   card: {
