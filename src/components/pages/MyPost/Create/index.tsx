@@ -1,6 +1,7 @@
+import { SelectInputProps } from '@material-ui/core/Select/SelectInput'
 import axios from 'axios'
 import { useSnackbar } from 'notistack'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useHistory } from 'react-router'
 import LoadingBackdrop from 'src/components/shared/LoadingBackdrop'
@@ -18,7 +19,7 @@ type PreviewImage = {
 }
 
 export default function Create() {
-  const formMethods = useForm()
+  const formMethods = useForm<PostFormInputs>()
 
   const [previewImages, setPreviewImages] = useState<PreviewImage[]>([])
 
@@ -28,10 +29,7 @@ export default function Create() {
 
   const { enqueueSnackbar } = useSnackbar()
 
-  const { handleSubmit, watch } = formMethods
-
-  // Categories and subcategories
-  const categoryID = watch('categoryID', '')
+  const { setValue } = formMethods
 
   const { data: categories, loading: loadingCategories } = useAxios<Category[]>(
     {
@@ -54,18 +52,17 @@ export default function Create() {
     },
   })
 
-  useEffect(() => {
-    if (!categoryID) return
+  // Load districts on city change
+  const handleCategoryChange: SelectInputProps['onChange'] = (event, child) => {
+    const categoryID = event.target.value as string
 
+    setValue('subCategoryID', '')
     getSubcategories({
       params: {
         category: categoryID,
       },
     })
-  }, [categoryID])
-
-  // Cities and districts
-  const cityID = watch('cityID', '')
+  }
 
   const { data: cities, loading: loadingCities } = useAxios<City[]>({
     config: {
@@ -86,15 +83,17 @@ export default function Create() {
     },
   })
 
-  useEffect(() => {
-    if (!cityID) return
+  // Load districts on city change
+  const handleCityChange: SelectInputProps['onChange'] = (event, child) => {
+    const cityID = event.target.value as string
 
+    setValue('districtID', '')
     getDistricts({
       params: {
         city: cityID,
       },
     })
-  }, [cityID])
+  }
 
   const handleNewImageLoad = (res: PreviewImageLoadResult) => {
     setPreviewImages(previewImages => [
@@ -122,7 +121,7 @@ export default function Create() {
     })
   }
 
-  const onSubmit = handleSubmit((data: PostFormInputs) => {
+  const onSubmit = (data: PostFormInputs) => {
     data.vaccination = data.vaccination === 'true'
 
     setLoading(true)
@@ -147,7 +146,7 @@ export default function Create() {
         history.push('/my-account/posts?state=DRAFT')
       })
     })
-  })
+  }
 
   if (loadingCategories || loadingCities) {
     return <LoadingBackdrop open />
@@ -166,6 +165,8 @@ export default function Create() {
         previewImages={previewImages}
         subcategories={subcategories}
         submitText="Lưu bản nháp"
+        onCategoryChange={handleCategoryChange}
+        onCityChange={handleCityChange}
         onImageDelete={handleImageDelete}
         onImagePin={handleImagePin}
         onNewImageLoad={handleNewImageLoad}

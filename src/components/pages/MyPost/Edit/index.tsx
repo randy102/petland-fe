@@ -1,14 +1,17 @@
+import { SelectInputProps } from '@material-ui/core/Select/SelectInput'
 import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { Redirect, useParams } from 'react-router'
 import LoadingBackdrop from 'src/components/shared/LoadingBackdrop'
+import { IMAGE_BASE_URL } from 'src/constants'
 import getCategories from 'src/helpers/getCategories'
 import getCities from 'src/helpers/getCities'
 import getDistricts from 'src/helpers/getDistricts'
 import getImageURL from 'src/helpers/getImageURL'
 import getPostDetails from 'src/helpers/getPostDetails'
 import getSubcategories from 'src/helpers/getSubcategories'
+import uploadImages from 'src/helpers/uploadImages'
 import { Category } from 'src/types/Category'
 import { City } from 'src/types/City'
 import { District } from 'src/types/District'
@@ -31,16 +34,18 @@ function idToImg(id: string): PreviewImage {
   }
 }
 
+function isNewImage(img: PreviewImage) {
+  return img.src.startsWith(IMAGE_BASE_URL)
+}
+
 export default function Edit() {
   const formMethods = useForm<PostFormInputs>()
 
-  const { handleSubmit, setError, setValue, watch } = formMethods
+  const { handleSubmit, setError, watch, setValue } = formMethods
 
   const { id } = useParams<UrlParams>()
 
   const [previewImages, setPreviewImages] = useState<PreviewImage[]>([])
-
-  const [loading, setLoading] = useState<boolean>(true)
 
   const [fetchError, setFetchError] = useState()
 
@@ -52,12 +57,41 @@ export default function Edit() {
   const [categories, setCategories] = useState<Category[]>()
   const [subcategories, setSubcategories] = useState<Subcategory[]>()
 
-  const cityID = watch('cityID')
+  const [loadingDefaultValues, setLoadingDefaultValues] = useState(true)
+  const [loadingDistricts, setLoadingDistricts] = useState(false)
+  const [loadingSubcategories, setLoadingSubcategories] = useState(false)
 
-  useEffect(() => {
-    console.log(cityID)
-  }, [cityID])
+  const [deletedImageIds, setDeletedImageIds] = useState<string[]>([])
 
+  // Load districts on city change
+  const handleCategoryChange: SelectInputProps['onChange'] = (event, child) => {
+    const categoryID = event.target.value as string
+
+    setLoadingSubcategories(true)
+    setSubcategories(undefined)
+    setValue('subCategoryID', '')
+
+    getDistricts(categoryID).then(response => {
+      setSubcategories(response.data)
+      setLoadingSubcategories(false)
+    })
+  }
+
+  // Load districts on city change
+  const handleCityChange: SelectInputProps['onChange'] = (event, child) => {
+    const cityID = event.target.value as string
+
+    setLoadingDistricts(true)
+    setDistricts(undefined)
+    setValue('districtID', '')
+
+    getDistricts(cityID).then(response => {
+      setDistricts(response.data)
+      setLoadingDistricts(false)
+    })
+  }
+
+  // Load default values on mount
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -92,20 +126,22 @@ export default function Edit() {
         setFetchError(error)
         enqueueSnackbar(error?.response?.data.message, { variant: 'error' })
       } finally {
-        setLoading(false)
+        setLoadingDefaultValues(false)
       }
     }
 
     fetchData()
   }, [])
 
+  // Update preview images on new image load
   const handleNewImageLoad = (res: PreviewImageLoadResult) => {
     setPreviewImages(previewImages => [
       ...previewImages,
-      { src: res.src, file: res.file, isNew: true },
+      { src: res.src, file: res.file },
     ])
   }
 
+  // Pin image to array start
   const handleImagePin = (index: number) => {
     setPreviewImages(previewImages => {
       const newImages = [...previewImages]
@@ -116,22 +152,54 @@ export default function Edit() {
     })
   }
 
+  // Delete image
   const handleImageDelete = (index: number) => {
     setPreviewImages(previewImages => {
       const newImages = [...previewImages]
-      newImages.splice(index, 1)
 
-      if (newImages.length < 2) {
-        setError('mainImage', {
-          message: 'Cần ít nhất 2 ảnh thú cưng',
-        })
+      const deletedImage = newImages.splice(index, 1)[0]
+
+      // If it's an uploaded image, save it's ID to delete later
+      if (!deletedImage.file) {
+        const deletedId = deletedImage.src.replace(IMAGE_BASE_URL + '/', '')
+
+        setDeletedImageIds(deletedImageIds => [...deletedImageIds, deletedId])
       }
 
       return newImages
     })
   }
 
-  const onSubmit = handleSubmit((data: PostFormInputs) => {
+  const deleteImages = () => {
+    console.log('Delete image ids:', deletedImageIds)
+  }
+
+  const uploadNewImages = () => {
+    const newImageFiles = previewImages
+      .filter(image => image.file)
+      .map(image => image.file)
+
+    console.log('Upload new images:', newImageFiles)
+
+    // uploadImages(newImageFiles as File[]).then(response => {
+    //   setPreviewImages(previewImages =>
+    //     previewImages.map(img => {
+    //       if (!img.file) return img
+
+    //       const newId = response.data.shift()
+
+    //       return {
+    //         src: getImageURL(newId),
+    //       }
+    //     })
+    //   )
+    // })
+  }
+
+  const onSubmit = (data: PostFormInputs) => {
+    console.log('Preview images:', previewImages)
+    deleteImages()
+    uploadNewImages()
     // data.vaccination = data.vaccination === 'true'
     // setLoading(true)
     // const mainImageFile = previewImages.slice(0, 1).map(img => img.file)
@@ -154,18 +222,20 @@ export default function Edit() {
     //       history.push('/my-account/posts?state=DRAFT')
     //     })
     // })
-  })
+  }
 
   if (fetchError) {
     return <Redirect to="/" />
   }
 
-  if (loading) {
+  if (loadingDefaultValues) {
     return <LoadingBackdrop open />
   }
 
   return (
     <FormProvider {...formMethods}>
+      <LoadingBackdrop open={loadingDistricts || loadingSubcategories} />
+
       <Form
         categories={categories}
         cities={cities}
@@ -185,7 +255,9 @@ export default function Edit() {
         districts={districts}
         previewImages={previewImages}
         subcategories={subcategories}
-        submitText="Lưu bản nháp"
+        submitText="Lưu thay đổi"
+        onCategoryChange={handleCategoryChange}
+        onCityChange={handleCityChange}
         onImageDelete={handleImageDelete}
         onImagePin={handleImagePin}
         onNewImageLoad={handleNewImageLoad}

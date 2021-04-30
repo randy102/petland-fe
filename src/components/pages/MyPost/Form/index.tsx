@@ -24,6 +24,8 @@ import useStyles from './styles'
 import _partition from 'lodash/partition'
 import { useSnackbar } from 'notistack'
 import useDidUpdateEffect from 'src/hooks/useDidUpdateEffect'
+import Select from 'src/components/shared/Select'
+import { SelectInputProps } from '@material-ui/core/Select/SelectInput'
 
 export type PostFormInputs = {
   name: string
@@ -62,6 +64,8 @@ type Props = {
   cities?: City[]
   districts?: District[]
   defaultValues?: Partial<PostFormInputs>
+  onCategoryChange?: SelectInputProps['onChange']
+  onCityChange?: SelectInputProps['onChange']
 }
 
 export default function Form(props: Props) {
@@ -77,6 +81,8 @@ export default function Form(props: Props) {
     cities,
     districts,
     defaultValues,
+    onCityChange,
+    onCategoryChange,
   } = props
 
   const classes = useStyles()
@@ -91,6 +97,7 @@ export default function Form(props: Props) {
     control,
     clearErrors,
     setError,
+    handleSubmit,
   } = useFormContext()
 
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -98,8 +105,11 @@ export default function Form(props: Props) {
   const { enqueueSnackbar } = useSnackbar()
 
   useDidUpdateEffect(() => {
+    if (previewImages.length >= 2) return
+
     setError('mainImage', {
       type: 'validate',
+      message: 'Cần ít nhất 2 ảnh thú cưng',
     })
   }, [previewImages.length])
 
@@ -152,7 +162,7 @@ export default function Form(props: Props) {
   }
 
   return (
-    <form noValidate onSubmit={onSubmit}>
+    <form noValidate onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
         <Grid item lg={6} xs={12}>
           <CardWithTitle title="Thông tin thú cưng">
@@ -164,31 +174,31 @@ export default function Form(props: Props) {
                 spacing={3}
               >
                 <Grid item sm={6} xs={12}>
-                  <TextField
+                  <Select
                     fullWidth
                     required
-                    select
+                    control={control}
                     defaultValue={defaultValues?.categoryID || ''}
-                    label="Loại thú cưng"
-                    {...register('categoryID', {
-                      required: 'Hãy chọn loại thú cưng',
-                    })}
                     error={!!errors?.categoryID}
                     helperText={errors?.categoryID?.message}
-                  >
-                    {categories?.map(category => (
-                      <MenuItem key={category._id} value={category._id}>
-                        {category.name}
-                      </MenuItem>
-                    ))}
-                  </TextField>
+                    label="Loại thú cưng"
+                    name="categoryID"
+                    options={categories?.map(category => ({
+                      value: category._id,
+                      label: category.name,
+                    }))}
+                    rules={{
+                      required: 'Hãy chọn loại thú cưng',
+                    }}
+                    onChange={onCategoryChange}
+                  />
                 </Grid>
 
                 <Grid item sm={6} xs={12}>
-                  <TextField
+                  <Select
                     fullWidth
                     required
-                    select
+                    control={control}
                     defaultValue={defaultValues?.subCategoryID || ''}
                     disabled={!subcategories?.length}
                     error={
@@ -200,20 +210,15 @@ export default function Form(props: Props) {
                         : errors?.subCategoryID?.message
                     }
                     label="Giống thú cưng"
-                    {...register('subCategoryID', {
+                    name="subCategoryID"
+                    options={subcategories?.map(subcategory => ({
+                      value: subcategory._id,
+                      label: subcategory.name,
+                    }))}
+                    rules={{
                       required: 'Hãy chọn giống thú cưng',
-                    })}
-                  >
-                    {!subcategories?.length && (
-                      <MenuItem value="">Hãy chọn loại thú cưng trước</MenuItem>
-                    )}
-
-                    {subcategories?.map(subcategory => (
-                      <MenuItem key={subcategory._id} value={subcategory._id}>
-                        {subcategory.name}
-                      </MenuItem>
-                    ))}
-                  </TextField>
+                    }}
+                  />
                 </Grid>
               </Grid>
 
@@ -356,59 +361,49 @@ export default function Form(props: Props) {
                 spacing={3}
               >
                 <Grid item sm={6} xs={12}>
-                  <TextField
+                  <Select
                     fullWidth
                     required
-                    select
+                    control={control}
                     defaultValue={defaultValues?.cityID || ''}
                     error={!!errors?.cityID}
                     helperText={errors?.cityID?.message}
                     label="Tỉnh/Thành phố"
-                    {...register('cityID', {
+                    name="cityID"
+                    options={cities?.map(city => ({
+                      value: city._id,
+                      label: city.name,
+                    }))}
+                    rules={{
                       required: 'Hãy chọn tỉnh/thành phố',
-                    })}
-                  >
-                    {!cities?.length && <MenuItem value="">Đang tải</MenuItem>}
-
-                    {cities?.slice(1).map(city => (
-                      <MenuItem key={city._id} value={city._id}>
-                        {city.name}
-                      </MenuItem>
-                    ))}
-                  </TextField>
+                    }}
+                    onChange={onCityChange}
+                  />
                 </Grid>
 
                 <Grid item sm={6} xs={12}>
-                  <TextField
+                  <Select
                     fullWidth
                     required
-                    select
+                    control={control}
                     defaultValue={defaultValues?.districtID || ''}
                     disabled={!districts?.length}
                     error={!districts?.length ? false : !!errors?.districtID}
                     helperText={
                       !districts?.length
-                        ? ''
-                        : errors?.districtID?.message ||
-                          'Hãy chọn tỉnh/thành phố trước'
+                        ? 'Hãy chọn tỉnh/thành phố trước'
+                        : errors?.districtID?.message
                     }
                     label="Quận/Huyện"
-                    {...register('districtID', {
+                    name="districtID"
+                    options={districts?.map(district => ({
+                      value: district._id,
+                      label: district.name,
+                    }))}
+                    rules={{
                       required: 'Hãy chọn quận/huyện',
-                    })}
-                  >
-                    {!districts?.length && (
-                      <MenuItem value="">
-                        Hãy chọn Tỉnh/Thành phố trước
-                      </MenuItem>
-                    )}
-
-                    {districts?.map(district => (
-                      <MenuItem key={district._id} value={district._id}>
-                        {district.name}
-                      </MenuItem>
-                    ))}
-                  </TextField>
+                    }}
+                  />
                 </Grid>
               </Grid>
 
