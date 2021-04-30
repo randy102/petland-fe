@@ -7,7 +7,6 @@ import { Post } from 'src/types/Post'
 import useStyles from './styles'
 import PostItem from './PostItem'
 import useQuery from 'src/hooks/useQuery'
-import { useHistory } from 'react-router'
 
 export default function Posts() {
   const classes = useStyles()

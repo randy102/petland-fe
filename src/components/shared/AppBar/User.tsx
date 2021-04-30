@@ -52,7 +52,7 @@ export default function User() {
         <MenuLink
           icon="post_add"
           text="Đăng bài"
-          to="/create-post"
+          to="/my-post/create"
           onClick={popupState.close}
         />
 

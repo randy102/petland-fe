@@ -6,35 +6,26 @@ import {
   useMediaQuery,
   useTheme,
 } from '@material-ui/core'
-import { ChangeEvent, useEffect, useRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { Add, Delete } from '@material-ui/icons'
+import { ChangeEvent, useRef } from 'react'
+import { useFormContext } from 'react-hook-form'
 import CardWithTitle from 'src/components/shared/CardWithTitle'
 import CustomFormRow from 'src/components/shared/CustomFormRow'
-import LoadingBackdrop from 'src/components/shared/LoadingBackdrop'
 import NumberTextField from 'src/components/shared/NumberTextField'
-import useAxios from 'src/hooks/useAxios'
+import Radio from 'src/components/shared/Radio'
+import TextField from 'src/components/shared/TextField'
+import { MAX_POST_IMAGES } from 'src/constants'
+import isImage from 'src/helpers/isImage'
 import { Category } from 'src/types/Category'
 import { City } from 'src/types/City'
 import { District } from 'src/types/District'
 import { Subcategory } from 'src/types/Subcategory'
 import useStyles from './styles'
 import _partition from 'lodash/partition'
-import isImage from 'src/helpers/isImage'
 import { useSnackbar } from 'notistack'
-import TextField from 'src/components/shared/TextField'
-import { MAX_POST_IMAGES } from 'src/constants'
-import Radio from 'src/components/shared/Radio'
-import axios from 'axios'
-import uploadImages from 'src/helpers/uploadImages'
-import { useHistory, useParams } from 'react-router'
-import { Delete } from '@material-ui/icons'
+import useDidUpdateEffect from 'src/hooks/useDidUpdateEffect'
 
-type ImageObject = {
-  src: string
-  file: File
-}
-
-type Inputs = {
+export type PostFormInputs = {
   name: string
   categoryID: string
   subCategoryID: string
@@ -50,98 +41,67 @@ type Inputs = {
   images: string[]
 }
 
-export default function CreatePost() {
+type PreviewImage = {
+  src: string
+}
+
+export type PreviewImageLoadResult = {
+  src: string
+  file: File
+}
+
+type Props = {
+  onSubmit: any
+  previewImages: PreviewImage[]
+  onImageDelete: (index: number) => void
+  onImagePin: (index: number) => void
+  submitText: string
+  onNewImageLoad: (obj: { src: string; file: File }) => void
+  categories?: Category[]
+  subcategories?: Subcategory[]
+  cities?: City[]
+  districts?: District[]
+  defaultValues?: Partial<PostFormInputs>
+}
+
+export default function Form(props: Props) {
+  const {
+    onSubmit,
+    previewImages,
+    onImageDelete,
+    onImagePin,
+    onNewImageLoad,
+    submitText,
+    categories,
+    subcategories,
+    cities,
+    districts,
+    defaultValues,
+  } = props
+
   const classes = useStyles()
 
   const theme = useTheme()
 
   const isXs = useMediaQuery(theme.breakpoints.down('xs'))
 
-  // const {id} = useParams()
-
-  const [loading, setLoading] = useState<boolean>(false)
-
   const {
-    control,
     register,
-    watch,
-    handleSubmit,
     formState: { errors },
-    setError,
+    control,
     clearErrors,
-  } = useForm<Inputs>()
+    setError,
+  } = useFormContext()
 
-  // Categories and subcategories
-  const categoryID = watch('categoryID', '')
-
-  const { data: categories, loading: loadingCategories } = useAxios<Category[]>(
-    {
-      config: {
-        method: 'get',
-        route: 'category',
-      },
-      fetchOnMount: true,
-    }
-  )
-
-  const {
-    fetch: getSubcategories,
-    data: subcategories,
-    loading: loadingSubcategories,
-  } = useAxios<Subcategory[]>({
-    config: {
-      method: 'get',
-      route: 'sub-category',
-    },
-  })
-
-  useEffect(() => {
-    if (!categoryID) return
-
-    getSubcategories({
-      params: {
-        category: categoryID,
-      },
-    })
-  }, [categoryID])
-
-  // Cities and districts
-  const cityID = watch('cityID', '')
-
-  const { data: cities, loading: loadingCities } = useAxios<City[]>({
-    config: {
-      method: 'get',
-      route: 'city',
-    },
-    fetchOnMount: true,
-  })
-
-  const {
-    fetch: getDistricts,
-    data: districts,
-    loading: loadingDistricts,
-  } = useAxios<District[]>({
-    config: {
-      method: 'get',
-      route: 'district',
-    },
-  })
-
-  useEffect(() => {
-    if (!cityID) return
-
-    getDistricts({
-      params: {
-        city: cityID,
-      },
-    })
-  }, [cityID])
-
-  const [previewImages, setPreviewImages] = useState<ImageObject[]>([])
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const { enqueueSnackbar } = useSnackbar()
 
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  useDidUpdateEffect(() => {
+    setError('mainImage', {
+      type: 'validate',
+    })
+  }, [previewImages.length])
 
   const handleClick = () => {
     if (!fileInputRef?.current) return
@@ -171,10 +131,6 @@ export default function CreatePost() {
 
     if (previewImages.length + images.length >= 2) {
       clearErrors('mainImage')
-    } else {
-      setError('mainImage', {
-        message: 'Cần ít nhất 2 ảnh thú cưng',
-      })
     }
 
     // Load images into preview sources
@@ -184,10 +140,10 @@ export default function CreatePost() {
       reader.readAsDataURL(file)
 
       reader.onloadend = () => {
-        setPreviewImages(previewImages => [
-          ...previewImages,
-          { src: reader.result as string, file },
-        ])
+        onNewImageLoad({
+          src: reader.result as string,
+          file,
+        })
       }
     })
 
@@ -195,74 +151,8 @@ export default function CreatePost() {
     event.currentTarget.value = ''
   }
 
-  const history = useHistory()
-
-  const onSubmit = handleSubmit((data: Inputs) => {
-    data.vaccination = data.vaccination === 'true'
-
-    setLoading(true)
-
-    const mainImageFile = previewImages.slice(0, 1).map(img => img.file)
-    const otherImageFiles = previewImages.slice(1).map(img => img.file)
-
-    Promise.all([
-      uploadImages(mainImageFile),
-      uploadImages(otherImageFiles),
-    ]).then(results => {
-      data.mainImage = results[0].data[0]
-      data.images = results[1].data
-
-      axios
-        .post('/post', {
-          ...data,
-        })
-        .then(response => {
-          setLoading(false)
-
-          enqueueSnackbar('Tạo bài đăng thành công!', {
-            variant: 'success',
-          })
-
-          history.push('/my-account/posts?state=DRAFT')
-        })
-    })
-  })
-
-  const handleDeleteImageClick = (index: number) => {
-    setPreviewImages(previewImages => {
-      const newImages = [...previewImages]
-      newImages.splice(index, 1)
-
-      if (newImages.length < 2) {
-        setError('mainImage', {
-          message: 'Cần ít nhất 2 ảnh thú cưng',
-        })
-      }
-
-      return newImages
-    })
-  }
-
-  const handlePinImageClick = (index: number) => {
-    setPreviewImages(previewImages => {
-      const newImages = [...previewImages]
-
-      newImages.unshift(newImages.splice(index, 1)[0])
-
-      return newImages
-    })
-  }
-
-  if (loadingCategories || loadingCities) {
-    return <LoadingBackdrop open />
-  }
-
   return (
     <form noValidate onSubmit={onSubmit}>
-      <LoadingBackdrop
-        open={loadingSubcategories || loadingDistricts || loading}
-      />
-
       <Grid container spacing={3}>
         <Grid item lg={6} xs={12}>
           <CardWithTitle title="Thông tin thú cưng">
@@ -278,7 +168,7 @@ export default function CreatePost() {
                     fullWidth
                     required
                     select
-                    defaultValue=""
+                    defaultValue={defaultValues?.categoryID || ''}
                     label="Loại thú cưng"
                     {...register('categoryID', {
                       required: 'Hãy chọn loại thú cưng',
@@ -299,7 +189,7 @@ export default function CreatePost() {
                     fullWidth
                     required
                     select
-                    defaultValue=""
+                    defaultValue={defaultValues?.subCategoryID || ''}
                     disabled={!subcategories?.length}
                     error={
                       !subcategories?.length ? false : !!errors?.subCategoryID
@@ -330,6 +220,7 @@ export default function CreatePost() {
               <TextField
                 fullWidth
                 required
+                defaultValue={defaultValues?.origin}
                 error={!!errors?.origin}
                 helperText={errors?.origin?.message}
                 label="Nguồn gốc"
@@ -344,6 +235,7 @@ export default function CreatePost() {
                 required
                 className={classes.marginBottom3}
                 control={control}
+                defaultValue={defaultValues?.age}
                 error={!!errors?.age}
                 helperText={errors?.age?.message}
                 label="Tuổi"
@@ -364,7 +256,7 @@ export default function CreatePost() {
                   <Radio
                     fullWidth
                     required
-                    defaultValue=""
+                    defaultValue={defaultValues?.sex}
                     error={!!errors?.sex}
                     helperText={errors?.sex?.message}
                     label="Giới tính"
@@ -383,7 +275,11 @@ export default function CreatePost() {
                   <Radio
                     fullWidth
                     required
-                    defaultValue=""
+                    defaultValue={
+                      defaultValues?.vaccination
+                        ? defaultValues?.vaccination + ''
+                        : undefined
+                    }
                     error={!!errors?.vaccination}
                     helperText={errors?.vaccination?.message}
                     label="Đã tiêm chủng"
@@ -402,6 +298,7 @@ export default function CreatePost() {
               <TextField
                 fullWidth
                 multiline
+                defaultValue={defaultValues?.detail}
                 label="Mô tả thêm (nếu có)"
                 rows={4}
                 {...register('detail')}
@@ -419,6 +316,7 @@ export default function CreatePost() {
               <TextField
                 fullWidth
                 required
+                defaultValue={defaultValues?.name}
                 error={!!errors?.name}
                 helperText={errors?.name?.message}
                 label="Tiêu đề bài đăng"
@@ -437,6 +335,7 @@ export default function CreatePost() {
                 control={control}
                 decimalScale={0}
                 decimalSeparator=","
+                defaultValue={defaultValues?.price}
                 error={!!errors?.price}
                 helperText={
                   errors?.price?.message || 'Điền 0 nghĩa là giá thương lượng'
@@ -461,7 +360,7 @@ export default function CreatePost() {
                     fullWidth
                     required
                     select
-                    defaultValue=""
+                    defaultValue={defaultValues?.cityID || ''}
                     error={!!errors?.cityID}
                     helperText={errors?.cityID?.message}
                     label="Tỉnh/Thành phố"
@@ -484,7 +383,7 @@ export default function CreatePost() {
                     fullWidth
                     required
                     select
-                    defaultValue=""
+                    defaultValue={defaultValues?.districtID || ''}
                     disabled={!districts?.length}
                     error={!districts?.length ? false : !!errors?.districtID}
                     helperText={
@@ -545,7 +444,7 @@ export default function CreatePost() {
                   color="default"
                   disabled={previewImages.length === MAX_POST_IMAGES}
                   startIcon={
-                    previewImages.length !== MAX_POST_IMAGES && <Icon>add</Icon>
+                    previewImages.length !== MAX_POST_IMAGES && <Add />
                   }
                   type="button"
                   onClick={handleClick}
@@ -569,7 +468,7 @@ export default function CreatePost() {
                           className={classes.imageDeleteButton}
                           size="small"
                           type="button"
-                          onClick={() => handleDeleteImageClick(index)}
+                          onClick={() => onImageDelete(index)}
                         >
                           <Delete />
                         </Button>
@@ -579,7 +478,7 @@ export default function CreatePost() {
                             className={classes.imagePinButton}
                             size="small"
                             type="button"
-                            onClick={() => handlePinImageClick(index)}
+                            onClick={() => onImagePin(index)}
                           >
                             <Icon>push_pin</Icon>
                           </Button>
@@ -590,7 +489,7 @@ export default function CreatePost() {
                 )}
               </CustomFormRow>
 
-              <Button type="submit">Lưu bài đăng</Button>
+              <Button type="submit">{submitText}</Button>
             </div>
           </CardWithTitle>
         </Grid>

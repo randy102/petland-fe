@@ -27,6 +27,8 @@ export default function useAxios<Data>(props: Props<Data>) {
 
   const [loading, setLoading] = useState<boolean>(!!props.fetchOnMount)
 
+  const [error, setError] = useState<AxiosError>()
+
   const [data, setData] = useState<Data>()
 
   async function fetch(config?: AxiosRequestConfig) {
@@ -39,13 +41,6 @@ export default function useAxios<Data>(props: Props<Data>) {
       url: `/${route}`,
     }
 
-    // const token = localStorage.getItem('token')
-    // if (token) {
-    //   defaultConfig.headers = {
-    //     Authorization: 'Bearer ' + token,
-    //   }
-    // }
-
     defaultConfig = {
       ...defaultConfig,
       ...config,
@@ -53,16 +48,14 @@ export default function useAxios<Data>(props: Props<Data>) {
 
     axios(defaultConfig)
       .then((response: AxiosResponse<Data>) => {
-        setLoading(false)
-
         setData(response.data)
 
         onCompleted?.(response)
       })
       .catch((error: AxiosError) => {
-        setLoading(false)
-
         console.log('Error:', { error })
+
+        setError(error)
 
         // Toast error message if available
         if (error?.response?.data.message) {
@@ -70,6 +63,9 @@ export default function useAxios<Data>(props: Props<Data>) {
         }
 
         onError?.(error.response)
+      })
+      .finally(() => {
+        setLoading(false)
       })
   }
 
@@ -80,5 +76,5 @@ export default function useAxios<Data>(props: Props<Data>) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  return { data, fetch, loading }
+  return { data, fetch, loading, error }
 }

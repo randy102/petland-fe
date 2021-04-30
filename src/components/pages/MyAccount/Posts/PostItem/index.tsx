@@ -46,7 +46,7 @@ export default function PostItem(props: Props) {
   const history = useHistory()
 
   const goToEdit = () => {
-    history.push(`/edit-post/${post._id}`)
+    history.push(`/my-post/edit/${post._id}`)
   }
 
   const handleEditClick = () => {

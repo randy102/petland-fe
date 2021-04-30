@@ -1,0 +1,176 @@
+import axios from 'axios'
+import { useSnackbar } from 'notistack'
+import { useEffect, useState } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
+import { useHistory } from 'react-router'
+import LoadingBackdrop from 'src/components/shared/LoadingBackdrop'
+import uploadImages from 'src/helpers/uploadImages'
+import useAxios from 'src/hooks/useAxios'
+import { Category } from 'src/types/Category'
+import { City } from 'src/types/City'
+import { District } from 'src/types/District'
+import { Subcategory } from 'src/types/Subcategory'
+import Form, { PostFormInputs, PreviewImageLoadResult } from '../Form'
+
+type PreviewImage = {
+  src: string
+  file: File
+}
+
+export default function Create() {
+  const formMethods = useForm()
+
+  const [previewImages, setPreviewImages] = useState<PreviewImage[]>([])
+
+  const [loading, setLoading] = useState<boolean>(false)
+
+  const history = useHistory()
+
+  const { enqueueSnackbar } = useSnackbar()
+
+  const { handleSubmit, watch } = formMethods
+
+  // Categories and subcategories
+  const categoryID = watch('categoryID', '')
+
+  const { data: categories, loading: loadingCategories } = useAxios<Category[]>(
+    {
+      config: {
+        method: 'get',
+        route: 'category',
+      },
+      fetchOnMount: true,
+    }
+  )
+
+  const {
+    fetch: getSubcategories,
+    data: subcategories,
+    loading: loadingSubcategories,
+  } = useAxios<Subcategory[]>({
+    config: {
+      method: 'get',
+      route: 'sub-category',
+    },
+  })
+
+  useEffect(() => {
+    if (!categoryID) return
+
+    getSubcategories({
+      params: {
+        category: categoryID,
+      },
+    })
+  }, [categoryID])
+
+  // Cities and districts
+  const cityID = watch('cityID', '')
+
+  const { data: cities, loading: loadingCities } = useAxios<City[]>({
+    config: {
+      method: 'get',
+      route: 'city',
+    },
+    fetchOnMount: true,
+  })
+
+  const {
+    fetch: getDistricts,
+    data: districts,
+    loading: loadingDistricts,
+  } = useAxios<District[]>({
+    config: {
+      method: 'get',
+      route: 'district',
+    },
+  })
+
+  useEffect(() => {
+    if (!cityID) return
+
+    getDistricts({
+      params: {
+        city: cityID,
+      },
+    })
+  }, [cityID])
+
+  const handleNewImageLoad = (res: PreviewImageLoadResult) => {
+    setPreviewImages(previewImages => [
+      ...previewImages,
+      { src: res.src, file: res.file },
+    ])
+  }
+
+  const handleImagePin = (index: number) => {
+    setPreviewImages(previewImages => {
+      const newImages = [...previewImages]
+
+      newImages.unshift(newImages.splice(index, 1)[0])
+
+      return newImages
+    })
+  }
+
+  const handleImageDelete = (index: number) => {
+    setPreviewImages(previewImages => {
+      const newImages = [...previewImages]
+      newImages.splice(index, 1)
+
+      return newImages
+    })
+  }
+
+  const onSubmit = handleSubmit((data: PostFormInputs) => {
+    data.vaccination = data.vaccination === 'true'
+
+    setLoading(true)
+
+    const mainImageFile = previewImages.slice(0, 1).map(img => img.file)
+    const otherImageFiles = previewImages.slice(1).map(img => img.file)
+
+    Promise.all([
+      uploadImages(mainImageFile),
+      uploadImages(otherImageFiles),
+    ]).then(results => {
+      data.mainImage = results[0].data[0]
+      data.images = results[1].data
+
+      axios.post('/post', data).then(response => {
+        setLoading(false)
+
+        enqueueSnackbar('Tạo bài đăng thành công!', {
+          variant: 'success',
+        })
+
+        history.push('/my-account/posts?state=DRAFT')
+      })
+    })
+  })
+
+  if (loadingCategories || loadingCities) {
+    return <LoadingBackdrop open />
+  }
+
+  return (
+    <FormProvider {...formMethods}>
+      <LoadingBackdrop
+        open={loadingSubcategories || loadingDistricts || loading}
+      />
+
+      <Form
+        categories={categories}
+        cities={cities}
+        districts={districts}
+        previewImages={previewImages}
+        subcategories={subcategories}
+        submitText="Lưu bản nháp"
+        onImageDelete={handleImageDelete}
+        onImagePin={handleImagePin}
+        onNewImageLoad={handleNewImageLoad}
+        onSubmit={onSubmit}
+      />
+    </FormProvider>
+  )
+}
