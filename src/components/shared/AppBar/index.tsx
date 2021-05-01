@@ -44,14 +44,16 @@ export default function AppBar() {
 
       <Container maxWidth="lg">
         <Toolbar className={classes.toolbar}>
-          <IconButton
-            aria-label="menu"
-            className={classes.menuButton}
-            color="inherit"
-            edge="start"
-          >
-            <MenuIcon />
-          </IconButton>
+          <Hidden smUp>
+            <IconButton
+              aria-label="menu"
+              className={classes.menuButton}
+              color="inherit"
+              edge="start"
+            >
+              <MenuIcon />
+            </IconButton>
+          </Hidden>
 
           <Hidden xsDown>
             <Link to="/">
@@ -61,12 +63,13 @@ export default function AppBar() {
 
           <SearchBar />
 
-          {localStorage.getItem('token') ? (
-            <User />
+          <User />
+
+          {/* {localStorage.getItem('token') ? (
+            
           ) : (
             <React.Fragment>
               <Button
-                classes={{ root: classes.loginButtonRoot }}
                 color="secondary"
                 size="small"
                 variant="contained"
@@ -84,7 +87,7 @@ export default function AppBar() {
                 Đăng ký
               </Button>
             </React.Fragment>
-          )}
+          )} */}
         </Toolbar>
       </Container>
     </MuiAppBar>

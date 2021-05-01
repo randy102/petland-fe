@@ -127,6 +127,7 @@ export default function Edit() {
       } catch (error) {
         setFetchError(error)
         enqueueSnackbar(error?.response?.data.message, { variant: 'error' })
+        console.log('Error:', error)
       } finally {
         setLoadingDefaultValues(false)
       }
@@ -212,33 +213,12 @@ export default function Edit() {
         variant: 'success',
       })
       history.push('/my-account/posts?state=DRAFT')
-    } catch (err) {
-      enqueueSnackbar('Đã có lỗi xảy ra.')
-      console.log('Error:', err)
+    } catch (error) {
+      enqueueSnackbar(error?.response?.data.message, { variant: 'error' })
+      console.log('Error:', error)
     } finally {
       setEditingPost(false)
     }
-
-    // const mainImageFile = previewImages.slice(0, 1).map(img => img.file)
-    // const otherImageFiles = previewImages.slice(1).map(img => img.file)
-    // Promise.all([
-    //   uploadImages(mainImageFile),
-    //   uploadImages(otherImageFiles),
-    // ]).then(results => {
-    //   data.mainImage = results[0].data[0]
-    //   data.images = results[1].data
-    //   axios
-    //     .post('/post', {
-    //       ...data,
-    //     })
-    //     .then(response => {
-    //       setLoading(false)
-    //       enqueueSnackbar('Tạo bài đăng thành công!', {
-    //         variant: 'success',
-    //       })
-    //       history.push('/my-account/posts?state=DRAFT')
-    //     })
-    // })
   }
 
   if (fetchError) {

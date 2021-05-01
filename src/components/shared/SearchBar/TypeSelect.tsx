@@ -1,7 +1,6 @@
 import { Button, Menu, MenuItem } from '@material-ui/core'
 import React, { useState } from 'react'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import useStyles from './styles'
 
 export type SearchType = 'pet' | 'product'
 
@@ -11,8 +10,6 @@ const searchTypeLabel: Record<SearchType, string> = {
 }
 
 export default function TypeSelect() {
-  const classes = useStyles()
-
   const [type, setType] = useState<SearchType>('pet')
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -33,9 +30,6 @@ export default function TypeSelect() {
   return (
     <React.Fragment>
       <Button
-        classes={{
-          root: classes.searchButtonRoot,
-        }}
         color="secondary"
         size="small"
         variant="contained"

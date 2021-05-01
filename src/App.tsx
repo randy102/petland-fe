@@ -11,6 +11,8 @@ import RegisterDialog from './components/shared/RegisterDialog'
 import store from './redux/store'
 import Routes from './Routes'
 import theme from './theme'
+import { StylesProvider, jssPreset } from '@material-ui/core/styles'
+import { create } from 'jss'
 
 // Base URL for all requests
 axios.defaults.baseURL = 'https://petland-cnpm.herokuapp.com/api'
@@ -26,36 +28,44 @@ axios.interceptors.request.use(config => {
   return config
 })
 
+const jss = create({
+  ...jssPreset(),
+  // Define a custom insertion point that JSS will look for when injecting the styles into the DOM.
+  insertionPoint: 'jss-insertion-point',
+})
+
 function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
-        <ThemeProvider theme={theme}>
-          <SnackbarProvider
-            anchorOrigin={{
-              horizontal: 'right',
-              vertical: 'top',
-            }}
-            autoHideDuration={3000}
-            maxSnack={3}
-            resumeHideDuration={0}
-            TransitionComponent={Grow as React.ComponentType<TransitionProps>}
-          >
-            <CssBaseline />
+        <StylesProvider jss={jss}>
+          <ThemeProvider theme={theme}>
+            <SnackbarProvider
+              anchorOrigin={{
+                horizontal: 'right',
+                vertical: 'top',
+              }}
+              autoHideDuration={3000}
+              maxSnack={3}
+              resumeHideDuration={0}
+              TransitionComponent={Grow as React.ComponentType<TransitionProps>}
+            >
+              <CssBaseline />
 
-            <AppBar />
+              <AppBar />
 
-            <LoginDialog />
+              <LoginDialog />
 
-            <RegisterDialog />
+              <RegisterDialog />
 
-            <Container maxWidth="lg">
-              <Box py={2}>
-                <Routes />
-              </Box>
-            </Container>
-          </SnackbarProvider>
-        </ThemeProvider>
+              <Container maxWidth="lg">
+                <Box py={2}>
+                  <Routes />
+                </Box>
+              </Container>
+            </SnackbarProvider>
+          </ThemeProvider>
+        </StylesProvider>
       </BrowserRouter>
     </Provider>
   )

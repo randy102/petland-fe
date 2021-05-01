@@ -4,9 +4,6 @@ const useStyles = makeStyles(theme => ({
   avatarContainer: {
     display: 'flex',
   },
-  loginButtonRoot: {
-    marginRight: theme.spacing(2),
-  },
   logo: {
     height: 48,
   },
@@ -15,6 +12,7 @@ const useStyles = makeStyles(theme => ({
   },
   toolbar: {
     padding: 0,
+    gap: theme.spacing(1),
   },
 }))
 

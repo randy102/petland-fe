@@ -1,4 +1,4 @@
-import { Button, Grid, Icon, useMediaQuery, useTheme } from '@material-ui/core'
+import { Button, Grid, Icon } from '@material-ui/core'
 import { Add, Delete } from '@material-ui/icons'
 import { ChangeEvent, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
@@ -22,6 +22,7 @@ import readImages from 'src/helpers/readImages'
 import LoadingBackdrop from 'src/components/shared/LoadingBackdrop'
 import { ReadImageResult } from 'src/helpers/readImage'
 import useDidUpdateEffect from 'src/hooks/useDidUpdateEffect'
+import useIsBreakpoint from 'src/hooks/useIsBreakpoint'
 
 export type PostFormInputs = {
   name: string
@@ -78,9 +79,7 @@ export default function Form(props: Props) {
 
   const classes = useStyles()
 
-  const theme = useTheme()
-
-  const isXs = useMediaQuery(theme.breakpoints.down('xs'))
+  const isXs = useIsBreakpoint('xs')
 
   const {
     register,

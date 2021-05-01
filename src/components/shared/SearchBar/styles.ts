@@ -2,9 +2,7 @@ import { makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
   inputRoot: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: '40vw',
+    flexGrow: 1,
   },
   search: {
     alignItems: 'center',
@@ -12,11 +10,10 @@ const useStyles = makeStyles(theme => ({
     borderRadius: theme.shape.borderRadius,
     color: theme.palette.primary.main,
     display: 'flex',
-    margin: '0 auto',
+    flexGrow: 1,
+    gap: theme.spacing(1),
+    justifyContent: 'space-between',
     padding: theme.spacing(1),
-  },
-  searchButtonRoot: {
-    paddingRight: theme.spacing(1),
   },
 }))
 
