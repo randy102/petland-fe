@@ -5,9 +5,5 @@ export default function uploadImages(files: File[]) {
 
   files.forEach(file => formData.append('files', file))
 
-  return axios({
-    method: 'post',
-    url: '/photo',
-    data: formData,
-  })
+  return axios.post('/photo', formData)
 }

@@ -1,10 +1,5 @@
 import { TextField } from '@material-ui/core'
-import {
-  Control,
-  Controller,
-  RegisterOptions,
-  UseControllerProps,
-} from 'react-hook-form'
+import { Control, Controller, UseControllerProps } from 'react-hook-form'
 import NumberFormat from 'react-number-format'
 
 type Props = {
@@ -17,7 +12,7 @@ type Props = {
   thousandSeparator?: string | boolean
   prefix?: string
   suffix?: string
-  control: Control<any>
+  control: Control
   defaultValue?: string | number
   helperText?: string
   label: string

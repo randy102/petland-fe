@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core'
 import { SelectInputProps } from '@material-ui/core/Select/SelectInput'
 import clsx from 'clsx'
-import { Control, Controller, RegisterOptions } from 'react-hook-form'
+import { Control, Controller, UseControllerProps } from 'react-hook-form'
 
 type Option = {
   value: string
@@ -24,10 +24,7 @@ type Props = {
   label: React.ReactNode
   control: Control
   defaultValue: string
-  rules?: Exclude<
-    RegisterOptions,
-    'valueAsNumber' | 'valueAsDate' | 'setValueAs'
-  >
+  rules?: UseControllerProps['rules']
   helperText?: React.ReactNode
   disabled?: boolean
   classes?: StyledComponentProps<FormControlClassKey>['classes']

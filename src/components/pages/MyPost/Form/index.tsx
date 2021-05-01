@@ -1,13 +1,6 @@
-import {
-  Button,
-  Grid,
-  Icon,
-  MenuItem,
-  useMediaQuery,
-  useTheme,
-} from '@material-ui/core'
+import { Button, Grid, Icon, useMediaQuery, useTheme } from '@material-ui/core'
 import { Add, Delete } from '@material-ui/icons'
-import { ChangeEvent, useRef } from 'react'
+import { ChangeEvent, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import CardWithTitle from 'src/components/shared/CardWithTitle'
 import CustomFormRow from 'src/components/shared/CustomFormRow'
@@ -23,9 +16,12 @@ import { Subcategory } from 'src/types/Subcategory'
 import useStyles from './styles'
 import _partition from 'lodash/partition'
 import { useSnackbar } from 'notistack'
-import useDidUpdateEffect from 'src/hooks/useDidUpdateEffect'
 import Select from 'src/components/shared/Select'
 import { SelectInputProps } from '@material-ui/core/Select/SelectInput'
+import readImages from 'src/helpers/readImages'
+import LoadingBackdrop from 'src/components/shared/LoadingBackdrop'
+import { ReadImageResult } from 'src/helpers/readImage'
+import useDidUpdateEffect from 'src/hooks/useDidUpdateEffect'
 
 export type PostFormInputs = {
   name: string
@@ -47,18 +43,13 @@ type PreviewImage = {
   src: string
 }
 
-export type PreviewImageLoadResult = {
-  src: string
-  file: File
-}
-
 type Props = {
   onSubmit: any
   previewImages: PreviewImage[]
   onImageDelete: (index: number) => void
   onImagePin: (index: number) => void
   submitText: string
-  onNewImageLoad: (obj: { src: string; file: File }) => void
+  onNewImageLoad: (results: ReadImageResult[]) => void
   categories?: Category[]
   subcategories?: Subcategory[]
   cities?: City[]
@@ -95,29 +86,26 @@ export default function Form(props: Props) {
     register,
     formState: { errors },
     control,
-    clearErrors,
-    setError,
     handleSubmit,
+    trigger,
   } = useFormContext()
 
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const { enqueueSnackbar } = useSnackbar()
 
-  useDidUpdateEffect(() => {
-    if (previewImages.length >= 2) return
-
-    setError('mainImage', {
-      type: 'validate',
-      message: 'Cần ít nhất 2 ảnh thú cưng',
-    })
-  }, [previewImages.length])
+  const [readingImages, setReadingImages] = useState<boolean>(false)
 
   const handleClick = () => {
     if (!fileInputRef?.current) return
 
     fileInputRef.current.click()
   }
+
+  // Trigger image validation on preview images length change
+  useDidUpdateEffect(() => {
+    trigger('mainImage')
+  }, [previewImages.length])
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     // Get selected files
@@ -139,22 +127,11 @@ export default function Form(props: Props) {
     // Cut image length to a maximum of available slots
     images.length = Math.min(availableSlots, images.length)
 
-    if (previewImages.length + images.length >= 2) {
-      clearErrors('mainImage')
-    }
+    setReadingImages(true)
 
-    // Load images into preview sources
-    images.forEach(file => {
-      const reader = new FileReader()
-
-      reader.readAsDataURL(file)
-
-      reader.onloadend = () => {
-        onNewImageLoad({
-          src: reader.result as string,
-          file,
-        })
-      }
+    readImages(images).then(results => {
+      setReadingImages(false)
+      onNewImageLoad(results)
     })
 
     // Reset input value so user can select the same file(s) next time
@@ -163,6 +140,8 @@ export default function Form(props: Props) {
 
   return (
     <form noValidate onSubmit={handleSubmit(onSubmit)}>
+      <LoadingBackdrop open={readingImages} />
+
       <Grid container spacing={3}>
         <Grid item lg={6} xs={12}>
           <CardWithTitle title="Thông tin thú cưng">

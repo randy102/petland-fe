@@ -1,8 +1,10 @@
 import { SelectInputProps } from '@material-ui/core/Select/SelectInput'
+import axios from 'axios'
 import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { Redirect, useParams } from 'react-router'
+import { useHistory } from 'react-router-dom'
 import LoadingBackdrop from 'src/components/shared/LoadingBackdrop'
 import { IMAGE_BASE_URL } from 'src/constants'
 import getCategories from 'src/helpers/getCategories'
@@ -11,13 +13,14 @@ import getDistricts from 'src/helpers/getDistricts'
 import getImageURL from 'src/helpers/getImageURL'
 import getPostDetails from 'src/helpers/getPostDetails'
 import getSubcategories from 'src/helpers/getSubcategories'
+import { ReadImageResult } from 'src/helpers/readImage'
 import uploadImages from 'src/helpers/uploadImages'
 import { Category } from 'src/types/Category'
 import { City } from 'src/types/City'
 import { District } from 'src/types/District'
 import { Post } from 'src/types/Post'
 import { Subcategory } from 'src/types/Subcategory'
-import Form, { PostFormInputs, PreviewImageLoadResult } from '../Form'
+import Form, { PostFormInputs } from '../Form'
 
 type PreviewImage = {
   src: string
@@ -34,14 +37,10 @@ function idToImg(id: string): PreviewImage {
   }
 }
 
-function isNewImage(img: PreviewImage) {
-  return img.src.startsWith(IMAGE_BASE_URL)
-}
-
 export default function Edit() {
   const formMethods = useForm<PostFormInputs>()
 
-  const { handleSubmit, setError, watch, setValue } = formMethods
+  const { setValue } = formMethods
 
   const { id } = useParams<UrlParams>()
 
@@ -50,6 +49,8 @@ export default function Edit() {
   const [fetchError, setFetchError] = useState()
 
   const { enqueueSnackbar } = useSnackbar()
+
+  const history = useHistory()
 
   const [details, setDetails] = useState<Post>()
   const [cities, setCities] = useState<City[]>()
@@ -60,6 +61,7 @@ export default function Edit() {
   const [loadingDefaultValues, setLoadingDefaultValues] = useState(true)
   const [loadingDistricts, setLoadingDistricts] = useState(false)
   const [loadingSubcategories, setLoadingSubcategories] = useState(false)
+  const [editingPost, setEditingPost] = useState(false)
 
   const [deletedImageIds, setDeletedImageIds] = useState<string[]>([])
 
@@ -134,11 +136,8 @@ export default function Edit() {
   }, [])
 
   // Update preview images on new image load
-  const handleNewImageLoad = (res: PreviewImageLoadResult) => {
-    setPreviewImages(previewImages => [
-      ...previewImages,
-      { src: res.src, file: res.file },
-    ])
+  const handleNewImageLoad = (results: ReadImageResult[]) => {
+    setPreviewImages(previewImages => [...previewImages, ...results])
   }
 
   // Pin image to array start
@@ -171,7 +170,11 @@ export default function Edit() {
   }
 
   const deleteImages = () => {
-    console.log('Delete image ids:', deletedImageIds)
+    return axios.delete('/photo', {
+      data: {
+        ids: deletedImageIds,
+      },
+    })
   }
 
   const uploadNewImages = () => {
@@ -179,29 +182,43 @@ export default function Edit() {
       .filter(image => image.file)
       .map(image => image.file)
 
-    console.log('Upload new images:', newImageFiles)
-
-    // uploadImages(newImageFiles as File[]).then(response => {
-    //   setPreviewImages(previewImages =>
-    //     previewImages.map(img => {
-    //       if (!img.file) return img
-
-    //       const newId = response.data.shift()
-
-    //       return {
-    //         src: getImageURL(newId),
-    //       }
-    //     })
-    //   )
-    // })
+    return uploadImages(newImageFiles as File[])
   }
 
-  const onSubmit = (data: PostFormInputs) => {
-    console.log('Preview images:', previewImages)
+  const onSubmit = async (data: PostFormInputs) => {
+    data.vaccination = data.vaccination === 'true'
+    setEditingPost(true)
+
     deleteImages()
-    uploadNewImages()
-    // data.vaccination = data.vaccination === 'true'
-    // setLoading(true)
+
+    try {
+      const uploadImageResponse = await uploadNewImages()
+
+      const newIds = uploadImageResponse.data
+
+      const imageIds = previewImages.map(img =>
+        img.file ? newIds.shift() : img.src.replace(IMAGE_BASE_URL + '/', '')
+      )
+
+      data.mainImage = imageIds[0]
+      data.images = imageIds.slice(1)
+
+      await axios.put('/post', {
+        ...data,
+        id,
+      })
+
+      enqueueSnackbar('Chỉnh sửa bài đăng thành công!', {
+        variant: 'success',
+      })
+      history.push('/my-account/posts?state=DRAFT')
+    } catch (err) {
+      enqueueSnackbar('Đã có lỗi xảy ra.')
+      console.log('Error:', err)
+    } finally {
+      setEditingPost(false)
+    }
+
     // const mainImageFile = previewImages.slice(0, 1).map(img => img.file)
     // const otherImageFiles = previewImages.slice(1).map(img => img.file)
     // Promise.all([
@@ -234,7 +251,9 @@ export default function Edit() {
 
   return (
     <FormProvider {...formMethods}>
-      <LoadingBackdrop open={loadingDistricts || loadingSubcategories} />
+      <LoadingBackdrop
+        open={loadingDistricts || loadingSubcategories || editingPost}
+      />
 
       <Form
         categories={categories}

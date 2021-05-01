@@ -5,13 +5,14 @@ import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useHistory } from 'react-router'
 import LoadingBackdrop from 'src/components/shared/LoadingBackdrop'
+import { ReadImageResult } from 'src/helpers/readImage'
 import uploadImages from 'src/helpers/uploadImages'
 import useAxios from 'src/hooks/useAxios'
 import { Category } from 'src/types/Category'
 import { City } from 'src/types/City'
 import { District } from 'src/types/District'
 import { Subcategory } from 'src/types/Subcategory'
-import Form, { PostFormInputs, PreviewImageLoadResult } from '../Form'
+import Form, { PostFormInputs } from '../Form'
 
 type PreviewImage = {
   src: string
@@ -95,11 +96,8 @@ export default function Create() {
     })
   }
 
-  const handleNewImageLoad = (res: PreviewImageLoadResult) => {
-    setPreviewImages(previewImages => [
-      ...previewImages,
-      { src: res.src, file: res.file },
-    ])
+  const handleNewImageLoad = (results: ReadImageResult[]) => {
+    setPreviewImages(previewImages => [...previewImages, ...results])
   }
 
   const handleImagePin = (index: number) => {
