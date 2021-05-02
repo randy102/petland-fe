@@ -4,6 +4,7 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  Chip,
   Typography,
 } from '@material-ui/core'
 import {
@@ -11,6 +12,7 @@ import {
   Delete,
   Edit,
   Publish,
+  Star,
   Visibility,
   VisibilityOff,
 } from '@material-ui/icons'
@@ -24,14 +26,16 @@ import { IMAGE_BASE_URL } from 'src/constants'
 import epochToString from 'src/helpers/epochToString'
 import { Post } from 'src/types/Post'
 import useStyles from './styles'
+import getDateDiff from '../../../../../helpers/getDateDiff'
 
 type Props = {
   post: Post
   refetchPosts: () => void
+  openHighlight: (postId: string) => void
 }
 
 export default function PostItem(props: Props) {
-  const { post, refetchPosts } = props
+  const { post, refetchPosts, openHighlight } = props
 
   const classes = useStyles()
 
@@ -235,6 +239,25 @@ export default function PostItem(props: Props) {
             >
               Hủy xét duyệt
             </Button>
+          )}
+
+          {post.state === 'PUBLISHED' && !post.isHighlighted && (
+            <Button
+              color="secondary"
+              size="small"
+              startIcon={<Star />}
+              onClick={() => openHighlight(post._id)}
+            >
+              Quảng cáo bài viết
+            </Button>
+          )}
+
+          {post.isHighlighted && post.highlightExpired && (
+            <Chip
+              icon={<Star />}
+              label={`Nổi bật (còn ${getDateDiff(post.highlightExpired)} ngày)`}
+              variant="outlined"
+            />
           )}
         </CardActions>
       </div>

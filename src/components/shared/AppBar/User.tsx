@@ -14,23 +14,6 @@ import Avatar from '../Avatar'
 import MenuLink from './MenuLink'
 import useStyles from './styles'
 import { openModal } from 'src/redux/slices/modal'
-import {
-  AccountCircle,
-  Pets,
-  PostAdd,
-  PowerSettingsNew,
-} from '@material-ui/icons'
-
-const hoverMenuProps = {
-  anchorOrigin: {
-    horizontal: 'right',
-    vertical: 'bottom',
-  },
-  transformOrigin: {
-    horizontal: 'right',
-    vertical: theme.spacing(-0.5),
-  },
-}
 
 export default function User() {
   const user = useAppSelector(state => state.user)

@@ -1,16 +1,13 @@
-import { Grid, Paper, Typography } from '@material-ui/core'
-import Avatar from 'src/components/shared/Avatar'
-import { useAppSelector } from 'src/redux/hooks'
-import useStyles from './styles'
-import { Route, Switch, useRouteMatch } from 'react-router'
-import Profile from './Profile'
-import ChangePassword from './ChangePassword'
-import Posts from './Posts'
+import useStyles from '../MyAccount/styles'
+import { useAppSelector } from '../../../redux/hooks'
+import { Redirect, Route, Switch, useRouteMatch } from 'react-router'
 import { useMemo } from 'react'
-import TextLink from 'src/components/shared/TextLink'
-import Point from '../Point'
+import { Grid, Paper, Typography } from '@material-ui/core'
+import TextLink from '../../shared/TextLink'
+import ChargeRequest from './ChargeRequest'
+import History from './History'
 
-export default function MyAccount() {
+export default function Point() {
   const classes = useStyles()
 
   const user = useAppSelector(state => state.user)
@@ -20,16 +17,12 @@ export default function MyAccount() {
   const sidebarLinks = useMemo(
     () => [
       {
-        to: '/profile',
-        label: 'Thông tin cá nhân',
+        to: '/charge-request',
+        label: 'Yêu cầu nạp điểm',
       },
       {
-        to: '/posts',
-        label: 'Bài đăng của bạn',
-      },
-      {
-        to: '/change-password',
-        label: 'Đổi mật khẩu',
+        to: '/history',
+        label: 'Lịch sử giao dịch',
       },
     ],
     []
@@ -45,10 +38,10 @@ export default function MyAccount() {
         <Grid container item direction="column" spacing={2}>
           <Grid item>
             <Paper className={classes.infoCard}>
-              <Avatar className={classes.avatar} size={80} />
-
               <div className={classes.infoContainer}>
-                <Typography variant="h6">{user?.name}</Typography>
+                <Typography style={{ paddingLeft: 10 }} variant="h6">
+                  Điểm: {user?.points}
+                </Typography>
               </div>
             </Paper>
           </Grid>
@@ -78,11 +71,13 @@ export default function MyAccount() {
 
       <Grid item xs>
         <Switch>
-          <Route component={Profile} path={`${path}/profile`} />
+          <Route component={ChargeRequest} path={`${path}/charge-request`} />
 
-          <Route component={ChangePassword} path={`${path}/change-password`} />
+          <Route component={History} path={`${path}/history`} />
 
-          <Route component={Posts} path={`${path}/posts`} />
+          <Route exact path={`${path}`}>
+            <Redirect to={`${path}/charge-request`} />
+          </Route>
         </Switch>
       </Grid>
     </Grid>
