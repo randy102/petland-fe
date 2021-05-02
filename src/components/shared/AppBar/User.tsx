@@ -57,30 +57,35 @@ export default function User() {
           </Box>
 
           <MenuLink
-            Icon={<Icon className="fas fa-plus fa-fw" fontSize="small" />}
+            Icon={<i className="fas fa-plus fa-fw" />}
             text="Đăng bài"
             to="/my-post/create"
             onClick={popupState.close}
           />
 
           <MenuLink
-            Icon={<Icon className="fas fa-paw fa-fw" fontSize="small" />}
+            Icon={<i className="fas fa-paw fa-fw" />}
             text="Bài đăng của bạn"
             to="/my-account/posts"
             onClick={popupState.close}
           />
 
           <MenuLink
-            Icon={
-              <Icon className="fas fa-user-circle fa-fw" fontSize="small" />
-            }
+            Icon={<i className="fas fa-user-circle fa-fw" />}
             text="Thông tin cá nhân"
             to="/my-account/profile"
             onClick={popupState.close}
           />
 
           <MenuLink
-            Icon={<Icon className="fas fa-sign-out fa-fw" fontSize="small" />}
+            Icon={<i className="fas fa-coins fa-fw" />}
+            text="Quản lý điểm"
+            to="/point"
+            onClick={popupState.close}
+          />
+
+          <MenuLink
+            Icon={<i className="fas fa-sign-out fa-fw" />}
             text="Đăng xuất"
             to="#"
             onClick={handleLogout}

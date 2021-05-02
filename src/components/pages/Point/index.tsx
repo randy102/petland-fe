@@ -40,7 +40,7 @@ export default function Point() {
             <Paper className={classes.infoCard}>
               <div className={classes.infoContainer}>
                 <Typography style={{ paddingLeft: 10 }} variant="h6">
-                  Điểm: {user?.points}
+                  Điểm: {user?.points || 0}
                 </Typography>
               </div>
             </Paper>

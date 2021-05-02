@@ -25,7 +25,7 @@ export default function HighlightPicker(props: Props) {
   const { data, loading } = useAxios<PackDTO[]>({
     config: {
       method: 'get',
-      route: 'pack/public',
+      route: '/pack/public',
     },
     fetchOnMount: true,
   })
@@ -37,7 +37,7 @@ export default function HighlightPicker(props: Props) {
   } = useAxios<boolean>({
     config: {
       method: 'post',
-      route: 'pack/register/',
+      route: '/pack/register/',
     },
     onCompleted: () => {
       enqueueSnackbar('Đăng ký gói thành công!', {
@@ -62,13 +62,13 @@ export default function HighlightPicker(props: Props) {
       field: 'dayNumber',
       headerName: 'Thời gian dán nhãn',
       flex: 1,
-      valueFormatter: params => `${params.value} ngày`,
+      valueFormatter: (params: any) => `${params.value} ngày`,
     },
     {
       field: 'id',
       headerName: ' ',
       // eslint-disable-next-line react/display-name
-      renderCell: params => (
+      renderCell: (params: any) => (
         <Button onClick={() => registerPack(String(params.value))}>
           Quy đổi
         </Button>

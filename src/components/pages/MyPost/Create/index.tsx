@@ -49,7 +49,7 @@ export default function Create() {
   } = useAxios<Subcategory[]>({
     config: {
       method: 'get',
-      route: 'sub-category',
+      route: '/sub-category',
     },
   })
 
@@ -80,7 +80,7 @@ export default function Create() {
   } = useAxios<District[]>({
     config: {
       method: 'get',
-      route: 'district',
+      route: '/district',
     },
   })
 

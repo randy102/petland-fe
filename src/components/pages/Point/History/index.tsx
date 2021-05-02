@@ -38,7 +38,7 @@ function History() {
   const { data, loading } = useAxios<Transaction[]>({
     config: {
       method: 'get',
-      route: 'point-transaction/user',
+      route: '/point-transaction/user',
     },
     fetchOnMount: true,
   })

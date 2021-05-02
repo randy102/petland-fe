@@ -51,7 +51,7 @@ function RequestForm({ handleCloseForm, open }: Props) {
   } = useAxios<ChargeRequestDTO>({
     config: {
       method: 'post',
-      route: 'charge-request',
+      route: '/charge-request',
     },
     onCompleted: () => {
       enqueueSnackbar('Gửi yêu cầu nạp thành công!', {
