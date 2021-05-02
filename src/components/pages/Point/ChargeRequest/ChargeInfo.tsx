@@ -1,6 +1,5 @@
 import React from 'react'
 import Dialog from '../../../shared/Dialog'
-import DialogTitle from '../../../shared/Dialog/DialogTitle'
 import DialogContent from '../../../shared/Dialog/DialogContent'
 import { DialogContentText } from '@material-ui/core'
 import { numberSpliter } from '../../../../helpers/numberSpliter'

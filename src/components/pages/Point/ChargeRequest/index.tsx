@@ -5,7 +5,6 @@ import { DataGrid, GridColumns } from '@material-ui/data-grid'
 import RequestForm from './RequestForm'
 import useAxios from '../../../../hooks/useAxios'
 import LoadingBackdrop from '../../../shared/LoadingBackdrop'
-import { Chip } from '@material-ui/core'
 import epochToString from '../../../../helpers/epochToString'
 
 const STATE_DICT = {
