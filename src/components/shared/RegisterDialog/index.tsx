@@ -58,7 +58,7 @@ export default function RegisterDialog() {
   const { fetch: register } = useAxios<string>({
     config: {
       method: 'POST',
-      route: 'auth/register',
+      route: '/auth/register',
     },
     onCompleted: response => {
       localStorage.setItem('token', response.data)

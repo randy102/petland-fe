@@ -57,7 +57,7 @@ export default function LoginDialog() {
   const { fetch: login } = useAxios<string>({
     config: {
       method: 'POST',
-      route: 'auth/login',
+      route: '/auth/login',
     },
     onCompleted: response => {
       localStorage.setItem('token', response.data)

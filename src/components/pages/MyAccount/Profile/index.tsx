@@ -46,7 +46,7 @@ export default function Profile() {
   const { fetch: updateUser } = useAxios<User>({
     config: {
       method: 'put',
-      route: 'user/changeInfo',
+      route: '/user/changeInfo',
     },
     onCompleted: response => {
       setLoading(false)

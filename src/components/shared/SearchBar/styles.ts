@@ -1,19 +1,18 @@
 import { makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
-  inputRoot: {
+  root: {
+    padding: '2px 4px',
+    display: 'flex',
+    alignItems: 'center',
     flexGrow: 1,
   },
-  search: {
-    alignItems: 'center',
-    backgroundColor: theme.palette.common.white,
-    borderRadius: theme.shape.borderRadius,
-    color: theme.palette.primary.main,
-    display: 'flex',
+  iconButton: {
+    padding: 10,
+  },
+  input: {
+    marginLeft: theme.spacing(1),
     flexGrow: 1,
-    gap: theme.spacing(1),
-    justifyContent: 'space-between',
-    padding: theme.spacing(1),
   },
 }))
 

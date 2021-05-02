@@ -36,7 +36,7 @@ export default function Create() {
     {
       config: {
         method: 'get',
-        route: 'category',
+        route: '/category',
       },
       fetchOnMount: true,
     }
@@ -68,7 +68,7 @@ export default function Create() {
   const { data: cities, loading: loadingCities } = useAxios<City[]>({
     config: {
       method: 'get',
-      route: 'city',
+      route: '/city',
     },
     fetchOnMount: true,
   })

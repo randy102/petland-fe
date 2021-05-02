@@ -9,8 +9,8 @@ const useStyles = makeStyles<Theme, Props>(theme => ({
     objectFit: 'cover',
   }),
   default: props => ({
-    background: theme.palette.common.black,
-    color: theme.palette.common.white,
+    background: theme.palette.grey['300'],
+    color: theme.palette.grey['500'],
     fontSize: props.size,
   }),
 }))

@@ -14,7 +14,7 @@ export default function Posts() {
   const { data: posts, loading, fetch } = useAxios<Post[]>({
     config: {
       method: 'get',
-      route: 'post/user',
+      route: '/post/user',
     },
     fetchOnMount: true,
   })

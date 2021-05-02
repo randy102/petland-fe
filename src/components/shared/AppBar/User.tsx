@@ -21,6 +21,17 @@ import {
   PowerSettingsNew,
 } from '@material-ui/icons'
 
+const hoverMenuProps = {
+  anchorOrigin: {
+    horizontal: 'right',
+    vertical: 'bottom',
+  },
+  transformOrigin: {
+    horizontal: 'right',
+    vertical: theme.spacing(-0.5),
+  },
+}
+
 export default function User() {
   const user = useAppSelector(state => state.user)
 
@@ -46,71 +57,79 @@ export default function User() {
     <div className={classes.avatarContainer} {...bindHover(popupState)}>
       <Avatar size={48} />
 
-      <HoverMenu
-        anchorOrigin={{
-          horizontal: 'right',
-          vertical: 'bottom',
-        }}
-        transformOrigin={{
-          horizontal: 'right',
-          vertical: theme.spacing(-0.5),
-        }}
-        {...bindMenu(popupState)}
-      >
-        {user ? (
-          <React.Fragment>
-            <Box px={2} py={1} width="100%">
-              <Typography>{user?.name}</Typography>
-            </Box>
+      {user ? (
+        <HoverMenu
+          anchorOrigin={{
+            horizontal: 'right',
+            vertical: 'bottom',
+          }}
+          transformOrigin={{
+            horizontal: 'right',
+            vertical: theme.spacing(-0.5),
+          }}
+          {...bindMenu(popupState)}
+        >
+          <Box px={2} py={1} width="100%">
+            <Typography>{user?.name}</Typography>
+          </Box>
 
-            <MenuLink
-              Icon={<Icon className="fas fa-plus fa-fw" fontSize="small" />}
-              text="Đăng bài"
-              to="/my-post/create"
-              onClick={popupState.close}
-            />
+          <MenuLink
+            Icon={<Icon className="fas fa-plus fa-fw" fontSize="small" />}
+            text="Đăng bài"
+            to="/my-post/create"
+            onClick={popupState.close}
+          />
 
-            <MenuLink
-              Icon={<Icon className="fas fa-paw fa-fw" fontSize="small" />}
-              text="Bài đăng của bạn"
-              to="/my-account/posts"
-              onClick={popupState.close}
-            />
+          <MenuLink
+            Icon={<Icon className="fas fa-paw fa-fw" fontSize="small" />}
+            text="Bài đăng của bạn"
+            to="/my-account/posts"
+            onClick={popupState.close}
+          />
 
-            <MenuLink
-              Icon={
-                <Icon className="fas fa-user-circle fa-fw" fontSize="small" />
-              }
-              text="Thông tin cá nhân"
-              to="/my-account/profile"
-              onClick={popupState.close}
-            />
+          <MenuLink
+            Icon={
+              <Icon className="fas fa-user-circle fa-fw" fontSize="small" />
+            }
+            text="Thông tin cá nhân"
+            to="/my-account/profile"
+            onClick={popupState.close}
+          />
 
-            <MenuLink
-              Icon={<Icon className="fas fa-sign-out fa-fw" fontSize="small" />}
-              text="Đăng xuất"
-              to="#"
-              onClick={handleLogout}
-            />
-          </React.Fragment>
-        ) : (
-          <React.Fragment>
-            <MenuLink
-              Icon={<Icon className="fas fa-sign-in fa-fw" fontSize="small" />}
-              text="Đăng nhập"
-              to="#"
-              onClick={handleLoginClick}
-            />
+          <MenuLink
+            Icon={<Icon className="fas fa-sign-out fa-fw" fontSize="small" />}
+            text="Đăng xuất"
+            to="#"
+            onClick={handleLogout}
+          />
+        </HoverMenu>
+      ) : (
+        <HoverMenu
+          anchorOrigin={{
+            horizontal: 'right',
+            vertical: 'bottom',
+          }}
+          transformOrigin={{
+            horizontal: 'right',
+            vertical: theme.spacing(-0.5),
+          }}
+          {...bindMenu(popupState)}
+        >
+          <MenuLink
+            Icon={<Icon className="fas fa-sign-in fa-fw" fontSize="small" />}
+            text="Đăng nhập"
+            to="#"
+            onClick={handleLoginClick}
+          />
 
-            <MenuLink
-              Icon={<Icon className="fas fa-edit fa-fw" fontSize="small" />}
-              text="Đăng ký"
-              to="#"
-              onClick={handleRegisterClick}
-            />
-          </React.Fragment>
-        )}
-      </HoverMenu>
+          <MenuLink
+            Icon={<Icon className="fas fa-edit fa-fw" fontSize="small" />}
+            text="Đăng ký"
+            to="#"
+            onClick={handleRegisterClick}
+          />
+        </HoverMenu>
+      )}
     </div>
   )
 }
