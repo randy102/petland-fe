@@ -10,4 +10,5 @@ export type User = {
   districtID: string
   role: string
   avatar?: string
+  points: number
 }

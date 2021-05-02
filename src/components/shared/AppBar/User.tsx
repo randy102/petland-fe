@@ -87,6 +87,13 @@ export default function User() {
             />
 
             <MenuLink
+              Icon={<Icon className="fas fa-gift fa-fw" fontSize="small" />}
+              text="Quản lý điểm"
+              to="/point"
+              onClick={popupState.close}
+            />
+
+            <MenuLink
               Icon={<Icon className="fas fa-sign-out fa-fw" fontSize="small" />}
               text="Đăng xuất"
               to="#"
