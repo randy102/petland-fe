@@ -73,7 +73,10 @@ export default function PostDetails() {
       <div className={classes.column}>
         <ReactImageGallery
           additionalClass={classes.slider}
-          items={images}
+          items={[post.mainImage, ...post.images].map(id => ({
+            original: IMAGE_BASE_URL + '/' + id,
+            thumbnail: IMAGE_BASE_URL + '/' + id,
+          }))}
           renderFullscreenButton={(onClick, isFullScreen) => (
             <IconButton
               aria-label="fullscreen"
