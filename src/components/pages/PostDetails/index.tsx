@@ -1,0 +1,131 @@
+import { useParams } from 'react-router'
+import LoadingBackdrop from 'src/components/shared/LoadingBackdrop'
+import { IMAGE_BASE_URL } from 'src/constants'
+import useAxios from 'src/hooks/useAxios'
+import { Post } from 'src/types/Post'
+import useStyles from './styles'
+import clsx from 'clsx'
+import ReactImageGallery from 'react-image-gallery'
+import { IconButton } from '@material-ui/core'
+import {
+  ChevronRightRounded,
+  ChevronLeftRounded,
+  FullscreenRounded,
+  FullscreenExitRounded,
+} from '@material-ui/icons'
+
+type Params = {
+  id: string
+}
+
+const images = [...Array(4)].map(x => 'http://placekitten.com/g/608/608')
+
+export default function PostDetails() {
+  const classes = useStyles()
+
+  const { id } = useParams<Params>()
+
+  const { data: post, loading: loadingPost } = useAxios<Post>({
+    config: {
+      method: 'get',
+      route: `/post/${id}`,
+    },
+    fetchOnMount: true,
+  })
+
+  if (loadingPost) {
+    return <LoadingBackdrop open />
+  }
+
+  if (!post) {
+    return null
+  }
+
+  const images = [
+    {
+      original: 'https://picsum.photos/id/1018/1000/600/',
+      thumbnail: 'https://picsum.photos/id/1018/250/150/',
+    },
+    {
+      original: 'https://picsum.photos/id/1015/1000/600/',
+      thumbnail: 'https://picsum.photos/id/1015/250/150/',
+    },
+    {
+      original: 'https://picsum.photos/id/1019/1000/600/',
+      thumbnail: 'https://picsum.photos/id/1019/250/150/',
+    },
+    {
+      original: 'https://picsum.photos/id/1018/1000/600/',
+      thumbnail: 'https://picsum.photos/id/1018/250/150/',
+    },
+    {
+      original: 'https://picsum.photos/id/1015/1000/600/',
+      thumbnail: 'https://picsum.photos/id/1015/250/150/',
+    },
+    {
+      original: 'https://picsum.photos/id/1019/1000/600/',
+      thumbnail: 'https://picsum.photos/id/1019/250/150/',
+    },
+  ]
+
+  return (
+    <div className={classes.root}>
+      <div className={classes.column}>
+        <ReactImageGallery
+          additionalClass={classes.slider}
+          items={images}
+          renderFullscreenButton={(onClick, isFullScreen) => (
+            <IconButton
+              aria-label="fullscreen"
+              classes={{
+                root: clsx(classes.iconButton, classes.fullscreenButton),
+              }}
+              onClick={onClick}
+            >
+              {isFullScreen ? (
+                <FullscreenExitRounded fontSize="inherit" />
+              ) : (
+                <FullscreenRounded fontSize="inherit" />
+              )}
+            </IconButton>
+          )}
+          renderLeftNav={(onClick, disabled) => (
+            <IconButton
+              aria-label="previous image"
+              classes={{
+                root: clsx(
+                  classes.iconButton,
+                  classes.navButton,
+                  classes.navButtonLeft
+                ),
+              }}
+              disabled={disabled}
+              onClick={onClick}
+            >
+              <ChevronLeftRounded fontSize="inherit" />
+            </IconButton>
+          )}
+          renderRightNav={(onClick, disabled) => (
+            <IconButton
+              aria-label="next image"
+              classes={{
+                root: clsx(
+                  classes.iconButton,
+                  classes.navButton,
+                  classes.navButtonRight
+                ),
+              }}
+              disabled={disabled}
+              onClick={onClick}
+            >
+              <ChevronRightRounded fontSize="inherit" />
+            </IconButton>
+          )}
+          showPlayButton={false}
+        />
+      </div>
+
+      <div className={classes.column}>Post Details</div>
+    </div>
+  )
+}

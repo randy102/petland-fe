@@ -7,6 +7,7 @@ const useStyles = makeStyles(theme => ({
     position: 'relative',
     [theme.breakpoints.down('xs')]: {
       minWidth: 180,
+      width: '70vh',
     },
   },
   actionArea: {

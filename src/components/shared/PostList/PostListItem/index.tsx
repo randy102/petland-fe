@@ -42,7 +42,7 @@ export default function PostListItem(props: Props) {
       <CardActionArea
         className={classes.actionArea}
         component={Link}
-        to={'/post/' + post._id}
+        to={'/post-details/' + post._id}
       >
         <div className={classes.mainImageContainer}>
           {imageFailed ? (

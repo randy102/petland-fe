@@ -4,6 +4,7 @@ import ProtectedRoute from './ProtectedRoute'
 import MyAccount from './components/pages/MyAccount'
 import MyPost from './components/pages/MyPost'
 import Point from './components/pages/Point'
+import PostDetails from './components/pages/PostDetails'
 
 export default function Routes() {
   return (
@@ -15,6 +16,8 @@ export default function Routes() {
       <ProtectedRoute component={MyPost} path="/my-post" />
 
       <ProtectedRoute component={Point} path="/point" />
+
+      <Route component={PostDetails} path="/post-details/:id" />
     </Switch>
   )
 }

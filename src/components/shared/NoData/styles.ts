@@ -10,6 +10,9 @@ const useStyles = makeStyles(theme => ({
   text: {
     marginTop: theme.spacing(1),
   },
+  icon: {
+    fontSize: theme.typography.pxToRem(36),
+  },
 }))
 
 export default useStyles
