@@ -1,8 +1,11 @@
 import PostList from 'src/components/shared/PostList'
 import useAxios from 'src/hooks/useAxios'
 import { Post } from 'src/types/Post'
+import useStyles from './styles'
 
 export default function Home() {
+  const classes = useStyles()
+
   const { data: posts, loading: loadingPosts } = useAxios<Post[]>({
     config: {
       method: 'get',
@@ -12,7 +15,7 @@ export default function Home() {
   })
 
   return (
-    <div>
+    <div className={classes.root}>
       <PostList
         loading={loadingPosts}
         posts={posts?.filter(post => post.isHighlighted)}

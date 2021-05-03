@@ -1,8 +1,9 @@
 import { makeStyles } from '@material-ui/core'
 
+const highlightRibbonSize = '24px'
+
 const useStyles = makeStyles(theme => ({
   cardRoot: {
-    overflow: 'visible',
     position: 'relative',
     [theme.breakpoints.down('xs')]: {
       minWidth: 180,
@@ -61,28 +62,26 @@ const useStyles = makeStyles(theme => ({
   icon: {
     marginRight: theme.spacing(0.5),
   },
-  hotRibbon: {
+  highlightRibbon: {
     position: 'absolute',
+    top: 0,
+    right: 0,
     zIndex: 10,
-    borderRadius: `${theme.shape.borderRadius}px ${theme.shape.borderRadius}px 0 ${theme.shape.borderRadius}px`,
-    padding: '4px 10px',
-    right: -4,
-    top: 4,
-    background: theme.palette.primary.main,
-    textAlign: 'center',
-    verticalAlign: 'middle',
-    fontWeight: 600,
-    color: theme.palette.primary.contrastText,
-    '&:after': {
-      content: '""',
-      position: 'absolute',
-      right: 0,
-      bottom: -4,
-      borderLeft: `2px solid ${theme.palette.primary.dark}`,
-      borderTop: `2px solid ${theme.palette.primary.dark}`,
-      borderRight: '2px solid transparent',
-      borderBottom: '2px solid transparent',
-    },
+    borderTop: `${highlightRibbonSize} solid ${theme.palette.primary.main}`,
+    borderRight: `${highlightRibbonSize} solid ${theme.palette.primary.main}`,
+    borderBottom: `${highlightRibbonSize} solid transparent`,
+    borderLeft: `${highlightRibbonSize} solid transparent`,
+    borderTopRightRadius: theme.shape.borderRadius,
+    filter:
+      'drop-shadow(0px 2px 1px rgba(0,0,0,0.2)) drop-shadow(0px 1px 1px rgba(0,0,0,0.14)) drop-shadow(0px 1px 3px rgba(0,0,0,0.12))',
+  },
+  highlightStar: {
+    position: 'absolute',
+    top: 6,
+    right: 6,
+    zIndex: 11,
+    color: theme.palette.common.white,
+    fontSize: 16,
   },
 }))
 

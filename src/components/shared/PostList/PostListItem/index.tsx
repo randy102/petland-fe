@@ -5,7 +5,7 @@ import {
   Typography,
 } from '@material-ui/core'
 import clsx from 'clsx'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { IMAGE_BASE_URL } from 'src/constants'
 import getPostRelativeDate from 'src/helpers/getPostRelativeDate'
@@ -32,7 +32,11 @@ export default function PostListItem(props: Props) {
   return (
     <Card classes={{ root: classes.cardRoot }}>
       {props.post.isHighlighted && (
-        <div className={classes.hotRibbon}>NỔI BẬT</div>
+        <React.Fragment>
+          <div className={classes.highlightRibbon} />
+
+          <i className={'fas fa-star ' + classes.highlightStar} />
+        </React.Fragment>
       )}
 
       <CardActionArea
