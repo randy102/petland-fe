@@ -1,6 +1,5 @@
 import {
   AppBar as MuiAppBar,
-  Button,
   Container,
   Hidden,
   Toolbar,
@@ -11,23 +10,23 @@ import MenuIcon from '@material-ui/icons/Menu'
 import { useEffect } from 'react'
 import logo from 'src/assets/images/logo.png'
 import useUser from 'src/hooks/useUser'
-import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
-import { openModal } from 'src/redux/slices/modal'
 import LoadingBackdrop from '../LoadingBackdrop'
 import SearchBar from '../SearchBar'
 import useStyles from './styles'
 import User from './User'
 import { Link } from 'react-router-dom'
+import Notification from '../Notification'
+import { useAppSelector } from '../../../redux/hooks'
 
 export default function AppBar() {
   const classes = useStyles()
 
-  const dispatch = useAppDispatch()
+  // const dispatch = useAppDispatch()
 
-  const handleLoginClick = () => dispatch(openModal('LOGIN'))
-
-  const handleRegisterClick = () => dispatch(openModal('REGISTER'))
-
+  // const handleLoginClick = () => dispatch(openModal('LOGIN'))
+  //
+  // const handleRegisterClick = () => dispatch(openModal('REGISTER'))
+  //
   const user = useAppSelector(state => state.user)
 
   const { fetch: getUser, loading: gettingUser } = useUser()
@@ -62,6 +61,8 @@ export default function AppBar() {
           </Hidden>
 
           <SearchBar />
+
+          {user && <Notification />}
 
           <User />
 

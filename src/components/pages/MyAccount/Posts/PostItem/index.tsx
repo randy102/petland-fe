@@ -253,11 +253,9 @@ export default function PostItem(props: Props) {
           )}
 
           {post.isHighlighted && post.highlightExpired && (
-            <Chip
-              icon={<Star />}
-              label={`Nổi bật (còn ${getDateDiff(post.highlightExpired)} ngày)`}
-              variant="outlined"
-            />
+            <Button color="default" size="small" startIcon={<Star />}>
+              Nổi bật (còn {getDateDiff(post.highlightExpired)} ngày)
+            </Button>
           )}
         </CardActions>
       </div>
