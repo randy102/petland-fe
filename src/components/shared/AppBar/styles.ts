@@ -5,14 +5,18 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
   },
   logo: {
-    height: 48,
+    height: 58,
   },
-  menuButton: {
-    marginRight: theme.spacing(2),
+  logoLink: {
+    display: 'flex',
   },
   toolbar: {
     padding: 0,
-    gap: theme.spacing(1),
+    justifyContent: 'space-between',
+    gap: theme.spacing(3),
+    [theme.breakpoints.down('xs')]: {
+      gap: theme.spacing(2),
+    },
   },
 }))
 

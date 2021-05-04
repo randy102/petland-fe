@@ -38,7 +38,7 @@ export default function useAxios<Data>(props: Props<Data>) {
 
     let defaultConfig: AxiosRequestConfig = {
       method,
-      url: `/${route}`,
+      url: `${route}`,
     }
 
     defaultConfig = {

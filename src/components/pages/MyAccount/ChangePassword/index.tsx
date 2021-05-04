@@ -28,7 +28,7 @@ export default function ChangePassword() {
   const { fetch: changePassword, loading } = useAxios({
     config: {
       method: 'put',
-      route: 'user/changePassWord',
+      route: '/user/changePassWord',
     },
     onCompleted: () => {
       enqueueSnackbar('Đổi mật khẩu thành công!', {

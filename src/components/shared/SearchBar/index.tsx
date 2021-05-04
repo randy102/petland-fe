@@ -1,8 +1,7 @@
-import { InputBase } from '@material-ui/core'
+import { IconButton, InputBase, Paper } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import { useForm } from 'react-hook-form'
 import useStyles from './styles'
-import TypeSelect from './TypeSelect'
 
 export default function SearchBar() {
   const classes = useStyles()
@@ -14,19 +13,20 @@ export default function SearchBar() {
   })
 
   return (
-    <form noValidate className={classes.search} onSubmit={onSubmit}>
-      <SearchIcon />
-
+    <Paper className={classes.root} component="form" onSubmit={onSubmit}>
       <InputBase
-        classes={{
-          root: classes.inputRoot,
-        }}
-        defaultValue=""
-        placeholder="Tìm kiếm..."
+        className={classes.input}
+        inputProps={{ 'aria-label': 'search google maps' }}
+        placeholder="Tìm kiếm trên Petland..."
         {...register('search')}
       />
-
-      <TypeSelect />
-    </form>
+      <IconButton
+        aria-label="search"
+        className={classes.iconButton}
+        type="submit"
+      >
+        <SearchIcon />
+      </IconButton>
+    </Paper>
   )
 }

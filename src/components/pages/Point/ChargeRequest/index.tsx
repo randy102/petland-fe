@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import CardWithTitle from '../../../shared/CardWithTitle'
 import { Button, Tooltip } from '@material-ui/core'
 import { DataGrid, GridColumns } from '@material-ui/data-grid'
@@ -28,7 +28,7 @@ function ChargeRequest() {
   const { data, loading, fetch } = useAxios<ChargeRequestDTO[]>({
     config: {
       method: 'get',
-      route: 'charge-request/user',
+      route: '/charge-request/user',
     },
     fetchOnMount: true,
   })

@@ -1,5 +1,4 @@
 import { Typography } from '@material-ui/core'
-import { SentimentDissatisfiedRounded } from '@material-ui/icons'
 import useStyles from './styles'
 
 export default function NoData() {
@@ -7,7 +6,7 @@ export default function NoData() {
 
   return (
     <div className={classes.container}>
-      <SentimentDissatisfiedRounded fontSize="large" />
+      <i className={'far fa-frown ' + classes.icon} />
 
       <Typography className={classes.text}>Không có dữ liệu</Typography>
     </div>

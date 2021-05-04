@@ -13,6 +13,8 @@ import Routes from './Routes'
 import theme from './theme'
 import { StylesProvider, jssPreset } from '@material-ui/core/styles'
 import { create } from 'jss'
+import { Settings } from 'luxon'
+import 'react-image-gallery/styles/css/image-gallery.css'
 
 // Base URL for all requests
 axios.defaults.baseURL = 'https://petland-cnpm.herokuapp.com/api'
@@ -33,6 +35,8 @@ const jss = create({
   // Define a custom insertion point that JSS will look for when injecting the styles into the DOM.
   insertionPoint: 'jss-insertion-point',
 })
+
+Settings.defaultLocale = 'vi'
 
 function App() {
   return (

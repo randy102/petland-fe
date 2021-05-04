@@ -4,10 +4,10 @@ import {
   Hidden,
   Toolbar,
 } from '@material-ui/core'
-import React from 'react'
 import IconButton from '@material-ui/core/IconButton/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import logo from 'src/assets/images/logo.png'
 import useUser from 'src/hooks/useUser'
 import LoadingBackdrop from '../LoadingBackdrop'
@@ -44,18 +44,13 @@ export default function AppBar() {
       <Container maxWidth="lg">
         <Toolbar className={classes.toolbar}>
           <Hidden smUp>
-            <IconButton
-              aria-label="menu"
-              className={classes.menuButton}
-              color="inherit"
-              edge="start"
-            >
+            <IconButton color="inherit" edge="start">
               <MenuIcon />
             </IconButton>
           </Hidden>
 
           <Hidden xsDown>
-            <Link to="/">
+            <Link className={classes.logoLink} to="/">
               <img alt="Petland Logo" className={classes.logo} src={logo} />
             </Link>
           </Hidden>

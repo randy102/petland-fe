@@ -169,7 +169,7 @@ export default function PostItem(props: Props) {
 
       <div className={classes.body}>
         <CardContent>
-          <Typography gutterBottom variant="h5">
+          <Typography gutterBottom variant="h6">
             {post.name}
           </Typography>
 
