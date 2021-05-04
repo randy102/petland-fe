@@ -99,7 +99,7 @@ export default function PostListItem(props: Props) {
             color="primary"
             variant="subtitle1"
           >
-            <Price price={post.price} />
+            {post.price ? <Price price={post.price} /> : 'Liên hệ'}
           </Typography>
         </CardContent>
       </CardActionArea>
