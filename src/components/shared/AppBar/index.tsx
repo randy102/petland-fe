@@ -14,7 +14,6 @@ import LoadingBackdrop from '../LoadingBackdrop'
 import SearchBar from '../SearchBar'
 import useStyles from './styles'
 import User from './User'
-import { Link } from 'react-router-dom'
 import Notification from '../Notification'
 import { useAppSelector } from '../../../redux/hooks'
 

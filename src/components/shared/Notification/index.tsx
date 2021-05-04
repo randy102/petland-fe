@@ -79,7 +79,6 @@ export default function Notification() {
       <Badge
         badgeContent={data && data.filter(n => !n.read).length}
         color="secondary"
-        style={{ margin: '0 15px' }}
       >
         <Notifications fontSize="large" />
       </Badge>
