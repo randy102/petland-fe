@@ -59,30 +59,6 @@ export default function AppBar() {
           {user && <Notification />}
 
           <User />
-
-          {/* {localStorage.getItem('token') ? (
-            
-          ) : (
-            <React.Fragment>
-              <Button
-                color="secondary"
-                size="small"
-                variant="contained"
-                onClick={handleLoginClick}
-              >
-                Đăng nhập
-              </Button>
-
-              <Button
-                color="secondary"
-                size="small"
-                variant="contained"
-                onClick={handleRegisterClick}
-              >
-                Đăng ký
-              </Button>
-            </React.Fragment>
-          )} */}
         </Toolbar>
       </Container>
     </MuiAppBar>

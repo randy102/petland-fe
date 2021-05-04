@@ -88,6 +88,15 @@ const useStyles = makeStyles(theme => ({
     bottom: 0,
     fontSize: 40,
   },
+  title: {
+    display: '-webkit-box',
+    WebkitLineClamp: 3,
+    WebkitBoxOrient: 'vertical',
+    overflow: 'hidden',
+  },
+  callButtonIcon: {
+    marginRight: theme.spacing(0.5),
+  },
 }))
 
 export default useStyles
