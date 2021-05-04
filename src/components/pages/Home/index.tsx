@@ -2,6 +2,7 @@ import PostList from 'src/components/shared/PostList'
 import useAxios from 'src/hooks/useAxios'
 import { Post } from 'src/types/Post'
 import useStyles from './styles'
+import AdImage from '../../shared/AdImage'
 
 export default function Home() {
   const classes = useStyles()
@@ -22,6 +23,8 @@ export default function Home() {
         title="Bài đăng nổi bật"
       />
 
+      <AdImage code="HOME1" />
+
       <PostList
         loading={loadingPosts}
         posts={posts?.filter(post => post.category === 'Mèo')}
@@ -34,6 +37,8 @@ export default function Home() {
         title="Bài đăng về chó"
       />
 
+      <AdImage code="HOME2" />
+
       <PostList
         loading={loadingPosts}
         posts={posts?.filter(post => post.category === 'Chim')}
@@ -45,6 +50,8 @@ export default function Home() {
         posts={posts?.filter(post => post.category === 'Cá cảnh')}
         title="Bài đăng về cá cảnh"
       />
+
+      <AdImage code="HOME3" />
 
       <PostList
         loading={loadingPosts}

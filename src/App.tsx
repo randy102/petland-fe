@@ -15,6 +15,7 @@ import { StylesProvider, jssPreset } from '@material-ui/core/styles'
 import { create } from 'jss'
 import { Settings } from 'luxon'
 import 'react-image-gallery/styles/css/image-gallery.css'
+import AdsProvider from './components/shared/AdsProvider'
 
 // Base URL for all requests
 axios.defaults.baseURL = 'https://petland-cnpm.herokuapp.com/api'
@@ -54,19 +55,21 @@ function App() {
               resumeHideDuration={0}
               TransitionComponent={Grow as React.ComponentType<TransitionProps>}
             >
-              <CssBaseline />
+              <AdsProvider>
+                <CssBaseline />
 
-              <AppBar />
+                <AppBar />
 
-              <LoginDialog />
+                <LoginDialog />
 
-              <RegisterDialog />
+                <RegisterDialog />
 
-              <Container maxWidth="lg">
-                <Box py={2}>
-                  <Routes />
-                </Box>
-              </Container>
+                <Container maxWidth="lg">
+                  <Box py={2}>
+                    <Routes />
+                  </Box>
+                </Container>
+              </AdsProvider>
             </SnackbarProvider>
           </ThemeProvider>
         </StylesProvider>
