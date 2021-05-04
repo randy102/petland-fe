@@ -67,8 +67,6 @@ export default function PostList(props: Props) {
               </CardActionArea>
             </Card>
           )}
-
-          <div className={classes.endPadding} />
         </div>
       ) : (
         <Card className={classes.noDataCard}>

@@ -6,8 +6,8 @@ const useStyles = makeStyles(theme => ({
   cardRoot: {
     position: 'relative',
     [theme.breakpoints.down('xs')]: {
-      minWidth: 180,
-      width: '70vh',
+      minWidth: 200,
+      maxWidth: 200,
     },
   },
   actionArea: {
