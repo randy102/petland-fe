@@ -60,9 +60,6 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 500,
     lineHeight: 1.2,
   },
-  icon: {
-    marginRight: theme.spacing(0.5),
-  },
   highlightRibbon: {
     position: 'absolute',
     top: 0,

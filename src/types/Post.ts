@@ -1,3 +1,5 @@
+import { User } from './User'
+
 export type Post = {
   _id: string
   createdAt: number
@@ -26,4 +28,5 @@ export type Post = {
   district: string
   city: string
   isHighlighted: boolean
+  createdUser: User
 }

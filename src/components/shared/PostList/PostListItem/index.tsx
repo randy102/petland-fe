@@ -88,8 +88,7 @@ export default function PostListItem(props: Props) {
                 key={o.icon}
                 variant="body2"
               >
-                <i className={clsx(o.icon, 'fa-fw', classes.icon)} />
-                {o.text}
+                <i className={clsx(o.icon, 'fa-fw')} /> {o.text}
               </Typography>
             ))}
           </div>

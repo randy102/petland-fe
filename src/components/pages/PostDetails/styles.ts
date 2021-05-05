@@ -1,5 +1,4 @@
 import { makeStyles } from '@material-ui/core'
-import theme from 'src/theme'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -35,6 +34,7 @@ const useStyles = makeStyles(theme => ({
         height: '100%',
         top: 0,
         left: 0,
+        objectFit: 'cover',
       },
     },
     '& .image-gallery-thumbnail.active': {
@@ -96,6 +96,42 @@ const useStyles = makeStyles(theme => ({
   },
   callButtonIcon: {
     marginRight: theme.spacing(0.5),
+  },
+  td: {
+    paddingBottom: theme.spacing(1),
+
+    '&:nth-child(2)': {
+      paddingRight: theme.spacing(2),
+    },
+  },
+  userInfo: {
+    display: 'flex',
+    gap: theme.spacing(1),
+    alignItems: 'center',
+    marginBottom: theme.spacing(1),
+  },
+  infoLabel: {
+    whiteSpace: 'nowrap',
+  },
+  userName: {
+    fontWeight: 500,
+  },
+  userAvatar: {
+    width: 50,
+    height: 50,
+    objectFit: 'cover',
+    borderRadius: theme.shape.borderRadius,
+  },
+  defaultAvatar: {
+    fontSize: 50,
+    background: theme.palette.grey['300'],
+    color: theme.palette.grey['500'],
+    borderRadius: theme.shape.borderRadius,
+  },
+  singleLineEllipsis: {
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
   },
 }))
 

@@ -6,7 +6,14 @@ import { Post } from 'src/types/Post'
 import useStyles from './styles'
 import clsx from 'clsx'
 import ReactImageGallery from 'react-image-gallery'
-import { Button, IconButton, Typography } from '@material-ui/core'
+import {
+  Box,
+  Button,
+  Chip,
+  Icon,
+  IconButton,
+  Typography,
+} from '@material-ui/core'
 import {
   ChevronRightRounded,
   ChevronLeftRounded,
@@ -16,6 +23,7 @@ import {
 } from '@material-ui/icons'
 import getPostRelativeDate from 'src/helpers/getPostRelativeDate'
 import Price from 'src/components/shared/Price'
+import Image from 'src/components/shared/Image'
 
 type Params = {
   id: string
@@ -107,22 +115,126 @@ export default function PostDetails() {
           {post.name}
         </Typography>
 
-        <Typography variant="subtitle2">
-          {getPostRelativeDate(post.updatedAt as number)}
-        </Typography>
+        <Box mt={0.5}>
+          <Typography variant="subtitle2">
+            <i className="fas fa-clock" />{' '}
+            {getPostRelativeDate(post.updatedAt as number)}
+          </Typography>
+        </Box>
 
-        <Typography color="primary" variant="h6">
-          <Price price={post.price} />
-        </Typography>
+        {post.isHighlighted && (
+          <Box mt={1}>
+            <Chip
+              color="primary"
+              label={
+                <Typography variant="subtitle2">
+                  <i className="fas fa-star" /> Nổi bật
+                </Typography>
+              }
+            />
+          </Box>
+        )}
 
-        <Button component="a" href="tel:0377981322" startIcon={<Phone />}>
-          {'0377981322'}
-        </Button>
+        <Box mt={2}>
+          <Typography color="primary" variant="h5">
+            <Box fontWeight={500}>
+              <Price price={post.price} />
+            </Box>
+          </Typography>
+        </Box>
 
-        <div>
-          <i className="fas fa-map-marker" />
-          Địa điểm:
-        </div>
+        <Box mt={2}>
+          <div className={classes.userInfo}>
+            {post.createdUser.avatar ? (
+              <Image
+                className={classes.userAvatar}
+                id={post.createdUser.avatar}
+              />
+            ) : (
+              <Icon className={classes.defaultAvatar}>person</Icon>
+            )}
+
+            <Typography variant="subtitle1">
+              <Box fontWeight={500}>{post.createdUser.name}</Box>
+            </Typography>
+          </div>
+
+          <Button
+            color="secondary"
+            component="a"
+            href={'tel:' + post.createdUser.phone}
+            startIcon={<Phone />}
+          >
+            {post.createdUser.phone}
+          </Button>
+        </Box>
+
+        <Box mt={3}>
+          <table>
+            {[
+              {
+                icon: 'fas fa-map-marker-alt',
+                label: 'Địa điểm',
+                content: post.district + ', ' + post.city,
+              },
+              {
+                icon: 'fas fa-paw',
+                label: 'Giống',
+                content: post.subCategory,
+              },
+              {
+                icon: `fas fa-${post.sex === 'MALE' ? 'mars' : 'venus'}`,
+                label: 'Giới tính',
+                content: post.sex === 'MALE' ? 'Đực' : 'Cái',
+              },
+              {
+                icon: 'fas fa-birthday-cake',
+                label: 'Tuổi',
+                content: post.age + ' tháng',
+              },
+              {
+                icon: 'fas fa-syringe',
+                label: 'Đã tiêm chủng',
+                content: post.vaccination ? 'Có' : 'Không',
+              },
+            ].map(x => (
+              <tr key={x.label}>
+                <td className={classes.td}>
+                  <i className={clsx(x.icon, 'fa-fw fa-lg')} />
+                </td>
+                <td className={classes.td}>
+                  <Typography className={classes.infoLabel}>
+                    {x.label}:
+                  </Typography>
+                </td>
+                <td className={classes.td}>
+                  <Typography className={classes.singleLineEllipsis}>
+                    {x.content}
+                  </Typography>
+                </td>
+              </tr>
+            ))}
+
+            <tr>
+              <td>
+                <i className="fas fa-info-circle fa-fw fa-lg" />
+              </td>
+              <td>
+                <Typography className={classes.infoLabel}>
+                  Mô tả thêm:
+                </Typography>
+              </td>
+              <td></td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td colSpan={2}>
+                <Typography>{post.detail || 'Không có'}</Typography>
+              </td>
+            </tr>
+          </table>
+        </Box>
       </div>
     </div>
   )
