@@ -1,19 +1,6 @@
 import { makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    display: 'flex',
-    gap: theme.spacing(2),
-    [theme.breakpoints.down('sm')]: {
-      flexDirection: 'column',
-    },
-  },
-  column: {
-    width: `calc(50% - ${theme.spacing(1)}px)`,
-    [theme.breakpoints.down('sm')]: {
-      width: '100%',
-    },
-  },
   slider: {
     '& .image-gallery-slides': {
       borderRadius: theme.shape.borderRadius,
