@@ -20,6 +20,7 @@ import {
   FullscreenRounded,
   FullscreenExitRounded,
   Phone,
+  ReportProblem,
 } from '@material-ui/icons'
 import getPostRelativeDate from 'src/helpers/getPostRelativeDate'
 import Price from 'src/components/shared/Price'
@@ -159,14 +160,24 @@ export default function PostDetails() {
             </Typography>
           </div>
 
-          <Button
-            color="secondary"
-            component="a"
-            href={'tel:' + post.createdUser.phone}
-            startIcon={<Phone />}
-          >
-            {post.createdUser.phone}
-          </Button>
+          <Box display="flex">
+            <Button
+              color="primary"
+              component="a"
+              href={'tel:' + post.createdUser.phone}
+              startIcon={<Phone />}
+            >
+              {post.createdUser.phone}
+            </Button>
+
+            <Button
+              className={classes.reportButton}
+              color="secondary"
+              startIcon={<ReportProblem />}
+            >
+              Báo cáo bài đăng
+            </Button>
+          </Box>
         </Box>
 
         <Box mt={3}>

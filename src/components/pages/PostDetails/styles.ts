@@ -133,6 +133,10 @@ const useStyles = makeStyles(theme => ({
     whiteSpace: 'nowrap',
     overflow: 'hidden',
   },
+  reportButton: {
+    textTransform: 'none',
+    marginLeft: theme.spacing(1),
+  },
 }))
 
 export default useStyles
