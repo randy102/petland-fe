@@ -16,6 +16,7 @@ import { create } from 'jss'
 import { Settings } from 'luxon'
 import 'react-image-gallery/styles/css/image-gallery.css'
 import AdsProvider from './components/shared/AdsProvider'
+import ReportDialog from './components/shared/ReportDialog'
 
 // Base URL for all requests
 axios.defaults.baseURL = 'https://petland-cnpm.herokuapp.com/api'
@@ -63,6 +64,8 @@ function App() {
                 <LoginDialog />
 
                 <RegisterDialog />
+
+                <ReportDialog />
 
                 <Container maxWidth="lg">
                   <Box py={2}>

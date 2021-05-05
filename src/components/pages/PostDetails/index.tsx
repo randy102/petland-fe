@@ -25,6 +25,8 @@ import {
 import getPostRelativeDate from 'src/helpers/getPostRelativeDate'
 import Price from 'src/components/shared/Price'
 import Image from 'src/components/shared/Image'
+import { useAppDispatch } from 'src/redux/hooks'
+import { openModal } from 'src/redux/slices/modal'
 
 type Params = {
   id: string
@@ -42,6 +44,10 @@ export default function PostDetails() {
     },
     fetchOnMount: true,
   })
+
+  const dispatch = useAppDispatch()
+
+  const openReportModal = () => dispatch(openModal('REPORT'))
 
   if (loadingPost) {
     return <LoadingBackdrop open />
@@ -174,6 +180,7 @@ export default function PostDetails() {
               className={classes.reportButton}
               color="secondary"
               startIcon={<ReportProblem />}
+              onClick={openReportModal}
             >
               Báo cáo bài đăng
             </Button>
