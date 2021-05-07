@@ -41,7 +41,7 @@ export default function Home() {
 
       <PostList
         loading={loadingPosts}
-        posts={posts?.filter(post => post.category === 'Chim')}
+        posts={posts?.filter(post => post.category === 'Chim cảnh')}
         title="Bài đăng về chim cảnh"
       />
 
