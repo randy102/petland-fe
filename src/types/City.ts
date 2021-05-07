@@ -1,4 +1,5 @@
-export type City = {
-  _id: string
+import { Default } from './Default'
+
+export type City = Default & {
   name: string
 }

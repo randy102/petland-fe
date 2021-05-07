@@ -10,7 +10,6 @@ import ReactImageGallery from 'react-image-gallery'
 import {
   Box,
   Button,
-  Card,
   Chip,
   Grid,
   Icon,
@@ -23,14 +22,11 @@ import {
   FullscreenRounded,
   FullscreenExitRounded,
   Phone,
-  ReportProblem,
 } from '@material-ui/icons'
 import getPostRelativeDate from 'src/helpers/getPostRelativeDate'
 import Price from 'src/components/shared/Price'
 import Image from 'src/components/shared/Image'
-import { useAppDispatch } from 'src/redux/hooks'
-import { openModal } from 'src/redux/slices/modal'
-import CardWithTitle from 'src/components/shared/CardWithTitle'
+import { QA } from 'src/types/QA'
 
 type Params = {
   id: string
@@ -49,9 +45,13 @@ export default function PostDetails() {
     fetchOnMount: true,
   })
 
-  const dispatch = useAppDispatch()
-
-  const openReportModal = () => dispatch(openModal('REPORT'))
+  const { data: questions, loading: loadingQuestions } = useAxios<QA[]>({
+    config: {
+      method: 'get',
+      route: `/qa?postID=${id}`,
+    },
+    fetchOnMount: true,
+  })
 
   if (loadingPost) {
     return <LoadingBackdrop open />
@@ -179,15 +179,6 @@ export default function PostDetails() {
                 startIcon={<Phone />}
               >
                 {post.createdUser.phone}
-              </Button>
-
-              <Button
-                className={classes.reportButton}
-                color="secondary"
-                startIcon={<ReportProblem />}
-                onClick={openReportModal}
-              >
-                Báo cáo
               </Button>
             </Box>
           </Box>

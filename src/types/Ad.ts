@@ -1,11 +1,8 @@
-export type Ad = {
-  _id: string
+import { Default } from './Default'
+
+export type Ad = Default & {
   url: string
   fileID: string
   position: string
-  createdAt: number
-  createdBy: string
-  updatedAt: number
-  updatedBy: string
   partner: string
 }

@@ -1,9 +1,6 @@
-export type User = {
-  _id: string
-  createdAt: number
-  createdBy: string | null
-  updatedAt: number | null
-  updatedBy: string | null
+import { Default } from './Default'
+
+export type User = Default & {
   isActive: boolean
   email: string
   password: string

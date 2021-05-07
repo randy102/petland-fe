@@ -1,5 +1,6 @@
-export type District = {
-  _id: string
+import { Default } from './Default'
+
+export type District = Default & {
   name: string
   cityID: string
 }

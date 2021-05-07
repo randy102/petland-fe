@@ -1,12 +1,8 @@
+import { Default } from './Default'
 import { User } from './User'
 
-export type Post = {
-  _id: string
-  createdAt: number
-  createdBy: string
+export type Post = Default & {
   createdName: string
-  updatedAt: number | null
-  updatedBy: string | null
   name: string
   categoryID: string
   subCategoryID: string
