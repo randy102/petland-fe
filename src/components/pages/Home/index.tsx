@@ -1,6 +1,6 @@
 import PostList from 'src/components/shared/PostList'
 import useAxios from 'src/hooks/useAxios'
-import { Post } from 'src/types/Post'
+import { Post } from 'src/typings/Post'
 import useStyles from './styles'
 import AdImage from '../../shared/AdImage'
 

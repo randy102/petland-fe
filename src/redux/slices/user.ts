@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { User } from 'src/types/User'
+import { User } from 'src/typings/User'
 
 type State = User | null
 

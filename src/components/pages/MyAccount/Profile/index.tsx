@@ -13,7 +13,7 @@ import setServerErrors from 'src/helpers/setServerErrors'
 import useAxios from 'src/hooks/useAxios'
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
 import { setUser } from 'src/redux/slices/user'
-import { User } from 'src/types/User'
+import { User } from 'src/typings/User'
 import useStyles from './styles'
 
 type Inputs = {

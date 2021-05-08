@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios'
 import { useAppDispatch } from 'src/redux/hooks'
 import { setUser } from 'src/redux/slices/user'
-import { User } from 'src/types/User'
+import { User } from 'src/typings/User'
 import useAxios from './useAxios'
 
 type Props = {

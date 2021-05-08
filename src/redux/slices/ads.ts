@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Ad } from '../../types/Ad'
+import { Ad } from '../../typings/Ad'
 
 type State = Ad[] | null
 

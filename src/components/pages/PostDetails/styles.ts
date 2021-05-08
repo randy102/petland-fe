@@ -75,12 +75,6 @@ const useStyles = makeStyles(theme => ({
     bottom: 0,
     fontSize: 40,
   },
-  title: {
-    display: '-webkit-box',
-    WebkitLineClamp: 3,
-    WebkitBoxOrient: 'vertical',
-    overflow: 'hidden',
-  },
   callButtonIcon: {
     marginRight: theme.spacing(0.5),
   },
@@ -115,14 +109,11 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.grey['500'],
     borderRadius: theme.shape.borderRadius,
   },
-  singleLineEllipsis: {
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
+  cardContent: {
+    paddingBottom: theme.spacing(1),
   },
-  reportButton: {
-    textTransform: 'none',
-    marginLeft: theme.spacing(1),
+  transparent: {
+    color: 'transparent',
   },
 }))
 

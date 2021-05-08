@@ -24,7 +24,7 @@ import ConfirmDialog from 'src/components/shared/ConfirmDialog'
 import LoadingBackdrop from 'src/components/shared/LoadingBackdrop'
 import { IMAGE_BASE_URL } from 'src/constants'
 import epochToString from 'src/helpers/epochToString'
-import { Post } from 'src/types/Post'
+import { Post } from 'src/typings/Post'
 import useStyles from './styles'
 import getDateDiff from '../../../../../helpers/getDateDiff'
 

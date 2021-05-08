@@ -15,10 +15,12 @@ import HoverMenu from 'material-ui-popup-state/HoverMenu'
 import {
   Avatar,
   Badge,
+  Box,
   List,
   ListItem,
   ListItemAvatar,
   ListItemText,
+  Typography,
 } from '@material-ui/core'
 import useAxios from '../../../hooks/useAxios'
 import epochToString from '../../../helpers/epochToString'
@@ -39,7 +41,7 @@ function getNotificationLink(notification: Notification) {
     return '/my-account/posts'
   }
   if (notification.qaID) {
-    return `/post-details/${notification.postID}#${notification.qaID}`
+    return `/post-details/${notification.postID}?question=${notification.qaID}`
   }
   return `/post-details/${notification.postID}`
 }
@@ -87,7 +89,7 @@ export default function Notification() {
           horizontal: 'right',
           vertical: 'bottom',
         }}
-        style={{ height: 600, marginTop: 10 }}
+        style={{ height: 600 }}
         transformOrigin={{
           horizontal: 'right',
           vertical: theme.spacing(-0.5),
@@ -95,6 +97,17 @@ export default function Notification() {
         {...bindMenu(popupState)}
       >
         <List component="nav" style={{ width: 400 }}>
+          {!data?.length && (
+            <Box
+              alignItems="center"
+              display="flex"
+              justifyContent="center"
+              minHeight={100}
+            >
+              <Typography>Bạn không có thông báo nào</Typography>
+            </Box>
+          )}
+
           {data &&
             data.map(item => (
               <ListItem

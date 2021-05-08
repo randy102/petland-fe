@@ -3,7 +3,7 @@ import { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import CardWithTitle from 'src/components/shared/CardWithTitle'
 import NoData from 'src/components/shared/NoData'
 import useAxios from 'src/hooks/useAxios'
-import { Post } from 'src/types/Post'
+import { Post } from 'src/typings/Post'
 import useStyles from './styles'
 import PostItem from './PostItem'
 import useQuery from 'src/hooks/useQuery'
@@ -24,9 +24,9 @@ export default function Posts() {
 
   const query = useQuery()
 
-  const queryState = query.get('state')
-
   useEffect(() => {
+    const queryState = query.get('state')
+
     if (
       !queryState ||
       !['PUBLISHED', 'DRAFT', 'PENDING', 'HIDDEN', 'REJECTED'].includes(

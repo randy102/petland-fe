@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 import { useAppDispatch } from '../../../redux/hooks'
 import { setAds } from '../../../redux/slices/ads'
 import useAxios from '../../../hooks/useAxios'
-import { Ad } from '../../../types/Ad'
+import { Ad } from '../../../typings/Ad'
 
 type Props = {
   children: ReactNode
