@@ -17,6 +17,7 @@ import { Settings } from 'luxon'
 import 'react-image-gallery/styles/css/image-gallery.css'
 import AdsProvider from './components/shared/AdsProvider'
 import ReportDialog from './components/shared/ReportDialog'
+import GlobalLoadingBackdrop from './components/shared/GlobalLoadingBackdrop'
 
 // Base URL for all requests
 axios.defaults.baseURL = 'https://petland-cnpm.herokuapp.com/api'
@@ -46,6 +47,8 @@ function App() {
       <BrowserRouter>
         <StylesProvider jss={jss}>
           <ThemeProvider theme={theme}>
+            <GlobalLoadingBackdrop />
+
             <SnackbarProvider
               anchorOrigin={{
                 horizontal: 'right',

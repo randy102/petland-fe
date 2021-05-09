@@ -1,5 +1,7 @@
 import { Box, Card, CardContent, Typography } from '@material-ui/core'
+import clsx from 'clsx'
 import { useEffect, useRef } from 'react'
+import { useSharedStyles } from 'src/assets/styles/shared'
 import getPostRelativeDate from 'src/helpers/getPostRelativeDate'
 import useQuery from 'src/hooks/useQuery'
 import { Comment } from 'src/typings/Comment'
@@ -30,7 +32,11 @@ export default function CommentCard(props: Props) {
 
   return (
     <Card ref={ref} variant="outlined">
-      <CardContent classes={{ root: classes.cardContent }}>
+      <CardContent
+        classes={{
+          root: clsx(classes.cardContent),
+        }}
+      >
         <Box display="flex">
           <Typography gutterBottom variant="subtitle2">
             {props.name}

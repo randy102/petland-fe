@@ -1,11 +1,12 @@
 import { makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
-  cardContent: {
-    paddingBottom: theme.spacing(2),
-    '&:last-child': {
-      paddingBottom: theme.spacing(2),
-    },
+  buttonLoadingIcon: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
   },
 }))
 

@@ -106,6 +106,111 @@ export const useSharedStyles = makeStyles(theme => ({
   'margin-left-5': {
     marginLeft: theme.spacing(5),
   },
+  'padding-0': {
+    padding: theme.spacing(0),
+  },
+  'padding-top-0': {
+    paddingTop: theme.spacing(0),
+  },
+  'padding-right-0': {
+    paddingRight: theme.spacing(0),
+  },
+  'padding-bottom-0': {
+    paddingBottom: theme.spacing(0),
+  },
+  'padding-left-0': {
+    paddingLeft: theme.spacing(0),
+  },
+  'padding-0.5': {
+    padding: theme.spacing(0.5),
+  },
+  'padding-top-0.5': {
+    paddingTop: theme.spacing(0.5),
+  },
+  'padding-right-0.5': {
+    paddingRight: theme.spacing(0.5),
+  },
+  'padding-bottom-0.5': {
+    paddingBottom: theme.spacing(0.5),
+  },
+  'padding-left-0.5': {
+    paddingLeft: theme.spacing(0.5),
+  },
+  'padding-1': {
+    padding: theme.spacing(1),
+  },
+  'padding-top-1': {
+    paddingTop: theme.spacing(1),
+  },
+  'padding-right-1': {
+    paddingRight: theme.spacing(1),
+  },
+  'padding-bottom-1': {
+    paddingBottom: theme.spacing(1),
+  },
+  'padding-left-1': {
+    paddingLeft: theme.spacing(1),
+  },
+  'padding-2': {
+    padding: theme.spacing(2),
+  },
+  'padding-top-2': {
+    paddingTop: theme.spacing(2),
+  },
+  'padding-right-2': {
+    paddingRight: theme.spacing(2),
+  },
+  'padding-bottom-2': {
+    paddingBottom: theme.spacing(2),
+  },
+  'padding-left-2': {
+    paddingLeft: theme.spacing(2),
+  },
+  'padding-3': {
+    padding: theme.spacing(3),
+  },
+  'padding-top-3': {
+    paddingTop: theme.spacing(3),
+  },
+  'padding-right-3': {
+    paddingRight: theme.spacing(3),
+  },
+  'padding-bottom-3': {
+    paddingBottom: theme.spacing(3),
+  },
+  'padding-left-3': {
+    paddingLeft: theme.spacing(3),
+  },
+  'padding-4': {
+    padding: theme.spacing(4),
+  },
+  'padding-top-4': {
+    paddingTop: theme.spacing(4),
+  },
+  'padding-right-4': {
+    paddingRight: theme.spacing(4),
+  },
+  'padding-bottom-4': {
+    paddingBottom: theme.spacing(4),
+  },
+  'padding-left-4': {
+    paddingLeft: theme.spacing(4),
+  },
+  'padding-5': {
+    padding: theme.spacing(5),
+  },
+  'padding-top-5': {
+    paddingTop: theme.spacing(5),
+  },
+  'padding-right-5': {
+    paddingRight: theme.spacing(5),
+  },
+  'padding-bottom-5': {
+    paddingBottom: theme.spacing(5),
+  },
+  'padding-left-5': {
+    paddingLeft: theme.spacing(5),
+  },
   'single-line-ellipsis': {
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
@@ -122,5 +227,11 @@ export const useSharedStyles = makeStyles(theme => ({
   },
   'font-weight-400': {
     fontWeight: 400,
+  },
+  'absolute-center': {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
   },
 }))

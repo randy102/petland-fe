@@ -1,8 +1,7 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import LoadingBackdrop from 'src/components/shared/LoadingBackdrop'
 import { IMAGE_BASE_URL } from 'src/constants'
-import useAxios from 'src/hooks/useAxios'
 import { Post } from 'src/typings/Post'
 import useStyles from './styles'
 import clsx from 'clsx'
@@ -11,9 +10,11 @@ import {
   Box,
   Button,
   Chip,
+  CircularProgress,
   Grid,
   Icon,
   IconButton,
+  TextField,
   Typography,
 } from '@material-ui/core'
 import {
@@ -30,6 +31,14 @@ import Image from 'src/components/shared/Image'
 import { QA } from 'src/typings/QA'
 import CommentCard from './CommentCard'
 import { useSharedStyles } from 'src/assets/styles/shared'
+import { useForm } from 'react-hook-form'
+import axios from 'axios'
+import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
+import {
+  decreaseLoadingCount,
+  increaseLoadingCount,
+} from 'src/redux/slices/loadingCount'
+import Question from './Question'
 
 type Params = {
   id: string
@@ -40,34 +49,69 @@ export default function PostDetails() {
 
   const globalClasses = useSharedStyles()
 
-  console.log(globalClasses)
+  const user = useAppSelector(state => state.user)
+
+  const loadingCount = useAppSelector(state => state.loadingCount)
+
+  const { register, handleSubmit, reset } = useForm()
 
   // Post id
   const { id } = useParams<Params>()
 
-  // Get post details
-  const { data: post, loading: loadingPost } = useAxios<Post>({
-    config: {
-      method: 'get',
-      route: `/post/${id}`,
-    },
-    fetchOnMount: true,
+  const [postingQuestion, setPostingQuestion] = useState(false)
+
+  const [details, setDetails] = useState<Post>()
+
+  const [questions, setQuestions] = useState<QA[]>([])
+
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    const getData = async () => {
+      dispatch(increaseLoadingCount())
+
+      try {
+        const [detailsRes, questionsRes] = await Promise.all([
+          axios.get<Post>(`/post/${id}`),
+          axios.get<QA[]>(`/qa?postID=${id}`),
+        ])
+
+        setDetails(detailsRes.data)
+        setQuestions(
+          questionsRes.data.sort((a, b) => b.createdAt - a.createdAt)
+        )
+      } catch (error) {
+        console.log('Error:', { error })
+      } finally {
+        dispatch(decreaseLoadingCount())
+      }
+    }
+
+    getData()
+  }, [])
+
+  const onQuestionSubmit = handleSubmit(async data => {
+    try {
+      setPostingQuestion(true)
+
+      const { data: question } = await axios.post<QA>(`/qa`, {
+        detail: data.question,
+        postID: id,
+      })
+
+      question.createdName = user?.name || ''
+      question.comments = []
+
+      setQuestions(questions => [question, ...questions])
+      reset()
+    } catch (error) {
+      console.log('Post question error:', { error })
+    } finally {
+      setPostingQuestion(false)
+    }
   })
 
-  // Get all post questions
-  const { data: questions, loading: loadingQuestions } = useAxios<QA[]>({
-    config: {
-      method: 'get',
-      route: `/qa?postID=${id}`,
-    },
-    fetchOnMount: true,
-  })
-
-  if (loadingPost || loadingQuestions) {
-    return <LoadingBackdrop open />
-  }
-
-  if (!post) {
+  if (loadingCount > 0 || !details) {
     return null
   }
 
@@ -77,7 +121,7 @@ export default function PostDetails() {
         <Grid item sm={6} xs={12}>
           <ReactImageGallery
             additionalClass={classes.slider}
-            items={[post.mainImage, ...post.images].map(id => ({
+            items={[details.mainImage, ...details.images].map(id => ({
               original: IMAGE_BASE_URL + '/' + id,
               thumbnail: IMAGE_BASE_URL + '/' + id,
             }))}
@@ -137,7 +181,7 @@ export default function PostDetails() {
             className={globalClasses['multiline-ellipsis-3']}
             variant="h4"
           >
-            {post.name}
+            {details.name}
           </Typography>
 
           <Typography
@@ -145,10 +189,10 @@ export default function PostDetails() {
             variant="subtitle2"
           >
             <i className="fas fa-clock" />{' '}
-            {getPostRelativeDate(post.updatedAt as number)}
+            {getPostRelativeDate(details.updatedAt as number)}
           </Typography>
 
-          {post.isHighlighted && (
+          {details.isHighlighted && (
             <Chip
               className={globalClasses['margin-top-1']}
               color="primary"
@@ -168,15 +212,15 @@ export default function PostDetails() {
             color="primary"
             variant="h5"
           >
-            <Price price={post.price} />
+            <Price price={details.price} />
           </Typography>
 
           <Box mt={2}>
             <div className={classes.userInfo}>
-              {post.createdUser.avatar ? (
+              {details.createdUser.avatar ? (
                 <Image
                   className={classes.userAvatar}
-                  id={post.createdUser.avatar}
+                  id={details.createdUser.avatar}
                 />
               ) : (
                 <Icon className={classes.defaultAvatar}>person</Icon>
@@ -186,17 +230,17 @@ export default function PostDetails() {
                 className={globalClasses['font-weight-500']}
                 variant="subtitle1"
               >
-                {post.createdUser.name}
+                {details.createdUser.name}
               </Typography>
             </div>
 
             <Button
               color="primary"
               component="a"
-              href={'tel:' + post.createdUser.phone}
+              href={'tel:' + details.createdUser.phone}
               startIcon={<Phone />}
             >
-              {post.createdUser.phone}
+              {details.createdUser.phone}
             </Button>
           </Box>
 
@@ -206,27 +250,27 @@ export default function PostDetails() {
                 {
                   icon: 'fas fa-map-marker-alt',
                   label: 'Địa điểm',
-                  content: post.district + ', ' + post.city,
+                  content: details.district + ', ' + details.city,
                 },
                 {
                   icon: 'fas fa-paw',
                   label: 'Giống',
-                  content: post.subCategory,
+                  content: details.subCategory,
                 },
                 {
-                  icon: `fas fa-${post.sex === 'MALE' ? 'mars' : 'venus'}`,
+                  icon: `fas fa-${details.sex === 'MALE' ? 'mars' : 'venus'}`,
                   label: 'Giới tính',
-                  content: post.sex === 'MALE' ? 'Đực' : 'Cái',
+                  content: details.sex === 'MALE' ? 'Đực' : 'Cái',
                 },
                 {
                   icon: 'fas fa-birthday-cake',
                   label: 'Tuổi',
-                  content: post.age + ' tháng',
+                  content: details.age + ' tháng',
                 },
                 {
                   icon: 'fas fa-syringe',
                   label: 'Đã tiêm chủng',
-                  content: post.vaccination ? 'Có' : 'Không',
+                  content: details.vaccination ? 'Có' : 'Không',
                 },
               ].map(x => (
                 <tr key={x.label}>
@@ -263,7 +307,7 @@ export default function PostDetails() {
                         classes.transparent
                       )}
                     />{' '}
-                    {post.detail || 'Không có'}
+                    {details.detail || 'Không có'}
                   </Typography>
                 </td>
               </tr>
@@ -278,43 +322,39 @@ export default function PostDetails() {
             <i className="fas fa-question-circle" /> Hỏi đáp về thú cưng
           </Typography>
 
-          <Grid container spacing={3}>
+          <form noValidate onSubmit={onQuestionSubmit}>
+            <TextField
+              fullWidth
+              multiline
+              label="Đặt câu hỏi về thú cưng..."
+              rows={2}
+              rowsMax={1000}
+              {...register('question', {
+                required: true,
+              })}
+            />
+
+            <Box mt={1} position="relative" width="fit-content">
+              <Button disabled={postingQuestion} type="submit">
+                Đăng câu hỏi
+              </Button>
+
+              {postingQuestion && (
+                <CircularProgress
+                  className={classes.buttonLoadingIcon}
+                  size={24}
+                />
+              )}
+            </Box>
+          </form>
+
+          <Grid container className={globalClasses['margin-top-3']} spacing={3}>
             {questions?.map(question => (
-              <Grid container item key={question._id} spacing={1}>
-                <Grid item xs={12}>
-                  <CommentCard
-                    _id={question._id}
-                    content={question.detail}
-                    createdAt={question.createdAt}
-                    name={question.createdName}
-                  />
-                </Grid>
-
-                {question.comments?.map(comment => (
-                  <Grid item key={comment._id} xs={12}>
-                    <Box pl={5}>
-                      <CommentCard
-                        _id={comment._id}
-                        content={comment.detail}
-                        createdAt={comment.createdAt}
-                        name={comment.createdName}
-                      />
-                    </Box>
-                  </Grid>
-                ))}
-
-                <Grid item xs={12}>
-                  <Box pl={5}>
-                    <Button
-                      color="default"
-                      startIcon={<ReplyRounded />}
-                      variant="text"
-                    >
-                      Trả lời
-                    </Button>
-                  </Box>
-                </Grid>
-              </Grid>
+              <Question
+                key={question._id}
+                question={question}
+                setQuestions={setQuestions}
+              />
             ))}
           </Grid>
         </Box>

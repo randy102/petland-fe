@@ -10,36 +10,38 @@ import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import logo from 'src/assets/images/logo.png'
 import useUser from 'src/hooks/useUser'
-import LoadingBackdrop from '../LoadingBackdrop'
 import SearchBar from '../SearchBar'
 import useStyles from './styles'
 import User from './User'
 import Notification from '../Notification'
-import { useAppSelector } from '../../../redux/hooks'
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks'
+import {
+  increaseLoadingCount,
+  decreaseLoadingCount,
+} from 'src/redux/slices/loadingCount'
 
 export default function AppBar() {
   const classes = useStyles()
 
-  // const dispatch = useAppDispatch()
-
-  // const handleLoginClick = () => dispatch(openModal('LOGIN'))
-  //
-  // const handleRegisterClick = () => dispatch(openModal('REGISTER'))
-  //
   const user = useAppSelector(state => state.user)
 
-  const { fetch: getUser, loading: gettingUser } = useUser()
+  const dispatch = useAppDispatch()
+
+  const { fetch: getUser } = useUser({
+    onCompleted: () => {
+      dispatch(decreaseLoadingCount())
+    },
+  })
 
   useEffect(() => {
     if (!localStorage.getItem('token')) return
 
+    dispatch(increaseLoadingCount())
     getUser()
   }, [])
 
   return (
     <MuiAppBar position="sticky">
-      <LoadingBackdrop open={gettingUser} />
-
       <Container maxWidth="lg">
         <Toolbar className={classes.toolbar}>
           <Hidden smUp>

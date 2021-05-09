@@ -75,9 +75,6 @@ const useStyles = makeStyles(theme => ({
     bottom: 0,
     fontSize: 40,
   },
-  callButtonIcon: {
-    marginRight: theme.spacing(0.5),
-  },
   td: {
     paddingBottom: theme.spacing(1),
 
@@ -93,9 +90,6 @@ const useStyles = makeStyles(theme => ({
   },
   infoLabel: {
     whiteSpace: 'nowrap',
-  },
-  userName: {
-    fontWeight: 500,
   },
   userAvatar: {
     width: 50,
@@ -114,6 +108,13 @@ const useStyles = makeStyles(theme => ({
   },
   transparent: {
     color: 'transparent',
+  },
+  buttonLoadingIcon: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
   },
 }))
 
