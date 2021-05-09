@@ -23,6 +23,12 @@ export default function Home() {
         title="Bài đăng nổi bật"
       />
 
+      <PostList
+        loading={loadingPosts}
+        posts={posts?.filter(post => post.auctionExpired)}
+        title="Bài đăng đấu giá"
+      />
+
       <AdImage code="HOME1" />
 
       <PostList

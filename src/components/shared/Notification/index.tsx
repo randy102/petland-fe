@@ -96,46 +96,44 @@ export default function Notification() {
         }}
         {...bindMenu(popupState)}
       >
-        <List component="nav" style={{ width: 400 }}>
-          {!data?.length && (
-            <Box
-              alignItems="center"
-              display="flex"
-              justifyContent="center"
-              minHeight={100}
-            >
-              <Typography>Bạn không có thông báo nào</Typography>
-            </Box>
-          )}
+        {!data?.length && (
+          <Box
+            alignItems="center"
+            display="flex"
+            justifyContent="center"
+            minHeight={100}
+          >
+            <Typography>Bạn không có thông báo nào</Typography>
+          </Box>
+        )}
 
-          {data &&
-            data.map(item => (
-              <ListItem
-                button
-                key={item._id}
-                onClick={() => {
-                  !item.read &&
-                    markRead({ data: { ids: [item._id] } }).then(() => fetch())
-                  history.push(getNotificationLink(item))
-                }}
-              >
-                <ListItemAvatar>
-                  <Badge
-                    anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-                    color="secondary"
-                    invisible={item.read}
-                    variant="dot"
-                  >
-                    <Avatar>{getNotificationIcon(item)}</Avatar>
-                  </Badge>
-                </ListItemAvatar>
-                <ListItemText
-                  primary={item.message}
-                  secondary={epochToString(item.createdAt)}
-                />
-              </ListItem>
-            ))}
-        </List>
+        {data &&
+          data.map(item => (
+            <ListItem
+              button
+              key={item._id}
+              onClick={() => {
+                !item.read &&
+                  markRead({ data: { ids: [item._id] } }).then(() => fetch())
+                history.push(getNotificationLink(item))
+              }}
+            >
+              <ListItemAvatar>
+                <Badge
+                  anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                  color="secondary"
+                  invisible={item.read}
+                  variant="dot"
+                >
+                  <Avatar>{getNotificationIcon(item)}</Avatar>
+                </Badge>
+              </ListItemAvatar>
+              <ListItemText
+                primary={item.message}
+                secondary={epochToString(item.createdAt)}
+              />
+            </ListItem>
+          ))}
       </HoverMenu>
     </div>
   )

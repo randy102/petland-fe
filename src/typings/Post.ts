@@ -25,4 +25,5 @@ export type Post = Default & {
   city: string
   isHighlighted: boolean
   createdUser: User
+  auctionExpired: number | null
 }
