@@ -3,9 +3,14 @@ import useAxios from 'src/hooks/useAxios'
 import { Post } from 'src/typings/Post'
 import useStyles from './styles'
 import AdImage from '../../shared/AdImage'
+import { useAppDispatch } from 'src/redux/hooks'
+import { setPosts } from 'src/redux/slices/posts'
+import LoadingBackdrop from 'src/components/shared/LoadingBackdrop'
 
 export default function Home() {
   const classes = useStyles()
+
+  const dispatch = useAppDispatch()
 
   const { data: posts, loading: loadingPosts } = useAxios<Post[]>({
     config: {
@@ -13,10 +18,15 @@ export default function Home() {
       route: '/post/public',
     },
     fetchOnMount: true,
+    onCompleted: response => {
+      dispatch(setPosts(response.data))
+    },
   })
 
   return (
     <div className={classes.root}>
+      <LoadingBackdrop open={loadingPosts} />
+
       <PostList
         loading={loadingPosts}
         posts={posts?.filter(post => post.isHighlighted)}

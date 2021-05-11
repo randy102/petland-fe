@@ -3,6 +3,7 @@ import modalReducer from './slices/modal'
 import userReducer from './slices/user'
 import adsReducer from './slices/ads'
 import loadingCountReducer from './slices/loadingCount'
+import postsReducer from './slices/posts'
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     user: userReducer,
     ads: adsReducer,
     loadingCount: loadingCountReducer,
+    posts: postsReducer,
   },
 })
 

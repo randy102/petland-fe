@@ -1,6 +1,7 @@
 import { IconButton, InputBase, Paper } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import { useForm } from 'react-hook-form'
+import { useHistory } from 'react-router-dom'
 import useStyles from './styles'
 
 export default function SearchBar() {
@@ -8,8 +9,10 @@ export default function SearchBar() {
 
   const { register, handleSubmit } = useForm()
 
+  const history = useHistory()
+
   const onSubmit = handleSubmit(data => {
-    console.log('Keyword:', data.search)
+    history.push(`/search?keyword=${data.search}`)
   })
 
   return (
@@ -18,7 +21,9 @@ export default function SearchBar() {
         className={classes.input}
         inputProps={{ 'aria-label': 'search google maps' }}
         placeholder="Tìm kiếm trên Petland..."
-        {...register('search')}
+        {...register('search', {
+          required: true,
+        })}
       />
       <IconButton
         aria-label="search"
